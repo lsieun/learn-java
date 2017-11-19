@@ -248,6 +248,49 @@ Instances of this class are immutable and are safe for use by multiple concurren
 
 之所以有这样的结棍，是因为单词边界匹配器不匹配任何的字符，只是作为边界的标识。
 
+**实现Pattern的大小写不敏感**，可以使用Pattern的重载的compile方法：
+
+    /**
+     * Compiles the given regular expression into a pattern with the given flags.
+     *
+     * @param  regex
+     *         The expression to be compiled
+     *
+     * @param  flags
+     *         Match flags, a bit mask that may include
+     *         {@link #CASE_INSENSITIVE}, {@link #MULTILINE}, {@link #DOTALL},
+     *         {@link #UNICODE_CASE}, {@link #CANON_EQ}, {@link #UNIX_LINES},
+     *         {@link #LITERAL}, {@link #UNICODE_CHARACTER_CLASS}
+     *         and {@link #COMMENTS}
+     *
+     * @return the given regular expression compiled into a pattern with the given flags
+     */
+    public static Pattern compile(String regex, int flags) {
+        return new Pattern(regex, flags);
+    }
+
+示例：
+
+    /**
+     * 这个是与公司的业务有点相关，同一张图片会有不同的压缩格式，例如
+     * abc.jpg，一种存在的压缩格式是abc_c.jgp，其中_c表示compressed
+     * 这个例子注意两点：
+     * （1）正则表达式不区分大小写 Pattern p = Pattern.compile(reg,Pattern.CASE_INSENSITIVE);
+     * （2）业务相关，使用正则完成名称的替换：abc.jgp-->abc_c.jpg
+     */
+    @Test
+    public void testCaseInsensitive(){
+        String reg = "(.*)(\\.[jpg|png])(.*)";
+        Pattern p = Pattern.compile(reg,Pattern.CASE_INSENSITIVE);
+        String input = "https://img05.allinmd.cn/public1/M00/0B/0A/wKgBL1nAi9GAUCt5AAdq0Wg2Lnw081.JPG?abc=aaa";
+        System.out.println(input);
+        Matcher m = p.matcher(input);
+        if (m.find()) {
+            String output = m.replaceFirst("$1_c$2$3");
+            System.out.println(output);
+        }
+    }
+
 > 至此结束
 
 

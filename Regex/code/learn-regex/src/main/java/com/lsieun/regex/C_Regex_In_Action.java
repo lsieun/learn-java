@@ -142,4 +142,24 @@ public class C_Regex_In_Action {
         String reg = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
         System.out.println(email.matches(reg));
     }
+
+    /**
+     * 这个是与公司的业务有点相关，同一张图片会有不同的压缩格式，例如
+     * abc.jpg，一种存在的压缩格式是abc_c.jgp，其中_c表示compressed
+     * 这个例子注意两点：
+     * （1）正则表达式不区分大小写 Pattern p = Pattern.compile(reg,Pattern.CASE_INSENSITIVE);
+     * （2）业务相关，使用正则完成名称的替换：abc.jgp-->abc_c.jpg
+     */
+    @Test
+    public void testCaseInsensitive(){
+        String reg = "(.*)(\\.[jpg|png])(.*)";
+        Pattern p = Pattern.compile(reg,Pattern.CASE_INSENSITIVE);
+        String input = "https://img05.allinmd.cn/public1/M00/0B/0A/wKgBL1nAi9GAUCt5AAdq0Wg2Lnw081.JPG?abc=aaa";
+        System.out.println(input);
+        Matcher m = p.matcher(input);
+        if (m.find()) {
+            String output = m.replaceFirst("$1_c$2$3");
+            System.out.println(output);
+        }
+    }
 }
