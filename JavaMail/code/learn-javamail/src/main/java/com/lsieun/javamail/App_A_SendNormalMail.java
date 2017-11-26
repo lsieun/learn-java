@@ -10,13 +10,13 @@ import javax.mail.internet.MimeMessage;
 import java.util.Date;
 import java.util.Properties;
 
-public class App_SendMail {
+public class App_A_SendNormalMail {
     @Test
     public void testSend()throws Exception{
         //0. 邮件参数
         Properties prop = new Properties();
         prop.put("mail.transport.protocol", "smtp");	// 指定协议
-        //prop.put("mail.smtp.host", "localhost");		// 主机   stmp.qq.com
+        //prop.put("mail.smtp.host", "localhost");      // 主机   stmp.qq.com
         prop.put("mail.smtp.host", "192.168.80.128");	// 我把邮件服务器放到了192.168.80.128上
         prop.put("mail.smtp.port", 25);					// 端口
         prop.put("mail.smtp.auth", "true");				// 用户密码认证
@@ -28,7 +28,7 @@ public class App_SendMail {
         MimeMessage message = new MimeMessage(session);
         //3. 设置邮件体参数:
         //3.1 标题
-        message.setSubject("我的第一封邮件");
+        message.setSubject("第一个示例：我的第一封邮件");
         //3.2 邮件发送时间
         message.setSentDate(new Date());
         //3.3 发件人
@@ -36,7 +36,9 @@ public class App_SendMail {
         //3.4 接收人
         message.setRecipient(Message.RecipientType.TO, new InternetAddress("lisi@lsieun.com"));
         //3.5内容
-        message.setText("你好，已经发送成功！  正文....");  // 简单纯文本邮件
+        //message.setText("你好，已经发送成功！  正文....");  // 简单纯文本邮件
+        //邮件中含有超链接
+        message.setContent("<a href='http://www.baidu.com'>百度</a>","text/html;charset=UTF-8");
         message.saveChanges();   // 保存邮件(可选)
 
         //4. 发送
