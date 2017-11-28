@@ -79,7 +79,7 @@ Let’s create our `ClassVisitor` that we’ll use to add a field to the Integer
 
 Next, let’s override the `visitField` method, where we first check if the field we plan to add already exists and set a flag(`isFieldPresent`) to indicate the status.
 
-We still have to forward the method call to the parent class — this needs to happen as the visitField method is called for every field in the class. Failing to forward the call means no fields will be written to the class.
+We still have to forward the method call to the parent class — this needs to happen as the `visitField` method is called for every field in the class. Failing to forward the call means no fields will be written to the class.
 
 This method also allows us to modify the visibility or type of existing fields:
 
