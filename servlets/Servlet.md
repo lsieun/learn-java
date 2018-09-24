@@ -21,7 +21,7 @@ Simply put, a `Servlet` is a class that handles requests, processes them and rep
 
 ## 3. Maven Dependencies
 
-To add Servlet support in our web app, the javax.servlet-api dependency is required:
+To add Servlet support in our web app, the `javax.servlet-api` dependency is required:
 
 ```xml
 <dependency>
