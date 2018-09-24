@@ -3,6 +3,10 @@
 *.iml
 .idea/
 target/
+# Eclipse
+.project
+.classpath
+.settings/
 # Log file
 *.log
 
