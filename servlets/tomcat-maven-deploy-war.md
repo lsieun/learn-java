@@ -318,4 +318,4 @@ mvn tomcat7:redeploy
 http://localhost:8080/myapp/hello
 ```
 
-源码：[地址](code/tomcat-maven-war-deployment)
+源码：[地址](../code/tomcat-maven-war-deployment)
