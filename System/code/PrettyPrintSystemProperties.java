@@ -1,0 +1,53 @@
+public class PrettyPrintSystemProperties {
+    public static void main(String[] args) {
+        System.out.println("Java Basic Info:");
+        System.out.println("java.version = " + System.getProperty("java.version"));
+        System.out.println("java.home = " + System.getProperty("java.home"));
+        System.out.println("java.vendor = " + System.getProperty("java.vendor"));
+        System.out.println("java.vendor.url = " + System.getProperty("java.vendor.url"));
+        System.out.println();
+        System.out.println("Java Dirs:");
+        System.out.println("java.class.path = " + System.getProperty("java.class.path"));
+        System.out.println("java.library.path = " + System.getProperty("java.library.path"));
+        System.out.println("java.ext.dirs = " + System.getProperty("java.ext.dirs"));
+        System.out.println("java.io.tmpdir = " + System.getProperty("java.io.tmpdir"));
+        System.out.println();
+        System.out.println("Java Specification:");
+        System.out.println("java.specification.name = " + System.getProperty("java.specification.name"));
+        System.out.println("java.specification.version = " + System.getProperty("java.specification.version"));
+        System.out.println("java.specification.vendor = " + System.getProperty("java.specification.vendor"));
+        System.out.println();
+        System.out.println("Java Runtime:");
+        System.out.println("java.runtime.name = " + System.getProperty("java.runtime.name"));
+        System.out.println("java.runtime.version = " + System.getProperty("java.runtime.version"));
+        System.out.println();
+        System.out.println("Java VM");
+        System.out.println("java.vm.name = " + System.getProperty("java.vm.name"));
+        System.out.println("java.vm.version = " + System.getProperty("java.vm.version"));
+        System.out.println("java.vm.info = " + System.getProperty("java.vm.info"));
+        System.out.println("java.vm.vendor = " + System.getProperty("java.vm.vendor"));
+        System.out.println();
+        System.out.println("Java VM Specification:");
+        System.out.println("java.vm.specification.name = " + System.getProperty("java.vm.specification.name"));
+        System.out.println("java.vm.specification.version = " + System.getProperty("java.vm.specification.version"));
+        System.out.println("java.vm.specification.vendor = " + System.getProperty("java.vm.specification.vendor"));
+        System.out.println();
+        System.out.println("File:");
+        System.out.println("file.encoding = " + System.getProperty("file.encoding"));
+        System.out.println("path.separator = " + System.getProperty("path.separator"));
+        System.out.println("file.separator = " + System.getProperty("file.separator"));
+        System.out.println("line.separator = " + System.getProperty("line.separator"));
+        System.out.println();
+        System.out.println("User:");
+        System.out.println("user.name = " + System.getProperty("user.name"));
+        System.out.println("user.home = " + System.getProperty("user.home"));
+        System.out.println("user.dir = " + System.getProperty("user.dir"));
+        System.out.println("user.language = " + System.getProperty("user.language"));
+        System.out.println("user.country = " + System.getProperty("user.country"));
+        System.out.println();
+        System.out.println("OS:");
+        System.out.println("os.name = " + System.getProperty("os.name"));
+        System.out.println("os.arch = " + System.getProperty("os.arch"));
+        System.out.println("os.version = " + System.getProperty("os.version"));
+    }
+}
