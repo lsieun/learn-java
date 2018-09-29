@@ -2,6 +2,7 @@
 
 URL：
 
+- http://blog.51cto.com/lsieun/1775254
 - http://www.ntu.edu.sg/home/ehchua/programming/webprogramming/http_basics.html
 
 
@@ -63,7 +64,7 @@ HTTP协议版本
 </form>
 ```
 
-GET   vs  POST 区别：
+**GET   vs  POST 区别**：
 
 | GET方式                                                      | POST方式                                                     |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
@@ -160,3 +161,14 @@ String name = request.getParameter("name");
 String name = new String(name.getBytes("iso-8859-1"),"utf-8"); // 手动解码
 ```
 
+> 注意：在Tomcat 8之后的GET请求方式，就不需要进行手动解码了。Tomcat 7还是需要进行手动解码的。
+
+In Tomcat 8 starting with 8.0.0 (8.0.0-RC3, to be specific), the default value of `URIEncoding` attribute on the `<Connector>` element depends on "strict servlet compliance" setting. The default value (strict compliance is off) of `URIEncoding` is now `UTF-8`. If "strict servlet compliance" is enabled, the default value is `ISO-8859-1`.
+
+参考： https://wiki.apache.org/tomcat/FAQ/CharacterEncoding#Q8
+
+进一步说明：
+
+- 在`$CATALINA_HOME/conf`目录下有`server.xml`文件，里面有`<Connector>`标签，该标签可以配置`URIEncoding`属性。
+- 在Tomcat 8中，`URIEncoding`的默认值是`UTF-8`，因而**不需要**手动解码。如果强行进行转码，中文就会乱码。[Link](http://tomcat.apache.org/tomcat-8.0-doc/config/http.html)
+- 在Tomcat 7中，`URIEncoding`的默认值是`ISO-8859-1`，因此**需要**手动解码。如果不进行转码，那么中文就会出现乱码的情况。[Link](http://tomcat.apache.org/tomcat-7.0-doc/config/http.html)
