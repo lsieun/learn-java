@@ -158,10 +158,12 @@ Once you have found it add Tomcat as follows:
 
 配置说明：
 
-- （1）`server.id`：当前值为`TomcatServer`。这个值要和在后续`pom.xml`中配置的服务器的ID值保持一致。当后续处理到`pom.xml`文件时，可以再回来过进行对照。
+- （1）`server.id`：当前值为`TomcatServer`。这个值要和在后续`pom.xml`中配置的服务器的ID值保持一致。当后续处理到`pom.xml`文件时，可以再回来过进行对照。  
 - （2）`server.username`和`server.password`要与`$CATALINA_HOME\conf\tomcat-users.xml`配置的值相同。
 
 ## 5. Project
+
+[Code Link](code/tomcat-maven-war-deployment)
 
 ### 5.1 创建项目
 
@@ -176,6 +178,10 @@ mvn archetype:generate -DgroupId=lsieun -DartifactId=tomcat-maven-war-deployment
 > （2）添加了`-DarchetypeCatalog=internal`
 
 执行完`mvn`命令后，会创建`tomcat-maven-war-deployment`目录. 进入到该目录中，删除其中的`App.java`和`AppTest.java`。
+
+```bash
+find ./ -name "*.java" | xargs rm -rf
+```
 
 ### 5.2 项目配置：pom.xml
 
@@ -318,4 +324,4 @@ mvn tomcat7:redeploy
 http://localhost:8080/myapp/hello
 ```
 
-源码：[地址](../code/tomcat-maven-war-deployment)
+源码：[Code Link](code/tomcat-maven-war-deployment)
