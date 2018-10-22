@@ -1,0 +1,137 @@
+# JOptionPane对话框
+
+<!-- TOC -->
+
+- [JOptionPane对话框](#joptionpane对话框)
+    - [1. 显示信息](#1-显示信息)
+    - [2. 输入信息](#2-输入信息)
+    - [3. 确认信息](#3-确认信息)
+
+<!-- /TOC -->
+
+## 1. 显示信息
+
+显示一个带有OK 按钮的模态对话框。
+下面是几个使用`showMessageDialog`的例子：
+
+```java
+JOptionPane.showMessageDialog(null, "错误信息提示", "标题", JOptionPane.INFORMATION_MESSAGE);
+JOptionPane.showMessageDialog(jPanel, "提示消息", "标题",JOptionPane.WARNING_MESSAGE); 
+JOptionPane.showMessageDialog(null, "提示消息.", "标题",JOptionPane.ERROR_MESSAGE);
+JOptionPane.showMessageDialog(null, "提示消息.", "标题",JOptionPane.PLAIN_MESSAGE);
+```
+
+Java代码：
+
+```java
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+public class JOptionPane_01_ShowMessage {
+    public static void main(String[] args) {
+        // 创建JFrame
+        JFrame frame = new JFrame("Hello World");
+        FrameUtil.initFrame(frame, 300, 400);
+        
+        // 消息对话框
+        JOptionPane.showMessageDialog(frame, "今天的天气非常好", "通知", JOptionPane.INFORMATION_MESSAGE);
+        // 警告对话框
+        JOptionPane.showMessageDialog(frame, "今天的天气有雷阵雨", "警告", JOptionPane.WARNING_MESSAGE);
+        // 错误对话框
+        JOptionPane.showMessageDialog(frame, "今天的天气...，系统出错了", "错误", JOptionPane.ERROR_MESSAGE);
+
+        // 退出
+        FrameUtil.quit(frame);
+    }
+}
+
+```
+
+```java
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
+import javax.swing.JFrame;
+
+// 初始化窗体的工具类
+public class FrameUtil {
+
+    public static void initFrame(JFrame frame, int width, int height) {
+        // 获取一个与系统相关工具类对象
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        // 获取屏幕的分辨率
+        Dimension d = toolkit.getScreenSize();
+
+        int screenX = (int) d.getWidth();
+        int screenY = (int) d.getHeight();
+
+        int leftTopX = (screenX - width) / 2;
+        int leftTopY = (screenY - height) / 2;
+
+        frame.setBounds(leftTopX, leftTopY, width, height);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+    }
+
+    public static void quit(JFrame frame) {
+        frame.setVisible(false);
+        frame.dispose();
+    }
+}
+
+```
+
+## 2. 输入信息  
+
+```java
+String inputValue = JOptionPane.showInputDialog("信息");
+```
+
+```java
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+public class JOptionPane_01_ShowInput {
+    public static void main(String[] args) {
+        // 创建JFrame
+        JFrame frame = new JFrame("Hello World");
+        FrameUtil.initFrame(frame, 300, 400);
+        
+        // 输入对话框
+        String username = JOptionPane.showInputDialog("请输入你的用户名");
+        System.out.println("username = " + username);
+
+        // 退出
+        FrameUtil.quit(frame);
+    }
+}
+
+```
+
+## 3. 确认信息  
+
+```java
+int n = JOptionPane.showConfirmDialog(null, "信息", "标题",JOptionPane.YES_NO_OPTION);
+```
+
+```java
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+public class JOptionPane_01_ShowConfirm {
+    public static void main(String[] args) {
+        // 创建JFrame
+        JFrame frame = new JFrame("Hello World");
+        FrameUtil.initFrame(frame, 300, 400);
+        
+        // 确认对话框
+        int num = JOptionPane.showConfirmDialog(frame, "文件尚未保存，您确定要退出吗？");
+        System.out.println("num = " + num);
+
+        // 退出
+        FrameUtil.quit(frame);
+    }
+}
+
+````
+
