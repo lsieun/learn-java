@@ -1,0 +1,181 @@
+# 布局管理器
+
+布局管理器:布局管理就是用于指定组件的 摆放位置的。
+ 
+每种布局管理器都有自己的摆放风格 
+
+<!-- TOC -->
+
+- [布局管理器](#布局管理器)
+    - [1. 边框布局管理器(BorderLayout)](#1-边框布局管理器borderlayout)
+    - [2. 流式布局管理器(FlowLayout)](#2-流式布局管理器flowlayout)
+    - [3. 表格布局管理器(GridLayout)](#3-表格布局管理器gridlayout)
+    - [4. 卡片布局管理器(CardLayout)](#4-卡片布局管理器cardlayout)
+
+<!-- /TOC -->
+
+## 1. 边框布局管理器(BorderLayout)
+
+摆放的风格： 上北  、 下南 、 左西、 右东 ， 中 
+
+Borderlayout 要注意的事项：
+- (1))使用Borderlayout添加组件的时候，如果没有指定组件的方位，那么默认添加到中间的位置上。
+- (2)使用BorderLayout的时候，如果东南西北那个方向没有对应 的组件，那么中间位置的组件就会占据其空缺的位置。
+- (3)窗体默认的布局管理器就是Borderlayout.
+
+继承关系图(AWT)
+
+![](images/java-component-tree.png)
+
+```java
+import javax.swing.JFrame;
+import java.awt.BorderLayout;
+import javax.swing.JButton;
+
+public class Layout_01_BorderLayout {
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("测试Layout");
+
+        // 创建一个边框布局管理器
+        BorderLayout layout = new BorderLayout();
+        // 让borderlayout管理frame窗体。
+        frame.setLayout(layout);
+
+        frame.add(new JButton("北"), BorderLayout.NORTH);
+        frame.add(new JButton("南"), BorderLayout.SOUTH);
+        frame.add(new JButton("西"), BorderLayout.WEST);
+        frame.add(new JButton("东"), BorderLayout.EAST);
+        frame.add(new JButton("中"), BorderLayout.CENTER);
+
+        FrameUtil.initFrame(frame, 400, 500);
+    }
+}
+
+```
+
+## 2. 流式布局管理器(FlowLayout)
+
+流式布局管理器要注意的事项：
+- (1)流式布局管理器默认情况是居中对齐的。
+- (2)panel默认的局部管理器就是FlowLayout.
+
+```java
+import java.awt.FlowLayout;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JButton;
+
+public class Layout_01_FlowLayout {
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("测试Layout");
+
+        // 创建面板
+        JPanel panel = new JPanel();
+        frame.add(panel);
+
+        // 创建一个流式布局管理器
+        FlowLayout layout = new FlowLayout(FlowLayout.LEFT, 0, 50);
+        // 让流式布局管理器管理frame窗体
+        panel.setLayout(layout);
+
+        panel.add(new JButton("按钮1"));
+        panel.add(new JButton("按钮2"));
+        panel.add(new JButton("按钮3"));
+        panel.add(new JButton("按钮4"));
+
+        // 初始化窗体
+        FrameUtil.initFrame(frame, 300, 400);
+    }
+}
+
+```
+
+## 3. 表格布局管理器(GridLayout)
+ 
+注意的事项： 如果表格数量不够使用时，默认会多加一列。
+
+```java
+import java.awt.GridLayout;
+import javax.swing.JFrame;
+import javax.swing.JButton;
+
+public class Layout_01_GridLayout {
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("计算器");
+
+        // 创建表格布局管理器
+        GridLayout layout = new GridLayout(4, 4, 1, 2);
+        // 让窗体交给表格布局管理器管理
+        frame.setLayout(layout);
+
+        for(int i = 0; i < 10; i++) {
+            frame.add(new JButton("" + i));
+        }
+
+        frame.add(new JButton("+"));
+        frame.add(new JButton("-"));
+        frame.add(new JButton("*"));
+        frame.add(new JButton("/"));
+        frame.add(new JButton("="));
+        frame.add(new JButton("."));
+        // frame.add(new JButton("&"));
+
+        FrameUtil.initFrame(frame, 300, 300);
+    }
+}
+
+
+```
+
+## 4. 卡片布局管理器(CardLayout)
+
+```java
+import java.util.List;
+import java.util.ArrayList;
+import java.awt.CardLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JButton;
+
+public class Layout_01_CardLayout {
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("卡片布局管理器");
+
+        JPanel panel = new JPanel();
+        frame.add(panel);
+
+        // 创建一个卡片布局管理器
+        CardLayout layout = new CardLayout();
+        panel.setLayout(layout);
+
+        JButton btn1 = new JButton("东");
+        JButton btn2 = new JButton("南");
+        JButton btn3 = new JButton("西");
+        JButton btn4 = new JButton("北");
+
+        List<JButton> btnList = new ArrayList<JButton>();
+        btnList.add(btn1);
+        btnList.add(btn2);
+        btnList.add(btn3);
+        btnList.add(btn4);
+
+        for (int i = 0; i < btnList.size(); i++) {
+            JButton btn = btnList.get(i);
+            panel.add(btn);
+            btn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    layout.next(panel); // 下一张
+                    // layout.previous(panel); // 上一张
+                }
+            });
+        }
+
+        // 初始化窗体
+        FrameUtil.initFrame(frame, 300, 300);
+    }
+}
+
+```
