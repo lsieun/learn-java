@@ -3,6 +3,8 @@ import java.awt.FileDialog;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -13,6 +15,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JTextArea;
+import javax.swing.JOptionPane;
 
 /*
  菜单组件
@@ -37,32 +40,39 @@ public class Notepad {
     //文件菜单
     JMenu fileMenu = new JMenu("文件");
     JMenu editMenu  = new JMenu("编辑");
+    JMenu helpMenu  = new JMenu("帮助");
     
-    JMenu switchMenu = new JMenu("切换工作目录");
-    
-    
-    //菜单项
-    JMenuItem openMenu = new JMenuItem("打开");
-    JMenuItem saveMenu = new JMenuItem("保存");
- 
-    JMenuItem aboutMenu = new JMenuItem("关于");
-    JMenuItem closeMenu = new JMenuItem("关闭");
-    
-    
-    JMenuItem  workMenu1 = new JMenuItem("0910project");
-    JMenuItem  workMenu2 = new JMenuItem("1208project");
-    JMenuItem  workMenu3 = new JMenuItem("1110project");
     
     TextArea area = new TextArea(20,30);
-    
-    public void initNotepad(){
-        //菜单添加菜单项目
-        fileMenu.add(openMenu);
-        fileMenu.add(saveMenu);
+
+    private void initFileMenu() {
+        //菜单项
+        JMenuItem newItem = new JMenuItem("新建");
+        JMenuItem openItem = new JMenuItem("打开");
+        JMenuItem saveItem = new JMenuItem("保存");
+        JMenuItem closeItem = new JMenuItem("关闭");
+        JMenuItem quitItem = new JMenuItem("退出");
         
+        //复选菜单
+        JMenu switchMenu = new JMenu("切换工作目录");
+        JMenuItem workMenu1 = new JMenuItem("0910project");
+        JMenuItem workMenu2 = new JMenuItem("1208project");
+        JMenuItem workMenu3 = new JMenuItem("1110project");
+        switchMenu.add(workMenu1);
+        switchMenu.add(workMenu2);
+        switchMenu.add(workMenu3);
+
+        //菜单添加菜单项目
+        fileMenu.add(newItem);
+        fileMenu.add(openItem);
+        fileMenu.add(saveItem);
+        fileMenu.add(closeItem);
+        //菜单添加菜单就是复选菜单
+        fileMenu.add(switchMenu);
+        fileMenu.add(quitItem);
         
         //给保存添加事件
-        saveMenu.addActionListener(new ActionListener() {
+        saveItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -89,30 +99,68 @@ public class Notepad {
             }
         
         });
-        
-        
-        editMenu.add(aboutMenu);
-        editMenu.add(closeMenu);
-        
-        //复选菜单
-        switchMenu.add(workMenu1);
-        switchMenu.add(workMenu2);
-        switchMenu.add(workMenu3);
-        //菜单添加菜单就是复选菜单
-        fileMenu.add(switchMenu);
+
+        quitItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FrameUtil.quit(frame);
+            }
+        });
+
+    }
+
+    private void initEditMenu() {
+        JMenuItem cutItem = new JMenuItem("剪切");
+        JMenuItem copyItem = new JMenuItem("复制");
+        JMenuItem pasteItem = new JMenuItem("粘贴");
+
+        editMenu.add(cutItem);
+        editMenu.add(copyItem);
+        editMenu.add(pasteItem);
+    }
+
+    private void initHelpMenu() {
+        JMenuItem registerItem = new JMenuItem("注册...");
+        JMenuItem aboutItem = new JMenuItem("关于");
+
+        helpMenu.add(registerItem);
+        helpMenu.add(aboutItem);
+
+        aboutItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //System.out.println("About Click");
+                JOptionPane.showMessageDialog(frame, "程序：Super Notepad\r\n作者：Aegis\r\n版本：1.0.0 Beta", "关于", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+    }
+
+    public void initMenuBar() {
+        this.initFileMenu();
+        this.initEditMenu();
+        this.initHelpMenu();
         
         //菜单条添加菜单
         bar.add(fileMenu);
         bar.add(editMenu);
+        bar.add(helpMenu);
+    }
+    
+    public void init(){
+        this.initMenuBar();
         
         //添加菜单条
         frame.add(bar,BorderLayout.NORTH);
-        frame.add(area);
+        //添加编辑区域
+        frame.add(area, BorderLayout.CENTER);
+
+        // 初始化窗体
         FrameUtil.initFrame(frame, 500, 600);
     
     }
     
     public static void main(String[] args) {
-        new Notepad().initNotepad();
+        Notepad notepad = new Notepad();
+        notepad.init();
     }
 }
