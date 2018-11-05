@@ -9,3 +9,4 @@ JAVA EBook:
 - http://bestcbooks.com/categories/java/
 
 
+- [Java Concept Of The Day](https://javaconceptoftheday.com/)
