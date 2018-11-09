@@ -10,6 +10,9 @@
 
 动态加载JAR包文件
 
+Javassits加载classpath后，如何取消呢
+对多个应用进行crack
+
 - [ ] 找到返回ObtainTicketResponse的方法
 
 - [x] ObtainTicketResponse

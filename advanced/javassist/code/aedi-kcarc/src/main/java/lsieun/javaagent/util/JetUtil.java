@@ -8,10 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import javassist.CtClass;
-import lsieun.javaagent.handler.CatchExceptionHandler;
-import lsieun.javaagent.handler.Handler;
-import lsieun.javaagent.handler.ObtainTicketHandler;
-import lsieun.javaagent.handler.PingHandler;
+import lsieun.javaagent.handler.*;
 
 public class JetUtil {
     private static String jarDir;
@@ -38,6 +35,10 @@ public class JetUtil {
         String[] commands = {"jar", "-uvf", jarName, "com/jetbrains"};
         String result = ExecuteCommand.run(jarDir, commands);
         System.out.println("Result: " + result);
+
+        // 4. Clean up
+        String unWantedDir = jarDir + File.separator + "com";
+        IOUtil.deleteDirecotry(unWantedDir);
     }
 
     public static void init(String jarPath) {
@@ -96,7 +97,8 @@ public class JetUtil {
         List<Handler> handlers = new ArrayList<Handler>();
 
         String reg_Exception = "^\\(Ljava/lang/String;Ljava/lang/String;J\\[Lcom/jetbrains/\\w+/\\w+/\\w+;\\)V$";
-        handlers.add(new CatchExceptionHandler(reg_Exception));
+        //handlers.add(new CatchExceptionHandler(reg_Exception));
+        handlers.add(new JustReturnHandler(reg_Exception));
 
         String reg_ObtainTicket = "(Ljava/lang/String;Ljava/lang/String;IIZJ)Lcom/jetbrains/ls/responses/ObtainTicketResponse;";
         handlers.add(new ObtainTicketHandler(reg_ObtainTicket));
