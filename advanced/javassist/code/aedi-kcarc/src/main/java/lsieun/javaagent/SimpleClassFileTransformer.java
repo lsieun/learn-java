@@ -309,7 +309,7 @@ public class SimpleClassFileTransformer implements ClassFileTransformer {
 
         ClassPool pool = ClassPool.getDefault();
         pool.insertClassPath(new ByteArrayClassPath(fullyQualifiedClassName, byteCode));
-        //pool.insertClassPath("/home/liusen/workdir/dummy/idea-IU-182.4505.22/lib/idea.jar");
+        //pool.getPool("/home/liusen/workdir/dummy/idea-IU-182.4505.22/lib/idea.jar");
         pool.insertClassPath("/home/liusen/workdir/dummy/idea-IU-182.4892.20/lib/idea.jar");
         CtClass cc = pool.makeClass(new ByteArrayInputStream(byteCode));
         CtMethod[] methods = cc.getDeclaredMethods(methodName);
@@ -383,7 +383,7 @@ public class SimpleClassFileTransformer implements ClassFileTransformer {
 
         ClassPool pool = ClassPool.getDefault();
         pool.insertClassPath(new ByteArrayClassPath(fullyQualifiedClassName, byteCode));
-        //pool.insertClassPath("/home/liusen/workdir/dummy/idea-IU-182.4505.22/lib/idea.jar");
+        //pool.getPool("/home/liusen/workdir/dummy/idea-IU-182.4505.22/lib/idea.jar");
         pool.insertClassPath("/home/liusen/workdir/dummy/idea-IU-182.4892.20/lib/idea.jar");
         CtClass cc = pool.makeClass(new ByteArrayInputStream(byteCode));
         CtMethod[] methods = cc.getDeclaredMethods(methodName);

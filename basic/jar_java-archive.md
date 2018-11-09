@@ -234,7 +234,7 @@ Example:
 
 ```java
 JarFile jarfile = new JarFile(jarFileName);
-Manifest mf = jarfile.getManifestI();
+Manifest mf = jarfile.getManifest();
 Attributes attrs = mf.getMainAttributes();
 String mainClassName = attrs.getValue(Attributes.Name.MAIN_CLASS);
 ```

@@ -1,10 +1,13 @@
 package lsieun.javaagent.util;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import javassist.ByteArrayClassPath;
+import javassist.ClassPath;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
@@ -17,19 +20,28 @@ public class AssistUtil {
     static {
         pool = ClassPool.getDefault();
 
-        try {
-            // FIXME: 这里应该如何解决呢？不能写成固定值，是否可以写成传入值呢？
-            //pool.insertClassPath(new ByteArrayClassPath(fullyQualifiedClassName, byteCode));
-            //pool.insertClassPath("/home/liusen/workdir/dummy/idea-IU-182.4505.22/lib/idea.jar");
-            pool.insertClassPath("/home/liusen/workdir/dummy/idea-IU-182.4892.20/lib/idea.jar");
-            pool.importPackage("com.jetbrains.ls.responses");
-        } catch (NotFoundException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            // FIXME: 这里应该如何解决呢？不能写成固定值，是否可以写成传入值呢？
+//            //pool.getPool(new ByteArrayClassPath(fullyQualifiedClassName, byteCode));
+//            //pool.getPool("/home/liusen/workdir/dummy/idea-IU-182.4505.22/lib/idea.jar");
+//            pool.getPool("/home/liusen/workdir/dummy/idea-IU-182.4892.20/lib/idea.jar");
+//            pool.importPackage("com.jetbrains.ls.responses");
+//        } catch (NotFoundException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public static ClassPool getPool() {
         return pool;
+    }
+
+    public static void insertClassPath(String classpath) {
+        try {
+            pool.insertClassPath(classpath);
+            pool.importPackage("com.jetbrains.ls.responses");
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public static CtClass getClass(String fullyQualifiedClassName,byte[] byteCode) throws Exception {
@@ -56,6 +68,33 @@ public class AssistUtil {
         }
 
         return cc.toBytecode();
+    }
+
+    public static boolean shouldSave(CtClass cc, List<Handler> handlers) {
+        CtMethod[] methods = cc.getDeclaredMethods();
+
+        boolean shouldSave = false;
+
+        try {
+            for (int i=0; i<methods.length; i++) {
+                CtMethod m = methods[i];
+                for (Handler h : handlers) {
+                    if (h.match(m)) {
+                        shouldSave = true;
+                        h.process(m);
+                    }
+                }
+            }
+        }catch (Exception ex) {
+            shouldSave = false;
+            ex.printStackTrace();
+        }
+
+        if (shouldSave) {
+            return true;
+        }
+
+        return false;
     }
 
     public static CtMethod[] findMethods(
