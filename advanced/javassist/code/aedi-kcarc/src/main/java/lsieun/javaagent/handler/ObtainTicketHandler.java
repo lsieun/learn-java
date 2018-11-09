@@ -35,15 +35,15 @@ public class ObtainTicketHandler extends Handler {
         sb.append("    response.setTicketId(\"1\");");
         sb.append("    String username = System.getProperty(\"user.name\");");
         sb.append("    response.setTicketProperties(\"licensee=\" + username + \"\\tlicenseType=0\");");
-        sb.append("    response.setMessage(\"liusen ObtainTicketResponse Message\");");
+        sb.append("    response.setMessage(\"DIY ObtainTicketResponse Message\");");
 
         sb.append("    response.setSalt(timestamp);");
         sb.append("    response.setConfirmationStamp(String.valueOf(timestamp));");
 
-        sb.append("    response.setServerUid(\"liusen_server_id\");");
-        sb.append("    response.setServerLease(\"liusen_serverlease\");");
-        sb.append("    response.setLeaseSignature(\"liusen_leasesignature\");");
-        sb.append("    response.setSignature(\"liusen_signature\");");
+        sb.append("    response.setServerUid(\"DIY_server_uid\");");
+        sb.append("    response.setServerLease(\"DIY_server_lease\");");
+        sb.append("    response.setLeaseSignature(\"DIY_lease_signature\");");
+        sb.append("    response.setSignature(\"DIY_signature\");");
 
         sb.append("    long period = 3600 * 60 * 24 * 365 * 10;");
         sb.append("    response.setProlongationPeriod(period);");

@@ -26,8 +26,9 @@ public class CatchExceptionHandler extends Handler {
         sb.append("    System.out.println();");
         sb.append("    System.out.println(\"====================>>>>>>>>>>>>catchException\");");
         sb.append("    System.out.println(\"Method Agent: \" + $class);");
-        sb.append("    System.out.println(\"捕获错误\");");
-        sb.append("    ex.printStackTrace();");
+        sb.append("    System.out.println(\"Gotcha\");");
+        //sb.append("    System.out.println(\"捕获错误\");");
+        //sb.append("    ex.printStackTrace();");
         sb.append("    System.out.println(\"<<<<<<<<<======================\");");
         sb.append("    return;");
 
