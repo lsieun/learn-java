@@ -13,14 +13,6 @@
             <artifactId>javassist</artifactId>
             <version>3.24.0-GA</version>
         </dependency>
-        <dependency>
-            <groupId>com.jetbrains</groupId>
-            <artifactId>intellij-idea</artifactId>
-            <version>1.0.0</version>
-            <scope>system</scope>
-            <!-- 指明jar包的位置 -->
-            <systemPath>${basedir}/lib/idea.jar</systemPath>
-        </dependency>
     </dependencies>
 
     <build>

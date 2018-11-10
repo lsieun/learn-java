@@ -1,6 +1,6 @@
 package lsieun.test;
 
-public class Test02 {
+public class RegExpTest {
     public static void main(String[] args) {
         String str1 = "(Ljava/lang/String;Ljava/lang/String;J[Lcom/jetbrains/a/b/s;)V";
         String str2 = "(Ljava/lang/String;Ljava/lang/String;J[Lcom/jetbrains/b/b/l;)V";
