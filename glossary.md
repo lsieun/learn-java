@@ -30,3 +30,15 @@ In **a traditional sense**, an `endpoint` can be a modem, hub, bridge, or switch
 Example:
 
 The `java.lang` package is imported automatically into all source files. In case there are two or more classes with the same name but defined in different imported (or assumed) packages, then those classes must be referenced by their **fully-qualified-class-name** (**FQCN**).
+
+## N
+
+A **network interface** is the point of interconnection between a computer and a network. A **network interface** is generally **a network interface card** (**NIC**), but does not have to have a **physical** form. Instead, the network interface can be implemented in **software**.
+
+
+## T
+
+### Thread pools
+
+Thread pools are useful when the number of threads that are created need to be limited. Using a pool not only **controls how many threads are created**, but it can also **eliminate the need to create and destroy threads repeatedly**, an often expensive operation.
+

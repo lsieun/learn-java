@@ -3,7 +3,7 @@
 我从3个层次去理解这些工具：
 
 - （1）sources 代码
-- （2）classes 字节码文件
+- （2）classes 字节码文件（静态的class文件，没有被加载到JVM中、没有运行的class文件）
 - （3）run 运行过程中的状态
 
 ## 1. sources
@@ -33,7 +33,7 @@
 | ---------------- | --------------------------------------- | ------------------------------------------------------------ |
 | classes 内容修改 | `asm`, <br/>`javassist`, <br/>`aspectj` |                                                              |
 | classes 内容分析 | `jdeps`                                 | a static analysis tool for analyzing the dependencies of packages or classes. |
-|                  | `javap`                                 | Java class disassembler—effectively a tool for peeking inside class files. |
+|                  | `javap`                                 | Java class disassembler -- effectively a tool for peeking inside class files. |
 | classes 文件使用 | `jar`                                   | class file -> jar                                            |
 |                  | `java`<br/>`javaw`                      | class file or jar -> JVM Run                                 |
 

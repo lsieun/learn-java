@@ -1,11 +1,10 @@
-package lsieun.network.freepastry;
+package lsieun.network.p2p.freepastry;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.Collection;
 
 import rice.environment.Environment;
-import rice.pastry.Id;
 import rice.pastry.NodeHandle;
 import rice.pastry.NodeIdFactory;
 import rice.pastry.PastryNode;

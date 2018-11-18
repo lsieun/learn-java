@@ -40,6 +40,11 @@ public class JarUtil {
         }
     }
 
+    /**
+     * Get Fully-Qualified Class Name
+     * @param entryName
+     * @return
+     */
     public static String getFQCN(String entryName) {
         String className = entryName.replace(".class", "").replace("/",".");
         return className;

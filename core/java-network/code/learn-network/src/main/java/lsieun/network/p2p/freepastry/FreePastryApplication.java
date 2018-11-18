@@ -1,4 +1,4 @@
-package lsieun.network.freepastry;
+package lsieun.network.p2p.freepastry;
 
 import rice.p2p.commonapi.Application;
 import rice.p2p.commonapi.Endpoint;

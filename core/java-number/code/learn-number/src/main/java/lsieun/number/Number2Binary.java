@@ -4,6 +4,7 @@ public class Number2Binary {
     public static void main(String[] args) {
         display('A');
         display('a');
+        display('宋');
 
         getStringRadix();
     }
