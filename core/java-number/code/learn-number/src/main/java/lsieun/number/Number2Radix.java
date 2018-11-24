@@ -24,5 +24,8 @@ public class Number2Binary {
         System.out.println("Octal eqivalent of 100 = " + Integer.toString(100, 8));
         System.out.println("Decimal eqivalent of 100 = " + Integer.toString(100, 10));
         System.out.println("Hexadecimal eqivalent of 100 = " + Integer.toString(100, 16));
+
+        // 自定义进制
+        System.out.println("五进制 of 100 = " + Integer.toString(100, 5));
     }
 }
