@@ -186,7 +186,7 @@ Default: 90 days
 
 Defines keystore as the name of the file that contains the key store. If this file does not exist, keytool creates it for you.
 
-Default: ".keystore" in the user’s home directory
+Default: "`.keystore`" in the **user’s home directory**
 
 - `-storepass storepass`
 

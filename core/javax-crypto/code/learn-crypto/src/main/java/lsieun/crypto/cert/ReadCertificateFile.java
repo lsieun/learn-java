@@ -16,7 +16,7 @@ public class ReadCertificateFile {
     public static void main(String[] args) {
         try {
             CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
-            String filepath = ReadCertificateFile.class.getClassLoader().getResource("cert/www.jscape.com.cert").toURI().getPath();
+            String filepath = ReadCertificateFile.class.getClassLoader().getResource("cert/lsieun-Test-CA-signed-cert.cer").toURI().getPath();
             InputStream inputStream = new FileInputStream(filepath);
             Certificate certificate = certFactory.generateCertificate(inputStream);
 

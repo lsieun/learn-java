@@ -37,7 +37,7 @@ public class Asymmetric_DSAParamsOfKeyPair {
             BigInteger base = dsaParams.getG();
             BigInteger x = privateKey.getX();
             BigInteger y = publicKey.getY();
-            System.out.println(dsaParams);
+            //System.out.println(dsaParams);
             System.out.println(prime);
             System.out.println(subPrime);
             System.out.println(base);
