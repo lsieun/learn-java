@@ -8,4 +8,19 @@
     <packaging>jar</packaging>
 
 
+    <dependencies>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk15on</artifactId>
+            <version>1.60</version>
+        </dependency>
+        <dependency>
+            <groupId>lsieun</groupId>
+            <artifactId>tank-war</artifactId>
+            <version>1.0.0</version>
+            <scope>system</scope>
+            <!-- 指明jar包的位置 -->
+            <systemPath>${basedir}/lib/tank.jar</systemPath>
+        </dependency>
+    </dependencies>
 </project>
