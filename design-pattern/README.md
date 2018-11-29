@@ -1,0 +1,1 @@
+A design pattern is not invented - it's discovered as a repeated solution to a commonly recurring problem.
