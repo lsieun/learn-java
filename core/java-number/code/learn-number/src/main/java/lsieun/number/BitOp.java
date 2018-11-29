@@ -3,6 +3,7 @@ package lsieun.number;
 public class BitOp {
     public static void main(String[] args) {
         testInt();
+        testUnsignedShift();
     }
 
     public static void testInt() {
@@ -24,5 +25,11 @@ public class BitOp {
 
     public static int bitXor(int a, int b) {
         return a ^ b;
+    }
+
+    public static void testUnsignedShift() {
+        byte b = (byte)-128;
+        System.out.println(b >> 1);
+        System.out.println(b >>> 1);
     }
 }
