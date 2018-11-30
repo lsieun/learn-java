@@ -1,14 +1,10 @@
-package lsieun.raj;
+package lsieun.jar;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
-
-import javax.print.DocFlavor;
 
 public class ReadTextOutByURL {
     public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package lsieun.raj;
+package lsieun.jar;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import java.util.zip.ZipEntry;
 
 public class ReadTextOut {
     public static void main(String[] args) {
