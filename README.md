@@ -1,5 +1,13 @@
 # learn-java
 
+## 知识归类
+
+classpath -> classloader(JVM)
+Classpath的归类JVM的classloader当中。因为在classloader加载class文件有三个层次：bootstrap、extension和user class。而classpath就是设置user class的寻找路径。
+
+
+`javac` `javap`这些归类于jdk tools
+
 Doc
 
 - https://docs.oracle.com/en/java/
@@ -24,7 +32,11 @@ Doc
 - https://www.javaworld.com/blog/java-101/
 - [JavaTM 2 Platform Standard Edition 5.0](https://www.cs.mun.ca/java-api-1.5/guide/)
 - https://developer.ibm.com/technologies/java/
+- [AVAJAVA Web Tutorials](http://www.avajava.com/tutorials/)
 
+## Design Patterns Tutorials
+
+- http://www.avajava.com/tutorials/categories/design-patterns
 
 JDK
 
