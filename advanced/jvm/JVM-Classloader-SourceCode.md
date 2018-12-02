@@ -1,5 +1,7 @@
 # The ClassLoader structure
 
+URL: https://www.ibm.com/developerworks/java/tutorials/j-classloader/j-classloader.html
+
 # 1. ClassLoader structure overview
 
 A ClassLoader's basic purpose is to service a request for a class. The JVM needs a class, so it asks the ClassLoader, by name, for this class, and the ClassLoader attempts to return a Class object that represents the class.
