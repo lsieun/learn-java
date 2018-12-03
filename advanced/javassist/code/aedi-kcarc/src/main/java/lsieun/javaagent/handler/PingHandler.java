@@ -4,8 +4,8 @@ import javassist.CtMethod;
 import lsieun.javaagent.util.CodeSegment;
 
 public class PingHandler extends Handler {
-    public PingHandler(String methodSignatureRegExp) {
-        super(methodSignatureRegExp);
+    public PingHandler(String methodSignature, boolean regex) {
+        super(methodSignature, regex);
     }
 
     @Override

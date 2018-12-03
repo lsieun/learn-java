@@ -5,17 +5,8 @@ import javassist.CtMethod;
 import lsieun.javaagent.util.AssistUtil;
 
 public class CatchExceptionHandler extends Handler {
-    public CatchExceptionHandler(String methodSignatureRegExp) {
-        super(methodSignatureRegExp);
-    }
-
-    @Override
-    public boolean match(CtMethod method) {
-        String sig = method.getSignature();
-        if (sig.matches(this.methodSignature)) {
-            return true;
-        }
-        return false;
+    public CatchExceptionHandler(String methodSignature, boolean regex) {
+        super(methodSignature, regex);
     }
 
     @Override

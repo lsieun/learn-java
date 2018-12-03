@@ -2,84 +2,170 @@ package lsieun.javaagent.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javassist.ByteArrayClassPath;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
+import javassist.NotFoundException;
+import lsieun.javaagent.handler.ClassNameFilter;
+import lsieun.javaagent.handler.Handler;
 
-/**
- * 任意jar包
- * 任何类正则表达式，正则表达式方法签名
- * 任意完整类名、方法名，任意方法签名
- *
- */
+
 public class CodePatch {
-    public static void patch(String jarPath, String entryRegex, String methodName, String methodSignatureRegex) {
-        try {
-            ClassPool pool = ClassPool.getDefault();
-            pool.insertClassPath(jarPath);
+    private String jarPath;
+    private String jarDirectory;
+    private String jarName;
+    private ClassPool pool;
+    private Map<String, ByteArrayOutputStream> map;
 
-            List<String> list = JarUtil.getAllEntries(jarPath);
-            if (entryRegex == null || "".equals(entryRegex.trim())) {
-                entryRegex = "^.*\\.class$";
-            }
-            JarUtil.filter(list, entryRegex);
+    public CodePatch() {
+        this.pool = ClassPool.getDefault();
+        this.map = new HashMap<String, ByteArrayOutputStream>();
+    }
 
+    public List<String> init(String jarPath) throws NotFoundException {
+        pool.insertClassPath(jarPath);
 
-            Map<String, ByteArrayOutputStream> map = JarUtil.getAllClasses(jarPath, list);
+        this.jarPath = jarPath;
+        File file = new File(jarPath);
+        this.jarDirectory = file.getParent();
+        this.jarName = file.getName();
 
-            Iterator<Map.Entry<String, ByteArrayOutputStream>> it = map.entrySet().iterator();
+        List<String> resultList = new ArrayList<String>();
+        resultList.add("Jar Path: " + jarPath);
+        resultList.add("Jar Dir : " + jarDirectory);
+        resultList.add("Jar Name: " + jarName);
+        return resultList;
+    }
 
-            while (it.hasNext()) {
-                Map.Entry<String, ByteArrayOutputStream> entry = it.next();
-                String className = entry.getKey();
-                byte[] byteCode = entry.getValue().toByteArray();
+    public void importPackage(String packageName) {
+        pool.importPackage(packageName);
+    }
 
+    public List<String> processClasses(List<ClassNameFilter> filters) {
+        List<String> entryList = this.getEntries(filters);
+        this.map = JarUtil.getAllClasses(jarPath, entryList);
+
+        List<String> resultList = new ArrayList<String>();
+
+        Iterator<Map.Entry<String, ByteArrayOutputStream>> it = map.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<String, ByteArrayOutputStream> entry = it.next();
+            String className = entry.getKey();
+            byte[] byteCode = entry.getValue().toByteArray();
+
+            List<Handler> handlers = getHandlers(className, filters);
+
+            try {
+                pool.insertClassPath(new ByteArrayClassPath(className, byteCode));
                 CtClass cc = pool.makeClass(new ByteArrayInputStream(byteCode));
                 CtMethod[] methods = cc.getDeclaredMethods();
+
+                boolean save = false;
                 for (int i=0; i<methods.length; i++) {
                     CtMethod m = methods[i];
-
                     if (m.isEmpty()) {
                         continue;
                     }
-
-                    if (methodName != null) {
-                        if (!methodName.equals(m.getName())) {
-                            continue;
+                    for (Handler h : handlers) {
+                        if (h.match(m)) {
+                            save = true;
+                            h.process(m);
                         }
                     }
-                    String sig = m.getSignature();
+                }
 
-                    if (!sig.matches(methodSignatureRegex)) {
-                        continue;
+                if (save) {
+                    try {
+                        cc.writeFile(this.jarDirectory);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
+                    resultList.add(className);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
-                    System.out.println(className + "#" + m.getName());
-                    CodeSegment codeBefore = new CodeSegment();
-                    codeBefore.printBlankLine(2);
-                    codeBefore.printStartMark();
-                    codeBefore.printMethodInfo();
-                    codeBefore.printSignature();
-                    codeBefore.printArguments();
-                    codeBefore.printEndMark();
+        return resultList;
+    }
 
-                    m.insertBefore(codeBefore.getString());
+    public List<String> getTopDir(List<String> list) {
+        List<String> resultList = new ArrayList<String>();
+        for (String item : list) {
+            String[] array = item.split("\\.");
+            String topPackage = array[0];
+            if (!resultList.contains(topPackage)) {
+                resultList.add(topPackage);
+            }
+        }
+        return resultList;
+    }
+
+    public List<String> updateJar(List<String> list) {
+        List<String> resultList = new ArrayList<String>();
+        for (String dir : list) {
+            String[] commands = {"jar", "-uvf", jarName, dir};
+            String result = ExecuteCommand.run(this.jarDirectory, commands);
+            resultList.add(result);
+        }
+        return resultList;
+    }
+
+    public List<String> deleteDir(List<String> list) {
+        List<String> resultList = new ArrayList<String>();
+        for (String dir : list) {
+            String unWantedDir = this.jarDirectory + File.separator + dir;
+            IOUtil.deleteDirecotry(unWantedDir);
+            resultList.add("Delete Directory: " + unWantedDir);
+        }
+        return resultList;
+    }
+
+    public List<Handler> getHandlers(String entryName, List<ClassNameFilter> filters) {
+        List<Handler> list = new ArrayList<Handler>();
+        entryName = entryName.replace(".", "/").concat(".class");
+
+
+        for (ClassNameFilter filter : filters) {
+            if (filter.matches(entryName)) {
+                List<Handler> handlers = filter.getHandlers();
+                if(handlers != null && handlers.size() > 0) {
+                    list.addAll(handlers);
                 }
             }
         }
-        catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        return list;
     }
+
+    public List<String> getEntries(List<ClassNameFilter> filters) {
+        List<String> entryNameList = JarUtil.getAllEntries(jarPath);
+
+        List<String> list = new ArrayList<String>();
+        for (String entryName : entryNameList) {
+            for(ClassNameFilter filter : filters) {
+                if (filter.matches(entryName)) {
+                    list.add(entryName);
+                    break;
+                }
+            }
+        }
+        return list;
+    }
+
 
     public static void main(String[] args) {
         String jarPath = "/home/liusen/workdir/git-repo/learn-java/advanced/javassist/code/aedi-kcarc/lib/idea.jar";
         String classNameRegex = "^.*\\.class$";
         String methodSignatureRegex = "^\\(.*\\)Lcom/jetbrains/ls/responses/License;$";
-        patch(jarPath, classNameRegex, null, methodSignatureRegex);
+
     }
 }

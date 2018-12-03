@@ -4,17 +4,8 @@ import javassist.CtMethod;
 import lsieun.javaagent.util.CodeSegment;
 
 public class JustReturnHandler extends Handler {
-    public JustReturnHandler(String methodSignature) {
-        super(methodSignature);
-    }
-
-    @Override
-    public boolean match(CtMethod method) {
-        String sig = method.getSignature();
-        if (sig.matches(this.methodSignature)) {
-            return true;
-        }
-        return false;
+    public JustReturnHandler(String methodSignature, boolean regex) {
+        super(methodSignature, regex);
     }
 
     @Override

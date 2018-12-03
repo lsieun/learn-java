@@ -7,6 +7,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -23,11 +24,11 @@ public class GUIMain {
     
     JPanel panel = new JPanel();
     
-    JTextField field = new JTextField("请选择文件...",30);
-    FileDialog openDialog = new FileDialog(frame, "请选择文件", FileDialog.LOAD);
-    JButton btnBrowse = new JButton("浏览");
-    JButton btnClear = new JButton("清空");
-    JButton btnCrack = new JButton("破解");
+    JTextField field = new JTextField("Please Select JAR file...",30);
+    FileDialog openDialog = new FileDialog(frame, "Select JAR File", FileDialog.LOAD);
+    JButton btnBrowse = new JButton("Browse");
+    JButton btnClear = new JButton("Clear");
+    JButton btnCrack = new JButton("Crack");
 
     JTextArea area = new JTextArea(15,25);
     
@@ -51,7 +52,7 @@ public class GUIMain {
             @Override
             public void mouseClicked(MouseEvent e) {
                 JTextField field =  (JTextField) e.getSource();
-                if(field.getText().equals("请选择文件...")){
+                if(field.getText().equals("Please Select JAR file...")){
                     field.setText("");
                 }
             }
@@ -89,23 +90,18 @@ public class GUIMain {
         //给按钮添加事件监听器
         btnCrack.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-//                //获取输入框输入的路径
-//                String path = field.getText();
-//                //使用输入的路径构建一个File对象
-//                File dir = new File(path);
-//                //找到目录下的所有子文件
-//                File[] files = dir.listFiles();
-//                for(File file : files){
-//                    area.setText(area.getText()+ file.getName()+"\r\n");
-//                }
                 String jarPath = field.getText();
                 File file = new File(jarPath);
                 if (!file.exists()) {
                     area.setText(area.getText()+ "File Not Found: " + jarPath +"\r\n");
                     return;
                 }
-                IOUtil.backupFile(jarPath);
-                JetUtil.process(jarPath);
+                String backupFile = IOUtil.backupFile(jarPath);
+                area.setText(area.getText()+ "Backup File: " + backupFile +"\r\n");
+                List<String> resultList = JetUtil.process(jarPath);
+                for(String line : resultList) {
+                    area.setText(area.getText()+ "" + line +"\r\n");
+                }
             }
         });
         

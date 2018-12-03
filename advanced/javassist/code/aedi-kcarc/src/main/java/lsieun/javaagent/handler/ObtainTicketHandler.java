@@ -5,8 +5,8 @@ import lsieun.javaagent.util.CodeSegment;
 
 public class ObtainTicketHandler extends Handler {
 
-    public ObtainTicketHandler(String methodSignatureRegExp) {
-        super(methodSignatureRegExp);
+    public ObtainTicketHandler(String methodSignature, boolean regex) {
+        super(methodSignature, regex);
     }
 
     @Override

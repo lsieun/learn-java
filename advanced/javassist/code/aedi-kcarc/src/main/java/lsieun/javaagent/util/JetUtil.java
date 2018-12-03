@@ -11,105 +11,45 @@ import javassist.CtClass;
 import lsieun.javaagent.handler.*;
 
 public class JetUtil {
-    private static String jarDir;
-    private static String jarName;
 
-    static {
-        String userDir = System.getProperty("user.dir");
-        jarDir = userDir + File.separator + "target" + File.separator + "tmp";
-        jarName = "idea.jar";
-    }
+    public static List<String> process(String jarPath) {
+        List<String> resultList = new ArrayList<String>();
+        try {
+            CodePatch patch = new CodePatch();
+            patch.importPackage("com.jetbrains.ls.responses");
+            patch.init(jarPath);
 
-    public static void process(String jarPath) {
-        // 0. Init
-        init(jarPath);
+            List<ClassNameFilter> filters = getFilters();
+            List<String> classList = patch.processClasses(filters);
+            resultList.addAll(classList);
 
-        // 1. Get Classes
-        String reg = "^com/jetbrains/\\w+/\\w+/\\w+\\.class$";
-        Map<String, ByteArrayOutputStream> map = getClasses(jarPath, reg);
-
-        // 2. Process and Save Classes
-        processClass(map);
-
-        // 3. Update Jar File
-        String[] commands = {"jar", "-uvf", jarName, "com/jetbrains"};
-        String result = ExecuteCommand.run(jarDir, commands);
-        System.out.println("Result: " + result);
-
-        // 4. Clean up
-        String unWantedDir = jarDir + File.separator + "com";
-        IOUtil.deleteDirecotry(unWantedDir);
-    }
-
-    public static void init(String jarPath) {
-        AssistUtil.insertClassPath(jarPath);
-
-        File file = new File(jarPath);
-        String dir = file.getParent();
-        System.setProperty("user.dir", dir);
-        jarDir = dir;
-        jarName = file.getName();
-        System.out.println("Working Dir: " + jarDir);
-        System.out.println("Jar Name: " + jarName);
-    }
-
-
-    public static Map<String, ByteArrayOutputStream> getClasses(String jarPath, String reg) {
-        List<String> list = JarUtil.getAllEntries(jarPath);
-        JarUtil.filter(list, reg);
-        System.out.println("List Size: " + list.size());
-        Map<String, ByteArrayOutputStream> map = JarUtil.getAllClasses(jarPath, list);
-        return map;
-    }
-
-
-    public static void processClass(Map<String, ByteArrayOutputStream> map) {
-        Iterator<Map.Entry<String, ByteArrayOutputStream>> it = map.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry<String, ByteArrayOutputStream> entry = it.next();
-            String className = entry.getKey();
-            byte[] byteCode = entry.getValue().toByteArray();
-
-            CtClass cc = null;
-            try {
-                cc = AssistUtil.getClass(className, byteCode);
-            } catch (Exception e) {
-                e.printStackTrace();
-                continue;
-            }
-
-            boolean save = check(cc);
-
-            if (save) {
-                try {
-                    cc.writeFile(jarDir);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                System.out.println("Save Class: " + className);
-            }
+            List<String> topDirList = patch.getTopDir(classList);
+            resultList.addAll(patch.updateJar(topDirList));
+            resultList.addAll(patch.deleteDir(topDirList));
         }
+        catch (Exception ex) {
+            resultList.add(ex.getMessage());
+            ex.printStackTrace();
+        }
+        return resultList;
     }
 
+    public static List<ClassNameFilter> getFilters() {
+        List<ClassNameFilter> filters = new ArrayList<ClassNameFilter>();
+        ClassNameFilter filter1 = new ClassNameFilter("^com/jetbrains/\\w+/\\w+/\\w+\\.class$", true);
 
-
-    public static boolean check(CtClass cc) {
-        List<Handler> handlers = new ArrayList<Handler>();
-
-//        String reg_Exception = "^\\(Ljava/lang/String;Ljava/lang/String;J\\[Lcom/jetbrains/\\w+/\\w+/\\w+;\\)V$";
-//        //handlers.add(new CatchExceptionHandler(reg_Exception));
-//        handlers.add(new JustReturnHandler(reg_Exception));
-
-        String reg_info = "^\\(Ljava/lang/String;Ljava/lang/String;J\\)Lcom/jetbrains/a/b/a;$";
-        handlers.add(new InfoHandler(reg_info));
+        String reg_Exception = "^\\(Ljava/lang/String;Ljava/lang/String;J\\[Lcom/jetbrains/\\w+/\\w+/\\w+;\\)V$";
+        filter1.addHandler(new JustReturnHandler(reg_Exception, true));
 
         String reg_ObtainTicket = "(Ljava/lang/String;Ljava/lang/String;IIZJ)Lcom/jetbrains/ls/responses/ObtainTicketResponse;";
-        handlers.add(new ObtainTicketHandler(reg_ObtainTicket));
+        filter1.addHandler(new ObtainTicketHandler(reg_ObtainTicket,false));
 
         String reg_Ping = "(Ljava/lang/String;Ljava/lang/String;J)Lcom/jetbrains/ls/responses/PingResponse;";
-        handlers.add(new PingHandler(reg_Ping));
+        filter1.addHandler(new PingHandler(reg_Ping, false));
 
-        boolean flag = AssistUtil.shouldSave(cc, handlers);
-        return flag;
+        filters.add(filter1);
+        return filters;
+
     }
+
 }

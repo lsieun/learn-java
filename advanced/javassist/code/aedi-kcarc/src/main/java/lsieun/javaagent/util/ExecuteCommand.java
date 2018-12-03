@@ -7,8 +7,8 @@ import java.util.Arrays;
 
 public class ExecuteCommand {
     public static String run(String dir, String[] commands) {
-        System.out.println("Run Command: " + Arrays.toString(commands));
         StringBuffer output = new StringBuffer();
+        output.append("Run Command: " + Arrays.toString(commands) + "\n");
 
         Process p;
         try {
