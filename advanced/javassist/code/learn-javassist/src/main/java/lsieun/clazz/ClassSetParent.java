@@ -3,7 +3,7 @@ package lsieun.clazz;
 import javassist.ClassPool;
 import javassist.CtClass;
 
-public class Test01 {
+public class ClassSetParent {
     public static void main(String[] args) {
         try {
             ClassPool pool = ClassPool.getDefault();

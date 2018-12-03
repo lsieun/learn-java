@@ -3,8 +3,8 @@ package lsieun.javaagent.handler;
 import javassist.CtMethod;
 import lsieun.javaagent.util.CodeSegment;
 
-public class JustReturnHandler extends Handler {
-    public JustReturnHandler(String methodSignature) {
+public class InfoHandler extends Handler {
+    public InfoHandler(String methodSignature) {
         super(methodSignature);
     }
 
@@ -26,7 +26,6 @@ public class JustReturnHandler extends Handler {
         codeBefore.printSignature();
         codeBefore.printArguments();
         codeBefore.printEndMark();
-        codeBefore.addJustReturn();
         method.insertBefore(codeBefore.getString());
     }
 }

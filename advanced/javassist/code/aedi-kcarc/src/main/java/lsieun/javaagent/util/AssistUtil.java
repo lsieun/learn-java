@@ -78,6 +78,7 @@ public class AssistUtil {
         try {
             for (int i=0; i<methods.length; i++) {
                 CtMethod m = methods[i];
+                if (m.isEmpty()) continue;
                 for (Handler h : handlers) {
                     if (h.match(m)) {
                         shouldSave = true;

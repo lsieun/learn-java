@@ -96,9 +96,12 @@ public class JetUtil {
     public static boolean check(CtClass cc) {
         List<Handler> handlers = new ArrayList<Handler>();
 
-        String reg_Exception = "^\\(Ljava/lang/String;Ljava/lang/String;J\\[Lcom/jetbrains/\\w+/\\w+/\\w+;\\)V$";
-        //handlers.add(new CatchExceptionHandler(reg_Exception));
-        handlers.add(new JustReturnHandler(reg_Exception));
+//        String reg_Exception = "^\\(Ljava/lang/String;Ljava/lang/String;J\\[Lcom/jetbrains/\\w+/\\w+/\\w+;\\)V$";
+//        //handlers.add(new CatchExceptionHandler(reg_Exception));
+//        handlers.add(new JustReturnHandler(reg_Exception));
+
+        String reg_info = "^\\(Ljava/lang/String;Ljava/lang/String;J\\)Lcom/jetbrains/a/b/a;$";
+        handlers.add(new InfoHandler(reg_info));
 
         String reg_ObtainTicket = "(Ljava/lang/String;Ljava/lang/String;IIZJ)Lcom/jetbrains/ls/responses/ObtainTicketResponse;";
         handlers.add(new ObtainTicketHandler(reg_ObtainTicket));
