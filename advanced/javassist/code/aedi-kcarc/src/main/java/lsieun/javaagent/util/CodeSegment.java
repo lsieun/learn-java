@@ -20,6 +20,10 @@ public class CodeSegment {
 
     public void printMethodInfo() {
         this.sb.append("    System.out.println(\"Method Agent: \" + $class);");
+//        this.sb.append("    final StackTraceElement[] ste = Thread.currentThread().getStackTrace();");
+//        this.sb.append("    String name = ste[ste.length - 2].getMethodName();");
+//        this.sb.append("    System.out.println(\"Method Name: \"name);");
+
         this.sb.append("    System.out.println(\"Return Type: \" + $type);");
     }
 

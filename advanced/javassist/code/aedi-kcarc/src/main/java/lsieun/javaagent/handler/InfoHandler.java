@@ -16,7 +16,12 @@ public class InfoHandler extends Handler {
         codeBefore.printMethodInfo();
         codeBefore.printSignature();
         codeBefore.printArguments();
-        codeBefore.printEndMark();
+        codeBefore.printStackTrace();
+//        codeBefore.printEndMark();
         method.insertBefore(codeBefore.getString());
+        CodeSegment codeAfter = new CodeSegment();
+        codeAfter.printReturnValue();
+        codeAfter.printEndMark();
+        method.insertAfter(codeAfter.toString());
     }
 }

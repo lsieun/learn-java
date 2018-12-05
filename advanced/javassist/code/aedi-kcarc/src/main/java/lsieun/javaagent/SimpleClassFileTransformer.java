@@ -38,8 +38,8 @@ public class SimpleClassFileTransformer implements ClassFileTransformer {
 
                     List<Handler> handlers = new ArrayList<Handler>();
 
-                    String reg_Exception = "^\\(Ljava/lang/String;Ljava/lang/String;J\\[Lcom/jetbrains/\\w+/\\w+/\\w+;\\)V$";
-                    handlers.add(new CatchExceptionHandler(reg_Exception, true));
+//                    String reg_Exception = "^\\(Ljava/lang/String;Ljava/lang/String;J\\[Lcom/jetbrains/\\w+/\\w+/\\w+;\\)V$";
+//                    handlers.add(new CatchExceptionHandler(reg_Exception, true));
 
                     String reg_ObtainTicket = "(Ljava/lang/String;Ljava/lang/String;IIZJ)Lcom/jetbrains/ls/responses/ObtainTicketResponse;";
                     handlers.add(new ObtainTicketHandler(reg_ObtainTicket,false));

@@ -26,8 +26,16 @@ public class CodePatch {
     private Map<String, ByteArrayOutputStream> map;
 
     public CodePatch() {
-        this.pool = ClassPool.getDefault();
+        //this.pool = ClassPool.getDefault();
+        ClassPool parent = ClassPool.getDefault();
+        this.pool = new ClassPool(parent);
+        this.pool.appendSystemPath();         // the same class path as the default one.
+        this.pool.childFirstLookup = true;    // changes the behavior of the child.
         this.map = new HashMap<String, ByteArrayOutputStream>();
+    }
+
+    public ClassPool getPool() {
+        return pool;
     }
 
     public List<String> init(String jarPath) throws NotFoundException {
