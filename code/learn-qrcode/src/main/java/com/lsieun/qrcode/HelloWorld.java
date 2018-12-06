@@ -66,9 +66,13 @@ public class HelloWorld {
     public static void main(String[] args) {
 
         String message = "http://www.baidu.com";//微信测试二维码
-
-        generatorQrCode(message, 400, 400, "baidu_qrcode.png", "D:/tmp");
-        System.out.println("OVER");
+        if (args.length > 0) {
+            message = args[0];
+        }
+        File file = new File(".");
+        String outPath = file.getAbsolutePath();
+        generatorQrCode(message, 400, 400, "qrcode.png", outPath);
+        System.out.println("message: " + message);
 
     }
 }
