@@ -28,6 +28,7 @@ Doc
 - https://github.com/eugenp/tutorials
 - https://www.geeksforgeeks.org/java/
 - https://www.novixys.com/blog/
+- https://www.mkyong.com/
 - https://beginnersbook.com/java-tutorial-for-beginners-with-examples/
 - https://www.javaworld.com/blog/java-101/
 - [JavaTM 2 Platform Standard Edition 5.0](https://www.cs.mun.ca/java-api-1.5/guide/)

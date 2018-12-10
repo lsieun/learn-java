@@ -1,0 +1,21 @@
+package lsieun.handler;
+
+import javassist.CtMethod;
+import lsieun.utils.CodeSegment;
+
+public class JustReturnHandler extends Handler {
+    public JustReturnHandler(String methodSignature, boolean regex) {
+        super(methodSignature, regex);
+    }
+
+    @Override
+    public void process(CtMethod method) throws Exception {
+        CodeSegment codeBefore = new CodeSegment();
+        codeBefore.printBlankLine(2);
+        codeBefore.printStartMark();
+        codeBefore.printMethodInfo(true, true, false);
+        codeBefore.printEndMark();
+        codeBefore.addJustReturn();
+        method.insertBefore(codeBefore.getString());
+    }
+}
