@@ -28,6 +28,27 @@ The current version reports 400 warnings in **the nine categories**:
 | Experimental                 | 3      | Method may fail to clean up stream or resource               |
 | Internationalization         | 2      | Consider using Locale parameterized version of invoked method |
 
+## Rankings
 
+As of version 2, FindBugs started ranking bugs with a scale from `1` to `20` to measure the severity of defects:
 
+- **Scariest**: ranked between `1 - 4`.
+- **Scary**: ranked between `5 - 9`.
+- **Troubling**: ranked between `10 - 14`.
+- **Of concern**: ranked between `15 - 20`.
+
+While the bug rank describes severity, the confidence factor reflects the likelihood of these bugs to be flagged as real ones. **The confidence was originally called priority**, but it was renamed in the new version.
+
+## Categories
+
+FindBugs divide defects in many categories:
+
+- **Correctness** – gathers general bugs, e.g. infinite loops, inappropriate use of equals(), etc
+- **Bad practice**, e.g. exceptions handling, opened streams, Strings comparison, etc
+- **Performance**, e.g. idle objects
+- **Multithreaded correctness** – gathers synchronization inconsistencies and various problems in a multi-threaded environment
+- **Internationalization** – gathers problems related to encoding and application’s internationalization
+- **Malicious code vulnerability** – gathers vulnerabilities in code, e.g. code snippets that can be exploited by potential attackers
+- **Security** – gathers security holes related to specific protocols or SQL injections
+- **Dodgy** – gathers code smells, e.g. useless comparisons, null checks, unused variables, etc
 
