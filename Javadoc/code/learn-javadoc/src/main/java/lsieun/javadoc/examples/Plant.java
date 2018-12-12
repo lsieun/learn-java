@@ -1,4 +1,4 @@
 package lsieun.javadoc.examples;
 
-public interface Plant {
+public abstract class Plant {
 }
