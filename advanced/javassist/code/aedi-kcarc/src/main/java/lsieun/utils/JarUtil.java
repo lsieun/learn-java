@@ -23,6 +23,7 @@ public class JarUtil {
                 list.add(entry.getName());
                 //System.out.println(entry.getName());
             }
+            jarFile.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -66,6 +67,7 @@ public class JarUtil {
             while ((len = in.read(buf)) != -1) {
                 out.write(buf, 0, len);
             }
+            in.close();
             return out.toByteArray();
         } catch (IOException e) {
             e.printStackTrace();
@@ -103,6 +105,8 @@ public class JarUtil {
                 while ((len = in.read(buf)) != -1) {
                     out.write(buf, 0, len);
                 }
+
+                in.close();
 
                 String className = getFQCN(entryName);
                 map.put(className, out);

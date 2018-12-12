@@ -2,12 +2,13 @@ package lsieun.utils;
 
 import java.util.List;
 
+import org.junit.Test;
+
 import lsieun.handler.ClassNameFilter;
-import lsieun.utils.CodePatch;
-import lsieun.utils.JetUtil;
 
 public class CodePatchTest {
-    public static void main(String[] args) {
+    @Test
+    public void test() {
         try {
             CodePatch patch = new CodePatch();
             patch.importPackage("com.jetbrains.ls.responses");

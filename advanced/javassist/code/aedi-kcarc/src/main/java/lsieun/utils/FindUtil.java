@@ -52,38 +52,4 @@ public class FindUtil {
         }
     }
 
-    public static void main(String[] args) {
-//        test1();
-//        test2();
-//        test3();
-        test4();
-    }
-
-    public static void test1() {
-        String jarPath = "/home/liusen/workdir/git-repo/learn-java/advanced/javassist/code/aedi-kcarc/lib/idea.jar";
-        String classNameRegex = "^com/jetbrains/\\w+/\\w+/\\w+\\.class$";
-        String methodSignatureRegex = "^\\(Ljava/lang/String;Ljava/lang/String;J\\[Lcom/jetbrains/\\w+/\\w+/\\w+;\\)V$";
-        findClassByRegex(jarPath, classNameRegex, methodSignatureRegex);
-    }
-
-    public static void test2() {
-        String jarPath = "/home/liusen/workdir/git-repo/learn-java/advanced/javassist/code/aedi-kcarc/lib/idea.jar";
-        String classNameRegex = "^com/jetbrains/\\w+/\\w+/\\w+\\.class$";
-        String methodSignatureRegex = "^\\(Ljava/lang/String;Ljava/lang/String;J\\)Lcom/jetbrains/ls/responses/PingResponse;$";
-        findClassByRegex(jarPath, classNameRegex, methodSignatureRegex);
-    }
-
-    public static void test3() {
-        String jarPath = "/home/liusen/workdir/git-repo/learn-java/advanced/javassist/code/aedi-kcarc/lib/idea.jar";
-        String classNameRegex = "^com/jetbrains/\\w+/\\w+/\\w+\\.class$";
-        String methodSignatureRegex = "^\\(Ljava/lang/String;Ljava/lang/String;J\\)Lcom/jetbrains/a/b/a;$";
-        findClassByRegex(jarPath, classNameRegex, methodSignatureRegex);
-    }
-
-    public static void test4() {
-        String jarPath = "/home/liusen/workdir/git-repo/learn-java/advanced/javassist/code/aedi-kcarc/lib/idea.jar";
-        String classNameRegex = "^.*\\.class$";
-        String methodSignatureRegex = "^\\(.*\\)Lcom/jetbrains/ls/responses/License;$";
-        findClassByRegex(jarPath, classNameRegex, methodSignatureRegex);
-    }
 }

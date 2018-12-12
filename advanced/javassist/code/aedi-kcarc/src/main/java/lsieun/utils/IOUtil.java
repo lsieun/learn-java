@@ -88,16 +88,20 @@ public class IOUtil {
     }
 
     public static void delete(File file) throws IOException{
+        if (file == null) return;
 
         if(file.isDirectory()){
-            //directory is empty, then delete it
-            if(file.list().length==0){
-                file.delete();
-                System.out.println("Directory is deleted : " + file.getAbsolutePath());
-            }else{
+            //list all the directory contents
+            String files[] = file.list();
+            if(files == null) return;
 
-                //list all the directory contents
-                String files[] = file.list();
+            //directory is empty, then delete it
+            if(files.length==0){
+                boolean flag = file.delete();
+                if(flag) {
+                    System.out.println("Directory is deleted : " + file.getAbsolutePath());
+                }
+            }else{
 
                 for (String temp : files) {
                     //construct the file structure
@@ -107,17 +111,22 @@ public class IOUtil {
                     delete(fileDelete);
                 }
 
+                files = file.list();
                 //check the directory again, if empty then delete it
-                if(file.list().length==0){
-                    file.delete();
-                    System.out.println("Directory is deleted : " + file.getAbsolutePath());
+                if(files == null || files.length==0){
+                    boolean flag = file.delete();
+                    if(flag) {
+                        System.out.println("Directory is deleted : " + file.getAbsolutePath());
+                    }
                 }
             }
 
         }else{
             //if file, then delete it
-            file.delete();
-            System.out.println("File is deleted : " + file.getAbsolutePath());
+            boolean flag = file.delete();
+            if(flag) {
+                System.out.println("File is deleted : " + file.getAbsolutePath());
+            }
         }
     }
 }
