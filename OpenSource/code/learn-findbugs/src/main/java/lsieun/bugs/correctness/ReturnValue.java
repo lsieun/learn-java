@@ -1,6 +1,7 @@
 package lsieun.bugs.correctness;
 
 public class ReturnValue {
+    private String name;
     /**
      * Method whose return value should not be ignored
      */
@@ -17,5 +18,8 @@ public class ReturnValue {
         }
     }
 
+    public static void main(String[] args) {
+        System.out.println("Hello World");
+    }
 
 }

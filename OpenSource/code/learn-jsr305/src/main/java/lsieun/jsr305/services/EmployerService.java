@@ -16,7 +16,7 @@ import lsieun.jsr305.entities.Specification;
  */
 public interface EmployerService {
     /**
-     * @param identifier the employer's identifier
+     * @param identifier the emloyer's identifier
      * @return the employer having specified {@code identifier}, {@code null} if not found
      */
     @CheckForNull
