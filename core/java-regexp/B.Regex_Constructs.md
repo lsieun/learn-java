@@ -4,9 +4,11 @@
 
 我理解的Regex中的Characters、Character classes和Predefined character classes的三者是一种不断进行高度抽象的过程。首先，三者都表示1个字符；而Characters表示一个确定的字符，Character classes在Characters的基础上加上了“范围”和“逻辑的与、或、非”，它（Character classes）加上classes应该是指一类字符的意思，一组字符范围的集合；Predefined character classes是更高一层的抽象，它能够由Character classes组合而来。
 
-https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html
+URL:
 
-https://docs.oracle.com/javase/tutorial/essential/regex/pre_char_classes.html
+- [ ] [Java Class `Pattern`](https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html)
+
+- [ ] https://docs.oracle.com/javase/tutorial/essential/regex/pre_char_classes.html
 
 
 
@@ -17,13 +19,13 @@ https://docs.oracle.com/javase/tutorial/essential/regex/pre_char_classes.html
 
 |Construct|Matches|
 |:--------|:------|
-|**.**|Any character (may or may not match line terminators)|
-|**\d**|A digit: [0-9]|
-|**\D**|A non-digit: [^0-9]|
-|**\s**|A whitespace character: [ \t\n\x0B\f\r]|
-|**\S**|A non-whitespace character: [^\s]|
-|**\w**|A word character: [a-zA-Z_0-9]|
-|**\W**|A non-word character: [^\w]|
+|`.`|Any character (may or may not match line terminators)|
+|`\d`|A digit: [0-9]|
+|`\D`|A non-digit: [^0-9]|
+|`\s`|A whitespace character: [ \t\n\x0B\f\r]|
+|`\S`|A non-whitespace character: [^\s]|
+|`\w`|A word character: [a-zA-Z_0-9]|
+|`\W`|A non-word character: [^\w]|
 
 
     System.out.println("a".matches("."));
@@ -34,17 +36,17 @@ https://docs.oracle.com/javase/tutorial/essential/regex/pre_char_classes.html
     System.out.println("a".matches("\\w"));
 
 ### Character classes ###	
-	
+
 |Construct|Matches|
 |:--------|:------|
-|[abc]|a, b, or c (simple class)|
-|[^abc]|Any character except a, b, or c (negation)|
-|[a-zA-Z]|a through z or A through Z, inclusive (range)|
-|[a-d[m-p]]|a through d, or m through p: [a-dm-p] (union)|
-|[a-z&&[def]]|d, e, or f (intersection)|
-|[a-z&&[^bc]]|a through z, except for b and c: [ad-z] (subtraction)|
-|[a-z&&[^m-p]]|a through z, and not m through p: [a-lq-z] (subtraction)|
-	
+|`[abc]`|a, b, or c (simple class)|
+|`[^abc]`|Any character except a, b, or c (negation)|
+|`[a-zA-Z]`|a through z or A through Z, inclusive (range)|
+|`[a-d[m-p]]`|a through d, or m through p: [a-dm-p] (union)|
+|`[a-z&&[def]]`|d, e, or f (intersection)|
+|`[a-z&&[^bc]]`|a through z, except for b and c: [ad-z] (subtraction)|
+|`[a-z&&[^m-p]]`|a through z, and not m through p: [a-lq-z] (subtraction)|
+
     System.out.println( "a".matches("[a]") );
     System.out.println( "aa".matches("[a]+") );
     System.out.println( "abc".matches("[abc]{3,}") );
@@ -56,28 +58,28 @@ https://docs.oracle.com/javase/tutorial/essential/regex/pre_char_classes.html
     System.out.println( "abdxyz".matches("[a-c[x-z]]+"));
     System.out.println( "bcbcbc".matches("[a-z&&[b-c]]{5,}"));
     System.out.println( "tretrt".matches("[a-z&&[^b-c]]{5,}"));
-	
+
 
 ### Characters ###
 
 |Construct|Matches|
 |:--------|:------|
-|x|The character x|
-|\\|The backslash character|
-|\t|The tab character ('\u0009')|
-|\n|The newline (line feed) character ('\u000A')|
-|\r|The carriage-return character ('\u000D')|
+|`x`|The character x|
+|`\\`|The backslash character|
+|`\t`|The tab character ('\u0009')|
+|`\n`|The newline (line feed) character ('\u000A')|
+|`\r`|The carriage-return character ('\u000D')|
 
 ### Greedy quantifiers ###
 
 |Construct|Matches|
 |:--------|:------|
-|X?|X, once or not at all|
-|X*|X, zero or more times|
-|X+|X, one or more times|
-|X{n}|X, exactly n times|
-|X{n,}|X, at least n times|
-|X{n,m}|X, at least n but not more than m times|
+|`X?`|X, once or not at all|
+|`X*`|X, zero or more times|
+|`X+`|X, one or more times|
+|`X{n}`|X, exactly n times|
+|`X{n,}`|X, at least n times|
+|`X{n,m}`|X, at least n but not more than m times|
 
     System.out.println( "a".matches(".") );
     System.out.println( "a".matches("a") );
@@ -93,18 +95,18 @@ https://docs.oracle.com/javase/tutorial/essential/regex/pre_char_classes.html
 
 |Construct|Matches|
 |:--------|:------|
-|XY|X followed by Y|
-|X\|Y|Either X or Y|
-|(X)|X, as a capturing group|
-	
+|`XY`|X followed by Y|
+|`X\|Y`|Either X or Y|
+|`(X)`|X, as a capturing group|
+
 ### Boundary matchers ###
-	
+
 |Construct|Matches|
 |:--------|:------|
-|^|The beginning of a line|
-|$|The end of a line|
-|\b|A word boundary|
-|\B|A non-word boundary|
+|`^`|The beginning of a line|
+|`$`|The end of a line|
+|`\b`|A word boundary|
+|`\B`|A non-word boundary|
 
 ## Backslashes and escapes ##
 
