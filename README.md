@@ -35,6 +35,7 @@ Doc
 - [JavaTM 2 Platform Standard Edition 5.0](https://www.cs.mun.ca/java-api-1.5/guide/)
 - https://developer.ibm.com/technologies/java/
 - [AVAJAVA Web Tutorials](http://www.avajava.com/tutorials/)
+- https://data-flair.training/blogs/
 
 ## Design Patterns Tutorials
 
