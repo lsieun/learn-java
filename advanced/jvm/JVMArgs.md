@@ -4,6 +4,40 @@ URL:
 
 - [Guide to the Most Important JVM Parameters](https://www.baeldung.com/jvm-parameters)
 
+## JVM OPTIONS
+
+Several options and environment variables are available that can affect the performance characteristics of the HotSpot JVM. These options start with `-X` or `-XX`. Note that `-X` options are not standard options. So, they may not work on all VM implementations. The `-X` and `-XX` options are subject to change without notice in subsequent releases of the JDK.
+
+The available `-X` options may be listed using the following command:
+
+```bash
+java -X
+```
+
+The partial output of this command is shown below:
+
+```txt
+...
+-Xms<size>    set initial Java heap size
+-Xmx<size>    set maximum Java heap size
+-Xss<size>    set java thread stack size
+...
+```
+
+The options related to **garbage collector** start with `-XX`.
+
+> 这句短短的话，我觉得很重要，使用GC时，options都是以`-XX`开头的。
+
+- **Options that do not require any value** (Boolean options) are turned on and off with `-XX:+<option>` and `-XX:-<option>` respectively (i.e., `+` for adding and `-` for removing option).
+- **Options that require numeric value** are set with `-XX:<option>=<number>`. Numbers can include ‘`m`’ or ‘`M`’ for **megabytes**, ‘`k`’ or ‘`K`’ for **kilobytes**, and ‘`g`’ or ‘`G`’ for **gigabytes**. For example, 2k is the same as 2048. 
+- **String options** are set with `-XX:<option>=<string>`.
+
+The options below are loosely categorized into groups as follows:
+
+- **Debugging options** - Usually used to enable tracing, printing, or output of VM information.
+- **Behavioural options** - Used to change the basic behaviour of the VM.
+- **Garbage First (G1)** Garbage Collection Options
+- **Performance tuning options** - Behaves like knobs(旋纽；按钮) which can be used to tune VM performance.
 
 ## Explicit Heap Memory
 
