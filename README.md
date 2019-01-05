@@ -36,6 +36,7 @@ Doc
 - https://developer.ibm.com/technologies/java/
 - [AVAJAVA Web Tutorials](http://www.avajava.com/tutorials/)
 - https://data-flair.training/blogs/
+- https://www.javainuse.com/spring/sprboot
 
 ## Design Patterns Tutorials
 
