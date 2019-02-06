@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import lsieun.domain.AttributeContainer;
+import lsieun.domain.AttributeInfo;
+import lsieun.domain.AttributesCount;
 import lsieun.domain.ClassInfo;
 import lsieun.domain.Common;
 import lsieun.domain.ConstantPoolCount;
@@ -13,6 +16,11 @@ import lsieun.domain.ConstantPoolInfo;
 import lsieun.domain.FieldContainer;
 import lsieun.domain.FieldInfo;
 import lsieun.domain.FieldsCount;
+import lsieun.domain.MemberContainer;
+import lsieun.domain.MemberEnum;
+import lsieun.domain.MemberInfo;
+import lsieun.domain.MethodContainer;
+import lsieun.domain.MethodInfo;
 import lsieun.domain.MethodsCount;
 import lsieun.domain.constant.ConstantCommonInfo;
 import lsieun.domain.MagicNumber;
@@ -33,6 +41,9 @@ import lsieun.domain.constant.ConstantNameAndTypeInfo;
 import lsieun.domain.constant.ConstantStringInfo;
 import lsieun.domain.constant.ConstantUtf8Info;
 
+// FIXME
+// (1)Constant Pool补全
+// (2)修改FIXME
 public class ByteCodeUtils {
     public static final int CHAR_COUNT_PER_BYTE = 2;
     public static final Map<Character, Integer> hex2IntMap;
@@ -110,6 +121,7 @@ public class ByteCodeUtils {
         constantPoolInfo.setStartIndex(index);
         constantPoolInfo.setCount(count);
         doConstantPool(hexCodeStr, constantPoolInfo);
+        fillValue(constantPoolInfo);
         System.out.println(constantPoolInfo);
         List<ConstantCommonInfo> cpList = constantPoolInfo.getList();
         for(int i=0; i<cpList.size(); i++) {
@@ -136,13 +148,21 @@ public class ByteCodeUtils {
 
         FieldContainer fieldContainer = new FieldContainer();
         fieldContainer.setStartIndex(index);
-        fieldContainer.setFieldsCount(fieldNum);
+        fieldContainer.setCount(fieldNum);
         doFieldContainer(hexCodeStr, fieldContainer);
-        List<FieldInfo> fieldList = fieldContainer.getList();
+        List<MemberInfo> fieldList = fieldContainer.getList();
+        fillMemberInfoValue(constantPoolInfo, fieldList);
         System.out.println(fieldContainer);
         for(int i=0; i<fieldList.size(); i++) {
-            FieldInfo item = fieldList.get(i);
+            MemberInfo item = fieldList.get(i);
             System.out.println("\t" + item);
+            AttributeContainer attributeContainer = item.getAttributeContainer();
+            if(attributeContainer == null) continue;
+            List<AttributeInfo> attributeInfoList = attributeContainer.getList();
+            fillAttributeInfoValue(constantPoolInfo, attributeInfoList);
+            for(AttributeInfo attr : attributeInfoList) {
+                System.out.println("\t\t" + attr);
+            }
         }
 
         index = fieldContainer.getNextIndex();
@@ -155,19 +175,181 @@ public class ByteCodeUtils {
 
         index = methodsCount.getNextIndex();
 
+        MethodContainer methodContainer = new MethodContainer();
+        methodContainer.setStartIndex(index);
+        methodContainer.setCount(methodNum);
+        doMethodContainer(hexCodeStr, methodContainer);
+        List<MemberInfo> methodList = methodContainer.getList();
+        fillMemberInfoValue(constantPoolInfo, methodList);
+        System.out.println(methodContainer);
+        for(int i=0; i<methodList.size(); i++) {
+            MemberInfo item = methodList.get(i);
+            System.out.println("\t" + item);
+            AttributeContainer attributeContainer = item.getAttributeContainer();
+            if(attributeContainer == null) continue;
+            List<AttributeInfo> attributeInfoList = attributeContainer.getList();
+            fillAttributeInfoValue(constantPoolInfo, attributeInfoList);
+            for(AttributeInfo attr : attributeInfoList) {
+                System.out.println("\t\t" + attr);
+            }
+        }
+
+        index = methodContainer.getNextIndex();
+
+        AttributesCount attributesCount = new AttributesCount();
+        attributesCount.setStartIndex(index);
+        doAttributesCount(hexCodeStr, attributesCount);
+        int attributesNum = attributesCount.getCount();
+        System.out.println(attributesCount);
+
+        index = attributesCount.getNextIndex();
+
+        AttributeContainer attributeContainer = new AttributeContainer();
+        attributeContainer.setStartIndex(index);
+        attributeContainer.setCount(attributesNum);
+        doAttributeConstainer(hexCodeStr, attributeContainer);
+        System.out.println(attributeContainer);
+        List<AttributeInfo> attributeInfoList = attributeContainer.getList();
+        fillAttributeInfoValue(constantPoolInfo, attributeInfoList);
+        for(AttributeInfo attr : attributeInfoList) {
+            System.out.println("\t" + attr);
+        }
+
+        index = attributeContainer.getNextIndex();
+
+        System.out.println("length = " + hexCodeStr.length());
         System.out.println("index = " + index);
 
-        String remainStr = hexCodeStr.substring(index);
-        System.out.println("remain: " + remainStr);
+        if(index < hexCodeStr.length()) {
+            String remainStr = hexCodeStr.substring(index);
+            System.out.println("remain: " + remainStr);
+        }
+    }
+
+    public static void fillValue(ConstantPoolInfo constantPoolInfo) {
+
+        List<ConstantCommonInfo> list = constantPoolInfo.getList();
+        Map<Integer, ConstantCommonInfo> map = constantPoolInfo.getMap();
+
+        int size = list.size();
+        for(int i=0; i<size; i++) {
+            ConstantCommonInfo item = list.get(i);
+            int tag = item.getTag();
+
+            if(tag == 1) continue;
+            if(tag == 7) { // Class
+                ConstantClassInfo current = (ConstantClassInfo) item;
+                int classIndex = current.getClassIndex();
+
+                ConstantCommonInfo target = map.get(Integer.valueOf(classIndex));
+                String value = target.getValue();
+                String className = value.replaceAll("/", ".");
+
+                current.setValue(className);
+                continue;
+            }
+            if(tag == 8) { // String
+                ConstantStringInfo current = (ConstantStringInfo) item;
+                int stringIndex = current.getStringIndex();
+
+                ConstantCommonInfo target = map.get(Integer.valueOf(stringIndex));
+                String value = target.getValue();
+
+                current.setValue(value);
+                continue;
+            }
+            if(tag == 12) { // NameAndType
+                ConstantNameAndTypeInfo current = (ConstantNameAndTypeInfo) item;
+                int nameIndex = current.getNameIndex();
+                int descriptorIndex = current.getDescriptorIndex();
+
+                ConstantCommonInfo targetName = map.get(Integer.valueOf(nameIndex));
+                String nameValue = targetName.getValue();
+                ConstantCommonInfo descriptorName = map.get(Integer.valueOf(descriptorIndex));
+                String descriptorValue = descriptorName.getValue();
+
+                String value = nameValue + ": " + descriptorValue;
+                current.setValue(value);
+                continue;
+            }
+        }
+
+        for(int i=0; i<size; i++) {
+            ConstantCommonInfo item = list.get(i);
+            int tag = item.getTag();
+
+            if(tag == 9) { // FieldRef
+                ConstantFieldRefInfo current = (ConstantFieldRefInfo) item;
+                int classIndex = current.getClassIndex();
+                int nameAndTypeIndex = current.getNameAndTypeIndex();
+
+                ConstantCommonInfo targetClass = map.get(Integer.valueOf(classIndex));
+                String className = targetClass.getValue();
+                ConstantCommonInfo targetNameAndType = map.get(Integer.valueOf(nameAndTypeIndex));
+                String nameAndType = targetNameAndType.getValue();
+
+                String value = className + "." + nameAndType;
+                current.setValue(value);
+                continue;
+            }
+
+            if(tag == 10) { // MethodRef
+                ConstantMethodRefInfo current = (ConstantMethodRefInfo) item;
+                int classIndex = current.getClassIndex();
+                int nameAndTypeIndex = current.getNameAndTypeIndex();
+
+                ConstantCommonInfo targetClass = map.get(Integer.valueOf(classIndex));
+                String className = targetClass.getValue();
+                ConstantCommonInfo targetNameAndType = map.get(Integer.valueOf(nameAndTypeIndex));
+                String nameAndType = targetNameAndType.getValue();
+
+                String value = className + "." + nameAndType;
+                current.setValue(value);
+                continue;
+            }
+
+        }
+    }
+
+    public static void fillMemberInfoValue(ConstantPoolInfo constantPoolInfo, List<MemberInfo> list) {
+        Map<Integer, ConstantCommonInfo> map = constantPoolInfo.getMap();
+
+        int size = list.size();
+        for(int i=0; i<size; i++) {
+            MemberInfo current = list.get(i);
+            int nameIndex = current.getNameIndex();
+            int descriptorIndex = current.getDescriptorIndex();
+
+            ConstantCommonInfo targetName = map.get(Integer.valueOf(nameIndex));
+            String nameValue = targetName.getValue();
+            ConstantCommonInfo descriptorName = map.get(Integer.valueOf(descriptorIndex));
+            String descriptorValue = descriptorName.getValue();
+
+            String value = nameValue + ": " + descriptorValue;
+
+            current.setName(nameValue);
+            current.setDescriptor(descriptorValue);
+            current.setValue(value);
+        }
+    }
+
+    public static void fillAttributeInfoValue(ConstantPoolInfo constantPoolInfo, List<AttributeInfo> list) {
+        Map<Integer, ConstantCommonInfo> map = constantPoolInfo.getMap();
+
+        int size = list.size();
+        for(int i=0; i<size; i++) {
+            AttributeInfo current = list.get(i);
+            int attributeNameIndex = current.getAttributeNameIndex();
+
+            ConstantCommonInfo target = map.get(Integer.valueOf(attributeNameIndex));
+            String value = target.getValue();
+
+            current.setValue(value);
+            current.setAttributeName(value);
+        }
     }
 
     public static void doMagicNumber(String hexCodeStr, MagicNumber instance) {
-//        int startIndex = instance.getStartIndex();
-//        int length = getCharLength(MagicNumber.BYTE_COUNT);
-//        String hexCode = getXPart(hexCodeStr, startIndex, length);
-//
-//        instance.setLength(length);
-//        instance.setHexCode(hexCode);
         doCommon(hexCodeStr, instance, MagicNumber.BYTE_COUNT);
 
         String hexCode = instance.getHexCode();
@@ -177,39 +359,31 @@ public class ByteCodeUtils {
     }
 
     public static void doMinorVersion(String hexCodeStr, MinorVersion instance) {
-        int startIndex = instance.getStartIndex();
-        int length = getCharLength(MinorVersion.BYTE_COUNT);
-        String hexCode = getXPart(hexCodeStr, startIndex, length);
+        doCommon(hexCodeStr, instance, MinorVersion.BYTE_COUNT);
+        String hexCode = instance.getHexCode();
 
-
-        int sum = hex2int(hexCode);
-        instance.setLength(length);
-        instance.setHexCode(hexCode);
-        instance.setValue(String.valueOf(sum));
+        int num = hex2int(hexCode);
+        String value = hexCode + "(" + num + ")";
+        instance.setValue(value);
     }
 
     public static void doMajorVersion(String hexCodeStr, MajorVersion instance) {
-        int startIndex = instance.getStartIndex();
-        int length = getCharLength(MajorVersion.BYTE_COUNT);
-        instance.setLength(length);
-        String hexCode = getXPart(hexCodeStr, startIndex, length);
-        instance.setHexCode(hexCode);
+        doCommon(hexCodeStr, instance, MajorVersion.BYTE_COUNT);
+        String hexCode = instance.getHexCode();
 
-        int sum = hex2int(hexCode);
-        int jdkVersion = sum - 44;
-        instance.setValue("JDK " + jdkVersion + "(" + sum + ")");
+        int num = hex2int(hexCode);
+        int jdkVersion = num - 44;
+        String value = "JDK " + jdkVersion + "(" + num + ")";
+        instance.setValue(value);
     }
 
     public static void doConstantPoolCount(String hexCodeStr, ConstantPoolCount instance) {
-        int startIndex = instance.getStartIndex();
-        int length = getCharLength(ConstantPoolCount.BYTE_COUNT);
-        String hexCode = getXPart(hexCodeStr, startIndex, length);
+        doCommon(hexCodeStr, instance, ConstantPoolCount.BYTE_COUNT);
+        String hexCode = instance.getHexCode();
 
         int sum = hex2int(hexCode);
         int count = sum - 1;
 
-        instance.setHexCode(hexCode);
-        instance.setLength(length);
         instance.setCount(count);
         instance.setValue("Constant Pool Count " + sum + "(" + count + ")");
     }
@@ -251,7 +425,8 @@ public class ByteCodeUtils {
                 int byteContentLength = getCharLength(byteCount);
                 sectionIndex += byteLength;
                 String byteContentHexCode = getXPart(sectionHexCode, sectionIndex, byteContentLength);
-                String value = byteContentHexCode + ": " + hex2str(byteContentHexCode);
+                //String value = byteContentHexCode + ": " + hex2str(byteContentHexCode);
+                String value = hex2str(byteContentHexCode);
                 section.setValue(value);
 
 
@@ -419,76 +594,189 @@ public class ByteCodeUtils {
     }
 
     public static void doFieldsCount(String hexCodeStr, FieldsCount instance) {
-        int startIndex = instance.getStartIndex();
-        int length = getCharLength(FieldsCount.BYTE_COUNT);
+        doCommon(hexCodeStr, instance, FieldsCount.BYTE_COUNT);
+        String hexCode = instance.getHexCode();
 
-        String hexCode = getXPart(hexCodeStr, startIndex, length);
-        int sum = hex2int(hexCode);
-        String value = hexCode + "(" + sum + ")";
+        int num = hex2int(hexCode);
+        String value = hexCode + "(" + num + ")";
 
-        instance.setLength(length);
-        instance.setHexCode(hexCode);
         instance.setValue(value);
-        instance.setFieldsCount(sum);
+        instance.setFieldsCount(num);
     }
 
     public static void doFieldContainer(String hexCodeStr, FieldContainer instance) {
+        doMemberContainer(hexCodeStr, instance, MemberEnum.FIELD);
+//        int startIndex = instance.getStartIndex();
+//        int fieldsCount = instance.getCount();
+//        List<MemberInfo> list = instance.getList();
+//
+//        int length = 0;
+//
+//        int index = startIndex;
+//
+//        for(int i=0; i<fieldsCount; i++) {
+//            int sectionLength = getCharLength(FieldInfo.BYTE_COUNT);
+//            String sectionHexCode = getXPart(hexCodeStr, index, sectionLength);
+//
+//            // access flags: public/private/protected
+//            int sectionIndex = 0;
+//            int accessFlagsLength = getCharLength(FieldInfo.ACCESS_FLAGS_BYTE_COUNT);
+//            String accessFlagsHexCode = getXPart(sectionHexCode, sectionIndex, accessFlagsLength);
+//            String accessFlags = getFieldAccessFlags(accessFlagsHexCode);
+//
+//            // field name index
+//            sectionIndex += accessFlagsLength;
+//            int nameIndexLength = getCharLength(FieldInfo.NAME_INDEX_BYTE_COUNT);
+//            String nameIndexHexCode = getXPart(sectionHexCode, sectionIndex, nameIndexLength);
+//            int nameIndex = hex2int(nameIndexHexCode);
+//
+//            // field descriptor index
+//            sectionIndex += nameIndexLength;
+//            int descriptorIndexLength = getCharLength(FieldInfo.DESCRIPTOR_INDEX_BYTE_COUNT);
+//            String descriptorIndexHexCode = getXPart(sectionHexCode, sectionIndex, descriptorIndexLength);
+//            int descriptorIndex = hex2int(descriptorIndexHexCode);
+//
+//            // field attribute count
+//            sectionIndex += descriptorIndexLength;
+//            int attributeCountLength = getCharLength(FieldInfo.ATTRIBUTE_COUNT_BYTE_COUNT);
+//            String attributesCountHexCode = getXPart(sectionHexCode, sectionIndex, attributeCountLength);
+//            int attributesCount = hex2int(attributesCountHexCode);
+//
+//            // FIXME: sectionLength，还需要加上attribute的部分
+//
+//            sectionHexCode = getXPart(hexCodeStr, index, sectionLength);
+//
+//            FieldInfo fieldInfo = new FieldInfo();
+//            fieldInfo.setStartIndex(index);
+//            fieldInfo.setLength(sectionLength);
+//            fieldInfo.setHexCode(sectionHexCode);
+//            fieldInfo.setAccessFlagsHexCode(accessFlagsHexCode);
+//            fieldInfo.setAccessFlags(accessFlags);
+//            fieldInfo.setNameIndexHexCode(nameIndexHexCode);
+//            fieldInfo.setNameIndex(nameIndex);
+//            fieldInfo.setDescriptorIndexHexCode(descriptorIndexHexCode);
+//            fieldInfo.setDescriptorIndex(descriptorIndex);
+//            fieldInfo.setAttributesCountHexCode(attributesCountHexCode);
+//            fieldInfo.setAttributesCount(attributesCount);
+//
+//            list.add(fieldInfo);
+//
+//            index += sectionLength;
+//            length += sectionLength;
+//        }
+//
+//        String hexCode = getXPart(hexCodeStr, startIndex, length);
+//
+//        instance.setLength(length);
+//        instance.setHexCode(hexCode);
+
+    }
+
+    public static void doMethodContainer(String hexCodeStr, MethodContainer instance) {
+        doMemberContainer(hexCodeStr, instance, MemberEnum.METHOD);
+    }
+
+    public static void doAttributesCount(String hexCodeStr, AttributesCount instance) {
+        doCommon(hexCodeStr, instance, AttributesCount.BYTE_COUNT);
+        String hexCode = instance.getHexCode();
+
+        int num = hex2int(hexCode);
+        String value = hexCode + "(" + num + ")";
+
+        instance.setValue(value);
+        instance.setCount(num);
+    }
+
+    public static void doMemberContainer(String hexCodeStr, MemberContainer instance, MemberEnum type) {
         int startIndex = instance.getStartIndex();
-        int fieldsCount = instance.getFieldsCount();
-        List<FieldInfo> list = instance.getList();
+        int count = instance.getCount();
+        List<MemberInfo> list = instance.getList();
 
         int length = 0;
 
-        int index = startIndex;
+        int memberStartIndex = startIndex;
 
-        for(int i=0; i<fieldsCount; i++) {
-            int sectionLength = getCharLength(FieldInfo.BYTE_COUNT);
-            String sectionHexCode = getXPart(hexCodeStr, index, sectionLength);
+        for(int i=0; i<count; i++) {
 
             // access flags: public/private/protected
-            int sectionIndex = 0;
+            int localIndex = memberStartIndex;
             int accessFlagsLength = getCharLength(FieldInfo.ACCESS_FLAGS_BYTE_COUNT);
-            String accessFlagsHexCode = getXPart(sectionHexCode, sectionIndex, accessFlagsLength);
-            String accessFlags = getFieldAccessFlags(accessFlagsHexCode);
+            String accessFlagsHexCode = getXPart(hexCodeStr, localIndex, accessFlagsLength);
+            //String accessFlags = getFieldAccessFlags(accessFlagsHexCode);
 
             // field name index
-            sectionIndex += accessFlagsLength;
+            localIndex += accessFlagsLength;
             int nameIndexLength = getCharLength(FieldInfo.NAME_INDEX_BYTE_COUNT);
-            String nameIndexHexCode = getXPart(sectionHexCode, sectionIndex, nameIndexLength);
+            String nameIndexHexCode = getXPart(hexCodeStr, localIndex, nameIndexLength);
             int nameIndex = hex2int(nameIndexHexCode);
 
             // field descriptor index
-            sectionIndex += nameIndexLength;
+            localIndex += nameIndexLength;
             int descriptorIndexLength = getCharLength(FieldInfo.DESCRIPTOR_INDEX_BYTE_COUNT);
-            String descriptorIndexHexCode = getXPart(sectionHexCode, sectionIndex, descriptorIndexLength);
+            String descriptorIndexHexCode = getXPart(hexCodeStr, localIndex, descriptorIndexLength);
             int descriptorIndex = hex2int(descriptorIndexHexCode);
 
             // field attribute count
-            sectionIndex += descriptorIndexLength;
+            localIndex += descriptorIndexLength;
             int attributeCountLength = getCharLength(FieldInfo.ATTRIBUTE_COUNT_BYTE_COUNT);
-            String attributesCountHexCode = getXPart(sectionHexCode, sectionIndex, attributeCountLength);
+            String attributesCountHexCode = getXPart(hexCodeStr, localIndex, attributeCountLength);
             int attributesCount = hex2int(attributesCountHexCode);
 
+            MemberInfo memberInfo = null;
+            String accessFlags = null;
+
+            if(type == MemberEnum.MEMBER) {
+                memberInfo = new MemberInfo();
+            }
+            else if(type == MemberEnum.FIELD) {
+                memberInfo = new FieldInfo();
+                accessFlags = getFieldAccessFlags(accessFlagsHexCode);
+            }
+            else if(type == MemberEnum.METHOD) {
+                memberInfo = new MethodInfo();
+                accessFlags = getMethodAccessFlags(accessFlagsHexCode);
+            }
+            else{
+                System.out.println("ERROR");
+                continue;
+            }
+
             // FIXME: sectionLength，还需要加上attribute的部分
+            int sectionLength = getCharLength(MemberInfo.BYTE_COUNT);
+            if(attributesCount > 0) {
+                localIndex += attributeCountLength;
 
-            sectionHexCode = getXPart(hexCodeStr, index, sectionLength);
+                AttributeContainer attributeContainer = new AttributeContainer();
+                memberInfo.setAttributeContainer(attributeContainer);
 
-            FieldInfo fieldInfo = new FieldInfo();
-            fieldInfo.setStartIndex(index);
-            fieldInfo.setLength(sectionLength);
-            fieldInfo.setHexCode(sectionHexCode);
-            fieldInfo.setAccessFlagsHexCode(accessFlagsHexCode);
-            fieldInfo.setAccessFlags(accessFlags);
-            fieldInfo.setNameIndexHexCode(nameIndexHexCode);
-            fieldInfo.setNameIndex(nameIndex);
-            fieldInfo.setDescriptorIndexHexCode(descriptorIndexHexCode);
-            fieldInfo.setDescriptorIndex(descriptorIndex);
-            fieldInfo.setAttributesCountHexCode(attributesCountHexCode);
-            fieldInfo.setAttributesCount(attributesCount);
+                attributeContainer.setStartIndex(localIndex);
+                attributeContainer.setCount(attributesCount);
 
-            list.add(fieldInfo);
+                doAttributeConstainer(hexCodeStr, attributeContainer);
+                // FIXME: getLength
+                List<AttributeInfo> attributeInfoList = attributeContainer.getList();
+                for(AttributeInfo item : attributeInfoList) {
+                    int attributeLength = item.getLength();
+                    sectionLength += attributeLength;
+                }
+            }
+            String sectionHexCode = getXPart(hexCodeStr, memberStartIndex, sectionLength);
 
-            index += sectionLength;
+            memberInfo.setStartIndex(memberStartIndex);
+            memberInfo.setLength(sectionLength);
+            memberInfo.setHexCode(sectionHexCode);
+            memberInfo.setAccessFlagsHexCode(accessFlagsHexCode);
+            memberInfo.setAccessFlags(accessFlags);
+            memberInfo.setNameIndexHexCode(nameIndexHexCode);
+            memberInfo.setNameIndex(nameIndex);
+            memberInfo.setDescriptorIndexHexCode(descriptorIndexHexCode);
+            memberInfo.setDescriptorIndex(descriptorIndex);
+            memberInfo.setAttributesCountHexCode(attributesCountHexCode);
+            memberInfo.setAttributesCount(attributesCount);
+
+            list.add(memberInfo);
+
+            memberStartIndex += sectionLength;
             length += sectionLength;
         }
 
@@ -496,13 +784,54 @@ public class ByteCodeUtils {
 
         instance.setLength(length);
         instance.setHexCode(hexCode);
+    }
 
+    public static void doAttributeConstainer(String hexCodeStr, AttributeContainer attributeContainer) {
+        int startIndex = attributeContainer.getStartIndex();
+        int count = attributeContainer.getCount();
+        List<AttributeInfo> attributeInfoList = attributeContainer.getList();
+
+        int length = 0;
+        int attributeStartIndex = startIndex;
+        for(int i=0; i<count; i++) {
+            int localIndex = attributeStartIndex;
+            int attributeNameIndexLength = getCharLength(AttributeInfo.ATTRIBUTE_NAME_INDEX_BYTE_COUNT);
+            String attributeNameIndexHexCode = getXPart(hexCodeStr, localIndex, attributeNameIndexLength);
+            int attributeNameIndex = hex2int(attributeNameIndexHexCode);
+
+            localIndex += attributeNameIndexLength;
+            int attributeLengthLength = getCharLength(AttributeInfo.ATTRIBUTE_LENGTH_BYTE_COUNT);
+            String attributeLengthHexCode = getXPart(hexCodeStr, localIndex,  attributeLengthLength);
+            int attributeLength = hex2int(attributeLengthHexCode);
+
+            int currentAttrTotallength = attributeNameIndexLength + attributeLengthLength + getCharLength(attributeLength);
+            String hexCode = getXPart(hexCodeStr, attributeStartIndex, currentAttrTotallength);
+
+            AttributeInfo attributeInfo = new AttributeInfo();
+            attributeInfo.setStartIndex(attributeStartIndex);
+            attributeInfo.setLength(currentAttrTotallength);
+            attributeInfo.setHexCode(hexCode);
+
+            attributeInfo.setAttributeNameIndexHexCode(attributeNameIndexHexCode);
+            attributeInfo.setAttributeNameIndex(attributeNameIndex);
+            attributeInfo.setAttributeLengthHexCode(attributeLengthHexCode);
+            attributeInfo.setAttributeLength(attributeLength);
+
+            attributeInfoList.add(attributeInfo);
+            attributeStartIndex += currentAttrTotallength;
+            length += currentAttrTotallength;
+        }
+
+        String hexCode = getXPart(hexCodeStr, startIndex, length);
+
+        attributeContainer.setLength(length);
+        attributeContainer.setHexCode(hexCode);
     }
 
     public static void doMethodsCount(String hexCodeStr, MethodsCount instance) {
         doCommon(hexCodeStr, instance, MethodsCount.BYTE_COUNT);
-
         String hexCode = instance.getHexCode();
+
         int num = hex2int(hexCode);
         instance.setMethodsCount(num);
     }
@@ -537,6 +866,55 @@ public class ByteCodeUtils {
         }
         if(hasBit(byteLow, 7)) {
             list.add("ACC_VOLATILE");
+        }
+        if(hasBit(byteLow, 5)) {
+            list.add("ACC_FINAL");
+        }
+        if(hasBit(byteLow, 4)) {
+            list.add("ACC_STATIC");
+        }
+        if(hasBit(byteLow, 3)) {
+            list.add("ACC_PROTECTED");
+        }
+        if(hasBit(byteLow, 2)) {
+            list.add("ACC_PRIVATE");
+        }
+        if(hasBit(byteLow, 1)) {
+            list.add("ACC_PUBLIC");
+        }
+
+        String accessFlags = list2str(list, "[", "]", ",");
+        return accessFlags;
+    }
+
+
+    public static String getMethodAccessFlags(String accessFlagsHexCode) {
+        byte[] bytes = hex2bytes(accessFlagsHexCode);
+        byte byteHigh = bytes[0];
+        byte byteLow = bytes[1];
+
+        List<String> list = new ArrayList<String>();
+
+        if(hasBit(byteHigh, 5)) {
+            list.add("ACC_SYNTHETIC");
+        }
+        if(hasBit(byteHigh, 4)) {
+            list.add("ACC_STRICTFP");
+        }
+        if(hasBit(byteHigh, 3)) {
+            list.add("ACC_ABSTRACT");
+        }
+        if(hasBit(byteHigh, 1)) {
+            list.add("ACC_NATIVE");
+        }
+        if(hasBit(byteLow, 8)) {
+            list.add("ACC_VARARGS");
+        }
+        if(hasBit(byteLow, 7)) {
+            list.add("ACC_BRIDGE");
+        }
+        if(hasBit(byteLow, 6)) {
+            list.add("ACC_SYNCHRONIZED");
         }
         if(hasBit(byteLow, 5)) {
             list.add("ACC_FINAL");

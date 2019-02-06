@@ -47,11 +47,11 @@ public class ConstantPoolInfo extends Common {
     @Override
     public String toString() {
         return NAME + ": {" +
-                "hexCode='" + super.hexCode + '\'' +
-                ", value='" + super.value + '\'' +
-                ", startIndex=" + super.startIndex +
+                "startIndex=" + super.startIndex +
                 ", length=" + super.length +
                 ", count=" + this.count +
+                ", hexCode='" + super.hexCode + '\'' +
+                ", value='" + super.value + '\'' +
                 '}';
     }
 }

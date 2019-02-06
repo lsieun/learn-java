@@ -5,6 +5,7 @@ public class ConstantMethodRefInfo extends ConstantCommonInfo {
     public static final int CLASS_BYTE_COUNT = 2;
     public static final int NAME_AND_TYPE_BYTE_COUNT = 2;
     public static final String NAME = "Method Ref";
+    public static final String PATTERN = "tag(2)-classIndex(4)-nameAndTypeIndex(4)";
 
     private int classIndex;
     private int nameAndTypeIndex;
@@ -28,14 +29,15 @@ public class ConstantMethodRefInfo extends ConstantCommonInfo {
     @Override
     public String toString() {
         return String.format("|%03d|", super.index) + " " + NAME + ": {" +
-                "hexCode='" + super.hexCode + '\'' +
-                ", value='" + super.value + '\'' +
+                "index=" + super.index +
+                ", tagHex=" + super.tagHex + "(" + super.tag + ")" +
                 ", startIndex=" + super.startIndex +
                 ", length=" + super.length +
-                ", index=" + super.index +
-                ", tagHex=" + super.tagHex + "(" + super.tag + ")" +
                 ", classIndex=" + this.classIndex +
                 ", nameAndTypeIndex=" + this.nameAndTypeIndex +
+                ", value='" + super.value + '\'' +
+                ", pattern='" + PATTERN + '\'' +
+                ", hexCode='" + super.hexCode + '\'' +
                 '}';
     }
 }

@@ -1,7 +1,7 @@
 package lsieun.domain;
 
-public class FieldContainer extends MemberContainer {
-    public static final String NAME = "FIELDS CONTAINER";
+public class MethodContainer extends MemberContainer {
+    public static final String NAME = "METHODS CONTAINER";
 
     @Override
     public String toString() {
@@ -10,7 +10,7 @@ public class FieldContainer extends MemberContainer {
                 ", value='" + super.value + '\'' +
                 ", startIndex=" + super.startIndex +
                 ", length=" + super.length +
-                ", fieldsCount=" + super.count +
+                ", methodsCount=" + super.count +
                 '}';
     }
 }

@@ -10,6 +10,7 @@ public class HelloWorld implements Serializable, Closeable {
 
     public HelloWorld() {
         this.name = "Tom";
+        this.age = 10;
     }
 
     public HelloWorld(String name, int age) {

@@ -5,6 +5,7 @@ public class ConstantNameAndTypeInfo extends ConstantCommonInfo {
     public static final int NAME_BYTE_COUNT = 2;
     public static final int DESCRIPTOR_BYTE_COUNT = 2;
     public static final String NAME = "Name And Type";
+    public static final String PATTERN = "tag(2)-nameIndex(4)-descriptorIndex(4)";
 
     private int nameIndex;
     private int descriptorIndex;
@@ -28,14 +29,15 @@ public class ConstantNameAndTypeInfo extends ConstantCommonInfo {
     @Override
     public String toString() {
         return String.format("|%03d|", super.index) + " " + NAME + ": {" +
-                "hexCode='" + super.hexCode + '\'' +
-                ", value='" + super.value + '\'' +
+                "index=" + super.index +
+                ", tagHex=" + super.tagHex + "(" + super.tag + ")" +
                 ", startIndex=" + super.startIndex +
                 ", length=" + super.length +
-                ", index=" + super.index +
-                ", tagHex=" + super.tagHex + "(" + super.tag + ")" +
                 ", nameIndex=" + this.nameIndex +
                 ", descriptorIndex=" + this.descriptorIndex +
+                ", value='" + super.value + '\'' +
+                ", pattern='" + PATTERN + '\'' +
+                ", hexCode='" + super.hexCode + '\'' +
                 '}';
     }
 }

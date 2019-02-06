@@ -1,9 +1,8 @@
 package lsieun.domain;
 
-public class FieldInfo extends MemberInfo {
+public class MethodInfo extends MemberInfo {
 
-    public static final String NAME = "Field Info";
-
+    public static final String NAME = "Method Info";
 
     @Override
     public String toString() {

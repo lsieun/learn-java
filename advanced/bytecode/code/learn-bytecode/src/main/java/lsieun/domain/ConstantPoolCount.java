@@ -17,10 +17,10 @@ public class ConstantPoolCount extends Common {
     @Override
     public String toString() {
         return NAME + ": {" +
-                "hexCode='" + super.hexCode + '\'' +
-                ", value='" + super.value + '\'' +
-                ", startIndex=" + super.startIndex +
+                "startIndex=" + super.startIndex +
                 ", length=" + super.length +
+                ", hexCode='" + super.hexCode + '\'' +
+                ", value='" + super.value + '\'' +
                 '}';
     }
 }
