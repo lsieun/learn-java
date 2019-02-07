@@ -2,7 +2,7 @@ package lsieun.domain;
 
 public class MethodsCount extends Common {
     public static final int BYTE_COUNT = 2;
-    public static final String NAME = "METHODS COUNT";
+    public static final String NAME = "Methods Count";
 
     private int methodsCount;
 

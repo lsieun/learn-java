@@ -2,7 +2,7 @@ package lsieun.domain;
 
 public class FieldsCount extends Common {
     public static final int BYTE_COUNT = 2;
-    public static final String NAME = "FIELDS COUNT";
+    public static final String NAME = "Fields Count";
 
     private int fieldsCount;
 

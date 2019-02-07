@@ -1,7 +1,7 @@
 package lsieun.domain;
 
 public class FieldContainer extends MemberContainer {
-    public static final String NAME = "FIELDS CONTAINER";
+    public static final String NAME = "FIELD CONTAINER";
 
     @Override
     public String toString() {

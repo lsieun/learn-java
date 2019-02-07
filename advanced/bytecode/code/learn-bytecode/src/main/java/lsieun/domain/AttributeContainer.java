@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AttributeContainer extends Common {
-    public static final String NAME = "Attribute CONTAINER";
+    public static final String NAME = "ATTRIBUTE CONTAINER";
 
     protected int count;
     protected List<AttributeInfo> list;

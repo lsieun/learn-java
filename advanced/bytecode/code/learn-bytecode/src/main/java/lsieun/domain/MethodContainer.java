@@ -1,7 +1,7 @@
 package lsieun.domain;
 
 public class MethodContainer extends MemberContainer {
-    public static final String NAME = "METHODS CONTAINER";
+    public static final String NAME = "METHOD CONTAINER";
 
     @Override
     public String toString() {
