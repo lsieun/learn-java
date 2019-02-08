@@ -2,6 +2,7 @@ package lsieun.chat;
 
 import java.io.UnsupportedEncodingException;
 
+import lsieun.utils.HexUtils;
 import lsieun.utils.IOUtils;
 
 public class Talker {
@@ -51,7 +52,7 @@ public class Talker {
                 "index=" + index +
                 ", name='" + name + '\'' +
                 ", length=" + length +
-                ", bytes=" + IOUtils.toHex(bytes) +
+                ", bytes=" + HexUtils.toHex(bytes) +
                 '}';
     }
 }

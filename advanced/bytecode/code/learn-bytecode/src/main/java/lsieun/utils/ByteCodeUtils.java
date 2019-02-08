@@ -1,6 +1,5 @@
 package lsieun.utils;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,27 +42,11 @@ import lsieun.domain.constant.ConstantUtf8Info;
 
 public class ByteCodeUtils {
     public static final int CHAR_COUNT_PER_BYTE = 2;
-    public static final Map<Character, Integer> hex2IntMap;
+
     public static final Map<Integer, Class> int2ClazzMap;
 
     static {
-        hex2IntMap = new HashMap<Character, Integer>();
-        hex2IntMap.put('0', Integer.valueOf(0));
-        hex2IntMap.put('1', Integer.valueOf(1));
-        hex2IntMap.put('2', Integer.valueOf(2));
-        hex2IntMap.put('3', Integer.valueOf(3));
-        hex2IntMap.put('4', Integer.valueOf(4));
-        hex2IntMap.put('5', Integer.valueOf(5));
-        hex2IntMap.put('6', Integer.valueOf(6));
-        hex2IntMap.put('7', Integer.valueOf(7));
-        hex2IntMap.put('8', Integer.valueOf(8));
-        hex2IntMap.put('9', Integer.valueOf(9));
-        hex2IntMap.put('A', Integer.valueOf(10));
-        hex2IntMap.put('B', Integer.valueOf(11));
-        hex2IntMap.put('C', Integer.valueOf(12));
-        hex2IntMap.put('D', Integer.valueOf(13));
-        hex2IntMap.put('E', Integer.valueOf(14));
-        hex2IntMap.put('F', Integer.valueOf(15));
+
 
         int2ClazzMap = new HashMap<Integer, Class>();
         int2ClazzMap.put(Integer.valueOf(1), ConstantUtf8Info.class);
@@ -238,7 +221,7 @@ public class ByteCodeUtils {
         doCommon(hexCodeStr, instance, MinorVersion.BYTE_COUNT);
         String hexCode = instance.getHexCode();
 
-        int num = hex2int(hexCode);
+        int num = HexUtils.toInt(hexCode);
         String value = hexCode + "(" + num + ")";
         instance.setValue(value);
     }
@@ -247,7 +230,7 @@ public class ByteCodeUtils {
         doCommon(hexCodeStr, instance, MajorVersion.BYTE_COUNT);
         String hexCode = instance.getHexCode();
 
-        int num = hex2int(hexCode);
+        int num = HexUtils.toInt(hexCode);
         int jdkVersion = num - 44;
         String value = "JDK " + jdkVersion + "(" + num + ")";
         instance.setValue(value);
@@ -257,7 +240,7 @@ public class ByteCodeUtils {
         doCommon(hexCodeStr, instance, ConstantPoolCount.BYTE_COUNT);
         String hexCode = instance.getHexCode();
 
-        int sum = hex2int(hexCode);
+        int sum = HexUtils.toInt(hexCode);
         int count = sum - 1;
 
         instance.setCount(count);
@@ -277,7 +260,7 @@ public class ByteCodeUtils {
 
         for(int i=0; i<count; i++) {
             String tagHexCode = getXPart(hexCodeStr, index, tagLength);
-            int constantPoolType = hex2int(tagHexCode);
+            int constantPoolType = HexUtils.toInt(tagHexCode);
 
             ConstantCommonInfo cpInfo = null;
             String sectionHexCode = null;
@@ -293,15 +276,15 @@ public class ByteCodeUtils {
                 sectionIndex += tagLength;
                 int byteLength = getCharLength(ConstantUtf8Info.LENGTH_BYTE_COUNT);
                 String byteHexCode = getXPart(sectionHexCode, sectionIndex, byteLength);
-                int byteCount = hex2int(byteHexCode);
+                int byteCount = HexUtils.toInt(byteHexCode);
 
                 sectionLength = getCharLength(ConstantUtf8Info.BYTE_COUNT + byteCount);
                 sectionHexCode = getXPart(hexCodeStr, index, sectionLength);
                 int byteContentLength = getCharLength(byteCount);
                 sectionIndex += byteLength;
                 String byteContentHexCode = getXPart(sectionHexCode, sectionIndex, byteContentLength);
-                //String value = byteContentHexCode + ": " + hex2str(byteContentHexCode);
-                String value = hex2str(byteContentHexCode);
+                //String value = byteContentHexCode + ": " + toUtf8(byteContentHexCode);
+                String value = HexUtils.toUtf8(byteContentHexCode);
                 section.setValue(value);
 
 
@@ -316,7 +299,7 @@ public class ByteCodeUtils {
                 sectionIndex += tagLength;
                 int bytesLength = getCharLength(ConstantIntegerInfo.BYTES_BYTE_COUNT);
                 String bytesHexCode = getXPart(sectionHexCode, sectionIndex, bytesLength);
-                int intValue = hex2int(bytesHexCode);
+                int intValue = HexUtils.toInt(bytesHexCode);
                 section.setIntValue(intValue);
 
                 cpInfo = section;
@@ -330,7 +313,7 @@ public class ByteCodeUtils {
                 sectionIndex += tagLength;
                 int bytesLength = getCharLength(ConstantFloatInfo.BYTES_BYTE_COUNT);
                 String bytesHexCode = getXPart(sectionHexCode, sectionIndex, bytesLength);
-                float f = hex2float(bytesHexCode);
+                float f = HexUtils.toFloat(bytesHexCode);
                 section.setFloatValue(f);
                 String value = f + "F";
                 section.setValue(value);
@@ -346,7 +329,7 @@ public class ByteCodeUtils {
                 sectionIndex += tagLength;
                 int bytesLength = getCharLength(ConstantLongInfo.BYTES_BYTE_COUNT);
                 String bytesHexCode = getXPart(sectionHexCode, sectionIndex, bytesLength);
-                int intValue = hex2int(bytesHexCode);
+                int intValue = HexUtils.toInt(bytesHexCode);
                 section.setLongValue(intValue);
                 String value = intValue + "L";
                 section.setValue(value);
@@ -362,7 +345,7 @@ public class ByteCodeUtils {
                 sectionIndex += tagLength;
                 int bytesLength = getCharLength(ConstantDoubleInfo.BYTES_BYTE_COUNT);
                 String bytesHexCode = getXPart(sectionHexCode, sectionIndex, bytesLength);
-                double doubleValue = hex2double(bytesHexCode);
+                double doubleValue = HexUtils.toDouble(bytesHexCode);
                 section.setDoubleValue(doubleValue);
                 String value = doubleValue + "";
                 section.setValue(value);
@@ -378,7 +361,7 @@ public class ByteCodeUtils {
                 sectionIndex += tagLength;
                 int classIndexLength = getCharLength(ConstantClassInfo.CLASS_BYTE_COUNT);
                 String classIndexHexCode = getXPart(sectionHexCode, sectionIndex, classIndexLength);
-                int classIndex = hex2int(classIndexHexCode);
+                int classIndex = HexUtils.toInt(classIndexHexCode);
                 section.setClassIndex(classIndex);
 
                 cpInfo = section;
@@ -392,7 +375,7 @@ public class ByteCodeUtils {
                 sectionIndex += tagLength;
                 int stringIndexLength = getCharLength(ConstantStringInfo.STRING_BYTE_COUNT);
                 String stringIndexHexCode = getXPart(sectionHexCode, sectionIndex, stringIndexLength);
-                int stringIndex = hex2int(stringIndexHexCode);
+                int stringIndex = HexUtils.toInt(stringIndexHexCode);
                 section.setStringIndex(stringIndex);
 
                 cpInfo = section;
@@ -406,11 +389,11 @@ public class ByteCodeUtils {
                 sectionIndex += tagLength;
                 int classIndexLength = getCharLength(ConstantFieldRefInfo.CLASS_BYTE_COUNT);
                 String classIndexHexCode = getXPart(sectionHexCode, sectionIndex, classIndexLength);
-                int classIndex = hex2int(classIndexHexCode);
+                int classIndex = HexUtils.toInt(classIndexHexCode);
                 sectionIndex += classIndexLength;
                 int nameAndTypeIndexLength = getCharLength(ConstantFieldRefInfo.NAME_AND_TYPE_BYTE_COUNT);
                 String nameAndTypeIndexHexCode = getXPart(sectionHexCode, sectionIndex, classIndexLength);
-                int nameAndTypeIndex = hex2int(nameAndTypeIndexHexCode);
+                int nameAndTypeIndex = HexUtils.toInt(nameAndTypeIndexHexCode);
 
                 section.setClassIndex(classIndex);
                 section.setNameAndTypeIndex(nameAndTypeIndex);
@@ -427,11 +410,11 @@ public class ByteCodeUtils {
                 sectionIndex += tagLength;
                 int classIndexLength = getCharLength(ConstantMethodRefInfo.CLASS_BYTE_COUNT);
                 String classIndexHexCode = getXPart(sectionHexCode, sectionIndex, classIndexLength);
-                int classIndex = hex2int(classIndexHexCode);
+                int classIndex = HexUtils.toInt(classIndexHexCode);
                 sectionIndex += classIndexLength;
                 int nameAndTypeIndexLength = getCharLength(ConstantMethodRefInfo.NAME_AND_TYPE_BYTE_COUNT);
                 String nameAndTypeIndexHexCode = getXPart(sectionHexCode, sectionIndex, classIndexLength);
-                int nameAndTypeIndex = hex2int(nameAndTypeIndexHexCode);
+                int nameAndTypeIndex = HexUtils.toInt(nameAndTypeIndexHexCode);
 
                 section.setClassIndex(classIndex);
                 section.setNameAndTypeIndex(nameAndTypeIndex);
@@ -447,11 +430,11 @@ public class ByteCodeUtils {
                 sectionIndex += tagLength;
                 int classIndexLength = getCharLength(ConstantInterfaceMethodRefInfo.CLASS_BYTE_COUNT);
                 String classIndexHexCode = getXPart(sectionHexCode, sectionIndex, classIndexLength);
-                int classIndex = hex2int(classIndexHexCode);
+                int classIndex = HexUtils.toInt(classIndexHexCode);
                 sectionIndex += classIndexLength;
                 int nameAndTypeIndexLength = getCharLength(ConstantInterfaceMethodRefInfo.NAME_AND_TYPE_BYTE_COUNT);
                 String nameAndTypeIndexHexCode = getXPart(sectionHexCode, sectionIndex, classIndexLength);
-                int nameAndTypeIndex = hex2int(nameAndTypeIndexHexCode);
+                int nameAndTypeIndex = HexUtils.toInt(nameAndTypeIndexHexCode);
 
                 section.setClassIndex(classIndex);
                 section.setNameAndTypeIndex(nameAndTypeIndex);
@@ -467,11 +450,11 @@ public class ByteCodeUtils {
                 sectionIndex += tagLength;
                 int nameIndexLength = getCharLength(ConstantNameAndTypeInfo.NAME_BYTE_COUNT);
                 String nameIndexHexCode = getXPart(sectionHexCode, sectionIndex, nameIndexLength);
-                int nameIndex = hex2int(nameIndexHexCode);
+                int nameIndex = HexUtils.toInt(nameIndexHexCode);
                 sectionIndex += nameIndexLength;
                 int descriptorIndexLength = getCharLength(ConstantNameAndTypeInfo.DESCRIPTOR_BYTE_COUNT);
                 String descriptorIndexHexCode = getXPart(sectionHexCode, sectionIndex, nameIndexLength);
-                int descriptorIndex = hex2int(descriptorIndexHexCode);
+                int descriptorIndex = HexUtils.toInt(descriptorIndexHexCode);
 
                 section.setNameIndex(nameIndex);
                 section.setDescriptorIndex(descriptorIndex);
@@ -534,7 +517,7 @@ public class ByteCodeUtils {
         index += superClassLength;
         int interfacesCountLength = getCharLength(ClassInfo.INTERFACES_COUNT_BYTE_COUNT);
         String interfacesCountHexCode = getXPart(hexCode, index, interfacesCountLength);
-        int interfacesCount = hex2int(interfacesCountHexCode);
+        int interfacesCount = HexUtils.toInt(interfacesCountHexCode);
 
         //重新计算hexCode和length
         length = getCharLength(ClassInfo.BYTE_COUNT + interfacesCount * ClassInfo.INTERFACES_BYTE_COUNT);
@@ -560,7 +543,7 @@ public class ByteCodeUtils {
         doCommon(hexCodeStr, instance, FieldsCount.BYTE_COUNT);
         String hexCode = instance.getHexCode();
 
-        int num = hex2int(hexCode);
+        int num = HexUtils.toInt(hexCode);
         String value = hexCode + "(" + num + ")";
 
         instance.setValue(value);
@@ -575,7 +558,7 @@ public class ByteCodeUtils {
         doCommon(hexCodeStr, instance, MethodsCount.BYTE_COUNT);
         String hexCode = instance.getHexCode();
 
-        int num = hex2int(hexCode);
+        int num = HexUtils.toInt(hexCode);
         instance.setMethodsCount(num);
     }
 
@@ -604,19 +587,19 @@ public class ByteCodeUtils {
             localIndex += accessFlagsLength;
             int nameIndexLength = getCharLength(FieldInfo.NAME_INDEX_BYTE_COUNT);
             String nameIndexHexCode = getXPart(hexCodeStr, localIndex, nameIndexLength);
-            int nameIndex = hex2int(nameIndexHexCode);
+            int nameIndex = HexUtils.toInt(nameIndexHexCode);
 
             // field descriptor index
             localIndex += nameIndexLength;
             int descriptorIndexLength = getCharLength(FieldInfo.DESCRIPTOR_INDEX_BYTE_COUNT);
             String descriptorIndexHexCode = getXPart(hexCodeStr, localIndex, descriptorIndexLength);
-            int descriptorIndex = hex2int(descriptorIndexHexCode);
+            int descriptorIndex = HexUtils.toInt(descriptorIndexHexCode);
 
             // field attribute count
             localIndex += descriptorIndexLength;
             int attributeCountLength = getCharLength(FieldInfo.ATTRIBUTE_COUNT_BYTE_COUNT);
             String attributesCountHexCode = getXPart(hexCodeStr, localIndex, attributeCountLength);
-            int attributesCount = hex2int(attributesCountHexCode);
+            int attributesCount = HexUtils.toInt(attributesCountHexCode);
 
             MemberInfo memberInfo = null;
             String accessFlags = null;
@@ -680,7 +663,7 @@ public class ByteCodeUtils {
         doCommon(hexCodeStr, instance, AttributesCount.BYTE_COUNT);
         String hexCode = instance.getHexCode();
 
-        int num = hex2int(hexCode);
+        int num = HexUtils.toInt(hexCode);
         String value = hexCode + "(" + num + ")";
 
         instance.setValue(value);
@@ -698,12 +681,12 @@ public class ByteCodeUtils {
             int localIndex = attributeStartIndex;
             int attributeNameIndexLength = getCharLength(AttributeInfo.ATTRIBUTE_NAME_INDEX_BYTE_COUNT);
             String attributeNameIndexHexCode = getXPart(hexCodeStr, localIndex, attributeNameIndexLength);
-            int attributeNameIndex = hex2int(attributeNameIndexHexCode);
+            int attributeNameIndex = HexUtils.toInt(attributeNameIndexHexCode);
 
             localIndex += attributeNameIndexLength;
             int attributeLengthLength = getCharLength(AttributeInfo.ATTRIBUTE_LENGTH_BYTE_COUNT);
             String attributeLengthHexCode = getXPart(hexCodeStr, localIndex,  attributeLengthLength);
-            int attributeLength = hex2int(attributeLengthHexCode);
+            int attributeLength = HexUtils.toInt(attributeLengthHexCode);
 
             int currentAttrTotallength = attributeNameIndexLength + attributeLengthLength + getCharLength(attributeLength);
             String hexCode = getXPart(hexCodeStr, attributeStartIndex, currentAttrTotallength);
@@ -872,7 +855,7 @@ public class ByteCodeUtils {
     // region Access Flags
 
     public static String getClassAccessFlags(String accessFlagsHexCode) {
-        byte[] bytes = hex2bytes(accessFlagsHexCode);
+        byte[] bytes = HexUtils.toBytes(accessFlagsHexCode);
         byte byteHigh = bytes[0];
         byte byteLow = bytes[1];
 
@@ -907,7 +890,7 @@ public class ByteCodeUtils {
     }
 
     public static String getFieldAccessFlags(String accessFlagsHexCode) {
-        byte[] bytes = hex2bytes(accessFlagsHexCode);
+        byte[] bytes = HexUtils.toBytes(accessFlagsHexCode);
         byte byteHigh = bytes[0];
         byte byteLow = bytes[1];
 
@@ -945,7 +928,7 @@ public class ByteCodeUtils {
     }
 
     public static String getMethodAccessFlags(String accessFlagsHexCode) {
-        byte[] bytes = hex2bytes(accessFlagsHexCode);
+        byte[] bytes = HexUtils.toBytes(accessFlagsHexCode);
         byte byteHigh = bytes[0];
         byte byteLow = bytes[1];
 
@@ -1005,60 +988,7 @@ public class ByteCodeUtils {
 
     // region hex2X
 
-    public static int hex2int(String hexCode) {
-        int base = 16;
-        int sum = 0;
 
-        for(int i=0; i<hexCode.length(); i++) {
-            char ch = hexCode.charAt(i);
-            Integer value = hex2IntMap.get(ch);
-
-            sum = sum * base + value;
-        }
-        return sum;
-    }
-
-    public static float hex2float(String hexCode) {
-        Long i = Long.parseLong(hexCode, 16);
-        Float f = Float.intBitsToFloat(i.intValue());
-        return f;
-    }
-
-    public static double hex2double(String hexCode) {
-        Long i = Long.parseLong(hexCode, 16);
-        Double value = Double.longBitsToDouble(i);
-        return value;
-    }
-
-    public static String hex2str(String hexCode) {
-        hexCode = hexCode.toLowerCase();
-        byte[] bytes = hex2bytes(hexCode);
-        String str = null;
-        try {
-            str = new String(bytes, "UTF8");
-        } catch (UnsupportedEncodingException e) {
-            str = null;
-            e.printStackTrace();
-        }
-        return str;
-    }
-
-
-    public static byte[] hex2bytes(String hex) {
-        int len = (hex.length() / 2);
-        byte[] result = new byte[len];
-        char[] array = hex.toCharArray();
-        for (int i = 0; i < len; i++) {
-            int pos = i * 2;
-            result[i] = (byte) (toByte(array[pos]) << 4 | toByte(array[pos + 1]));
-        }
-        return result;
-    }
-
-    private static byte toByte(char c) {
-        byte b = (byte) "0123456789abcdef".indexOf(c);
-        return b;
-    }
 
     // endregion
 

@@ -3,6 +3,8 @@
 URL:
 
 - [Guide to the Most Important JVM Parameters](https://www.baeldung.com/jvm-parameters)
+- [jvm-options](http://jvm-options.tech.xebia.fr/)
+- [JDK 9: XXtra Command Line Options](https://dzone.com/articles/jdk-9-xxtra-command-line-options)
 
 ## JVM OPTIONS
 
@@ -27,6 +29,16 @@ The partial output of this command is shown below:
 The options related to **garbage collector** start with `-XX`.
 
 > 这句短短的话，我觉得很重要，使用GC时，options都是以`-XX`开头的。
+
+使用`java -XX:+PrintFlagsFinal -version`可以查看`-XX:`的默认值是什么。使用`-XX:+PrintFlagsFinal`参数可以输出所有参数的名称及默认值（默认不包括Diagnostic和Experimental的参数，如果需要，可以配合`-XX:+UnlockDiagnosticVMOptions/-XX:+UnlockExperimentalVMOptions`一起使用）。
+
+```bash
+java -XX:+PrintFlagsInitial -version
+java -XX:+PrintFlagsInitial -XX:+UnlockExperimentalVMOptions -version
+java -XX:+PrintFlagsFinal -version
+java -XX:+PrintFlagsFinal -XX:+UnlockDiagnosticVMOptions -version
+java -XX:+PrintFlagsFinal -XX:+UnlockExperimentalVMOptions -version
+```
 
 - **Options that do not require any value** (Boolean options) are turned on and off with `-XX:+<option>` and `-XX:-<option>` respectively (i.e., `+` for adding and `-` for removing option).
 - **Options that require numeric value** are set with `-XX:<option>=<number>`. Numbers can include ‘`m`’ or ‘`M`’ for **megabytes**, ‘`k`’ or ‘`K`’ for **kilobytes**, and ‘`g`’ or ‘`G`’ for **gigabytes**. For example, 2k is the same as 2048. 
@@ -107,6 +119,8 @@ Using the following parameters, we can log the GC activity:
 -XX:GCLogFileSize=<filesize>[unit]
 -Xloggc:/path/to/gc.log
 ```
+
+Use `java -XX:+PrintFlagsFinal` to print available `-XX` options. More **diagnostic** and **experimental** options can be added to list with following options: `-XX:+UnlockDiagnosticVMOptions`  `-XX:+UnlockExperimentalVMOptions` (for **Sun**) `-XX:+UnlockInternalVMOptions` (for **JRockit**)
 
 `UseGCLogFileRotation` specifies the log file rolling policy, much like log4j, s4lj, etc. `NumberOfGCLogFiles` denotes the max number of log files that can be written for a single application life cycle. `GCLogFileSize` specifies the max size of the file. Finally, `loggc` denotes its location.
 

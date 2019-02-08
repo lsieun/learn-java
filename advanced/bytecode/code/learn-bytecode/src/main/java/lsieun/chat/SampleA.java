@@ -9,6 +9,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
+import lsieun.utils.ByteUtils;
 import lsieun.utils.IOUtils;
 
 public class SampleA {
@@ -73,8 +74,8 @@ public class SampleA {
 
     public static void write(OutputStream out, int index, int length, byte[] bytes) {
         try {
-            out.write(ChatUtils.toBytes(index, 1));
-            out.write(ChatUtils.toBytes(length, 2));
+            out.write(ByteUtils.toBytes(index, 1));
+            out.write(ByteUtils.toBytes(length, 2));
             out.write(bytes);
         } catch (IOException e) {
             e.printStackTrace();
