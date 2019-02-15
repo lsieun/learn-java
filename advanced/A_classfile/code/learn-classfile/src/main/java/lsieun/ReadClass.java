@@ -8,6 +8,7 @@ public class ReadClass {
         String dir = ReadClass.class.getResource(".").getPath();
         String filepath = dir + "example/HelloWorld.class";
         //String filepath = dir + "utils/ByteCodeUtils.class";
+        filepath = "/home/liusen/Workspace/dummy/lab/HelloWorld.class";
         String hexCodeStr = IOUtils.readFormatHex(filepath);
         System.out.println(hexCodeStr);
 

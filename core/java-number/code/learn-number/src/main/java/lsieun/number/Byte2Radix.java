@@ -1,6 +1,6 @@
 package lsieun.number;
 
-import lsieun.util.ByteUtil;
+import lsieun.utils.ByteUtils;
 
 public class Byte2Radix {
     public static void main(String[] args) {
@@ -13,13 +13,13 @@ public class Byte2Radix {
 
     public static void testBinary() {
         System.out.printf("|%5s|%10s|%n", "Byte", "Binary");
-        System.out.printf("|% 5d|%10s|%n", 0, ByteUtil.toBinary((byte)0));
-        System.out.printf("|% 5d|%10s|%n", 1, ByteUtil.toBinary((byte)1));
-        System.out.printf("|% 5d|%10s|%n", -1, ByteUtil.toBinary((byte)-1));
-        System.out.printf("|% 5d|%10s|%n", 127, ByteUtil.toBinary((byte)127));
-        System.out.printf("|% 5d|%10s|%n", -127, ByteUtil.toBinary((byte)-127));
-        System.out.printf("|% 5d|%10s|%n", -128, ByteUtil.toBinary((byte)-128));
-        System.out.printf("|% 5d|%10s|%n", -64, ByteUtil.toBinary((byte)-64));
+        System.out.printf("|% 5d|%10s|%n", 0, ByteUtils.toBinary((byte)0));
+        System.out.printf("|% 5d|%10s|%n", 1, ByteUtils.toBinary((byte)1));
+        System.out.printf("|% 5d|%10s|%n", -1, ByteUtils.toBinary((byte)-1));
+        System.out.printf("|% 5d|%10s|%n", 127, ByteUtils.toBinary((byte)127));
+        System.out.printf("|% 5d|%10s|%n", -127, ByteUtils.toBinary((byte)-127));
+        System.out.printf("|% 5d|%10s|%n", -128, ByteUtils.toBinary((byte)-128));
+        System.out.printf("|% 5d|%10s|%n", -64, ByteUtils.toBinary((byte)-64));
 
 //      Output:
 //      |Value|    Binary|

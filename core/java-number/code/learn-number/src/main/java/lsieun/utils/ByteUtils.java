@@ -1,6 +1,6 @@
-package lsieun.util;
+package lsieun.utils;
 
-public class ByteUtil {
+public class ByteUtils {
     public static String toBinary(byte b) {
         StringBuilder sb = new StringBuilder();
         sb.append((b >> 7) & 0x01);

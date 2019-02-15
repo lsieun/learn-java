@@ -1,4 +1,4 @@
-# chat
+# 理解Class文件的存储结构
 
 认知的过程：由简单->复杂。一生二，二生三，三生万物。
 
@@ -6,17 +6,13 @@
 
 始于模仿，终于创造。
 
-## 造轮子也有点作用（从观念上改变认知）
 
-通过自己来构造一个小的轮子来理解别人的大轮子的运行原理，可谓“以小知大”、“以简单知复杂”。
 
-## 造轮子（动手操作）
+## 有的没的
 
-![自定义的文件存储格式](images/stair-chat.png)
 
-最终的目标是，理解class文件的存储格式。
 
-中间的目标是，构造一种自定义的存储格式。这种自定义的存储格式，将有助于我们理解class文件的存储格式。中间的目标就是当前要实现的目标，也就是“造轮子”的过程。
+
 
 既然是自定义的文件存储格式，总是要存一些内容的。如果没有什么内容要存储，那也就不存在“存储格式”的问题了。
 
@@ -128,26 +124,7 @@ public static void writeSay(OutputStream out, Say say) {
 
 确定字段存储空间的大小
 
-序列化(Serialization)，就是将内存(Memory)中的数据向硬盘(HardDisk)中的数据转换的过程。
 
-```txt
-序列化：Java对象（内存）->文件（硬盘）
-```
-
-![序列化](images/memory_harddisk.jpeg)
-
-序列化(Serialization)的本质是映射(Mapping)。映射(Mapping)，是源域(Source Domain)中的样本向目标域(Target Domain)中的样本的对应关系，如下图所示。
-
-![映射](images/mapping-number.png)
-
-
-之所以说“序列化(Serialization)的本质是映射(Mapping)”，是因为我们可以将内存(Memory)理解成源域(Source Domain)，将硬盘(HardDisk)理解成目标域(Target Domain)；序列化的过程，就是将内存中的数据向硬盘中的数据进行映射的过程。
-
-```txt
-序列化的本质上是映射。（序列化==>映射）
-```
-
-![映射](images/mapping-serialization.png)
 
 ```txt
 文本->Java类->序列化。
@@ -214,7 +191,7 @@ public class Say {
 
 chat_info
 
-magic
+magic: ABCDDCBA
 year
 month
 day

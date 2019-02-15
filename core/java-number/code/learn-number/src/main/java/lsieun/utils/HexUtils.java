@@ -28,14 +28,6 @@ public class HexUtils {
         hex2IntMap.put('F', Integer.valueOf(15));
     }
 
-    public static String toHex(byte[] bytes) {
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < bytes.length; ++i) {
-            sb.append(Integer.toHexString((bytes[i] & 0xFF) | 0x100).substring(1,3));
-        }
-        return sb.toString();
-    }
-
     public static int toInt(String hexCode) {
         int base = 16;
         int sum = 0;
@@ -75,7 +67,6 @@ public class HexUtils {
     }
 
     public static byte[] toBytes(String hexCode) {
-        hexCode = hexCode.toLowerCase();
         int len = (hexCode.length() / 2);
         byte[] result = new byte[len];
         char[] array = hexCode.toCharArray();

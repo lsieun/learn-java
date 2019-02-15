@@ -1,7 +1,7 @@
 package lsieun.number;
 
-import lsieun.util.ByteUtil;
-import lsieun.util.IntegerUtil;
+import lsieun.utils.ByteUtils;
+import lsieun.utils.IntegerUtils;
 
 public class Byte0XFF {
     public static void main(String[] args) {
@@ -36,7 +36,7 @@ public class Byte0XFF {
         int[] array = new int[] {0, 1, -1, 127, -127, -128};
         for (int i=0; i<array.length; i++) {
             byte b = (byte)array[i];
-            System.out.printf("|%10d|%10s|%32s|%8s|%n", b, ByteUtil.toBinary(b), IntegerUtil.toBinary((b & 0xff)), (b & 0xff));
+            System.out.printf("|%10d|%10s|%32s|%8s|%n", b, ByteUtils.toBinary(b), IntegerUtils.toBinary((b & 0xff)), (b & 0xff));
         }
         System.out.println("================================\n");
     }

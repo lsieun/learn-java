@@ -3,35 +3,28 @@ package lsieun.chat;
 import java.io.UnsupportedEncodingException;
 
 import lsieun.utils.HexUtils;
-import lsieun.utils.IOUtils;
+import lsieun.utils.StringUtils;
 
 public class Talker {
     public static final String PATTERN = "index(1)-length(2)-bytes(length)";
 
-    private final int index;
+    private final int id;
     private final String name;
     private final int length;
     private final byte[] bytes;
 
-    public Talker(int index, String name) {
+    public Talker(int id, String name) {
+        byte[] bytes = StringUtils.getBytes(name, "UTF8");
+        int length = bytes.length;
 
-        int length = 0;
-        byte[] bytes = null;
-        try {
-            bytes = name.getBytes("UTF8");
-            length = bytes.length;
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-        this.index = index;
+        this.id = id;
         this.name = name;
         this.length = length;
         this.bytes = bytes;
     }
 
-    public int getIndex() {
-        return index;
+    public int getId() {
+        return id;
     }
 
     public int getLength() {
@@ -49,8 +42,8 @@ public class Talker {
     @Override
     public String toString() {
         return "Talker{" +
-                "index=" + index +
-                ", name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + "'" +
                 ", length=" + length +
                 ", bytes=" + HexUtils.toHex(bytes) +
                 '}';
