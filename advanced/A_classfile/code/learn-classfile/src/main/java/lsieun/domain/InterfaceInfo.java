@@ -1,17 +1,17 @@
 package lsieun.domain;
 
-public class MethodsCount extends Common {
+public class InterfaceInfo extends Common {
     public static final int BYTE_COUNT = 2;
-    public static final String NAME = "Methods Count";
+    public static final String NAME = "Interface";
 
-    private int methodsCount;
+    private int classIndex;
 
-    public int getMethodsCount() {
-        return methodsCount;
+    public int getClassIndex() {
+        return classIndex;
     }
 
-    public void setMethodsCount(int methodsCount) {
-        this.methodsCount = methodsCount;
+    public void setClassIndex(int classIndex) {
+        this.classIndex = classIndex;
     }
 
     @Override
@@ -19,7 +19,7 @@ public class MethodsCount extends Common {
         return NAME + ": {" +
                 "startIndex=" + super.startIndex +
                 ", length=" + super.length +
-                ", methodsCount=" + this.methodsCount +
+                ", classIndex=" + this.classIndex +
                 ", hexCode='" + super.hexCode + '\'' +
                 ", value='" + super.value + '\'' +
                 '}';

@@ -1,25 +1,14 @@
 package lsieun.domain;
 
-public class MethodsCount extends Common {
+public class AccessFlags extends Common {
     public static final int BYTE_COUNT = 2;
-    public static final String NAME = "Methods Count";
-
-    private int methodsCount;
-
-    public int getMethodsCount() {
-        return methodsCount;
-    }
-
-    public void setMethodsCount(int methodsCount) {
-        this.methodsCount = methodsCount;
-    }
+    public static final String NAME = "Access Flags";
 
     @Override
     public String toString() {
         return NAME + ": {" +
                 "startIndex=" + super.startIndex +
                 ", length=" + super.length +
-                ", methodsCount=" + this.methodsCount +
                 ", hexCode='" + super.hexCode + '\'' +
                 ", value='" + super.value + '\'' +
                 '}';

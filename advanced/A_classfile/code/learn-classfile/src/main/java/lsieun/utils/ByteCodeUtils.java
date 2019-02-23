@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import lsieun.domain.AccessFlags;
 import lsieun.domain.AttributeContainer;
 import lsieun.domain.AttributeInfo;
 import lsieun.domain.AttributesCount;
@@ -15,6 +16,9 @@ import lsieun.domain.ConstantPoolInfo;
 import lsieun.domain.FieldContainer;
 import lsieun.domain.FieldInfo;
 import lsieun.domain.FieldsCount;
+import lsieun.domain.InterfaceInfo;
+import lsieun.domain.InterfacesContainer;
+import lsieun.domain.InterfacesCount;
 import lsieun.domain.MagicNumber;
 import lsieun.domain.MajorVersion;
 import lsieun.domain.MemberContainer;
@@ -24,6 +28,8 @@ import lsieun.domain.MethodContainer;
 import lsieun.domain.MethodInfo;
 import lsieun.domain.MethodsCount;
 import lsieun.domain.MinorVersion;
+import lsieun.domain.SuperClass;
+import lsieun.domain.ThisClass;
 import lsieun.domain.constant.ConstantClassInfo;
 import lsieun.domain.constant.ConstantCommonInfo;
 import lsieun.domain.constant.ConstantDoubleInfo;
@@ -40,6 +46,7 @@ import lsieun.domain.constant.ConstantNameAndTypeInfo;
 import lsieun.domain.constant.ConstantStringInfo;
 import lsieun.domain.constant.ConstantUtf8Info;
 
+@SuppressWarnings("Duplicates")
 public class ByteCodeUtils {
     public static final int CHAR_COUNT_PER_BYTE = 2;
 
@@ -111,12 +118,57 @@ public class ByteCodeUtils {
             System.out.println("\t" + item);
         }
 
+        // AccessFlags
+        AccessFlags accessFlags = new AccessFlags();
+        accessFlags.setStartIndex(nextIndex);
+        doAccessFlags(hexCodeStr, accessFlags);
+        nextIndex = accessFlags.getNextIndex();
+        System.out.println(accessFlags);
+
+        // ThisClass
+        ThisClass thisClass = new ThisClass();
+        thisClass.setStartIndex(nextIndex);
+        doThisClass(hexCodeStr, thisClass);
+        fillThisClassValue(constantPoolInfo, thisClass);
+        nextIndex = thisClass.getNextIndex();
+        System.out.println(thisClass);
+
+        // SuperClass
+        SuperClass superClass = new SuperClass();
+        superClass.setStartIndex(nextIndex);
+        doSuperClass(hexCodeStr, superClass);
+        fillSuperClassValue(constantPoolInfo, superClass);
+        nextIndex = superClass.getNextIndex();
+        System.out.println(superClass);
+
+        // InterfacesCount
+        InterfacesCount interfacesCount = new InterfacesCount();
+        interfacesCount.setStartIndex(nextIndex);
+        doInterfacesCount(hexCodeStr, interfacesCount);
+        int interfacesNum = interfacesCount.getCount();
+        nextIndex = interfacesCount.getNextIndex();
+        System.out.println(interfacesCount);
+
+        // InterfaceContainer
+        InterfacesContainer interfacesContainer = new InterfacesContainer();
+        interfacesContainer.setStartIndex(nextIndex);
+        interfacesContainer.setCount(interfacesNum);
+        doInterfacesContainer(hexCodeStr, interfacesContainer);
+        List<InterfaceInfo> interfaces = interfacesContainer.getInterfaces();
+        nextIndex = interfacesContainer.getNextIndex();
+        System.out.println(interfacesContainer);
+        for(int i=0; i<interfaces.size(); i++) {
+            InterfaceInfo interfaceInfo = interfaces.get(i);
+            fillInterfaceInfoValue(constantPoolInfo, interfaceInfo);
+            System.out.println("\t" + interfaceInfo);
+        }
+
         // ClassInfo
-        ClassInfo classInfo = new ClassInfo();
-        classInfo.setStartIndex(nextIndex);
-        doClassInfo(hexCodeStr, classInfo);
-        nextIndex = classInfo.getNextIndex();
-        System.out.println(classInfo);
+//        ClassInfo classInfo = new ClassInfo();
+//        classInfo.setStartIndex(nextIndex);
+//        doClassInfo(hexCodeStr, classInfo);
+//        nextIndex = classInfo.getNextIndex();
+//        System.out.println(classInfo);
 
         // FieldsCount
         FieldsCount fieldsCount = new FieldsCount();
@@ -496,6 +548,61 @@ public class ByteCodeUtils {
         instance.setHexCode(hexCode);
     }
 
+    public static void doAccessFlags(String hexCodeStr, AccessFlags instance) {
+        doCommon(hexCodeStr, instance, ThisClass.BYTE_COUNT);
+        String hexCode = instance.getHexCode();
+
+        String accessFlags = getClassAccessFlags(hexCode);
+        instance.setValue(accessFlags);
+    }
+
+    public static void doThisClass(String hexCodeStr, ThisClass instance) {
+        doCommon(hexCodeStr, instance, ThisClass.BYTE_COUNT);
+        String hexCode = instance.getHexCode();
+
+        int num = HexUtils.toInt(hexCode);
+        instance.setClassIndex(num);
+    }
+
+    public static void doSuperClass(String hexCodeStr, SuperClass instance) {
+        doCommon(hexCodeStr, instance, ThisClass.BYTE_COUNT);
+        String hexCode = instance.getHexCode();
+
+        int num = HexUtils.toInt(hexCode);
+        instance.setClassIndex(num);
+    }
+
+    public static void doInterfacesCount(String hexCodeStr, InterfacesCount instance) {
+        doCommon(hexCodeStr, instance, ThisClass.BYTE_COUNT);
+        String hexCode = instance.getHexCode();
+
+        int num = HexUtils.toInt(hexCode);
+        instance.setCount(num);
+    }
+
+    public static void doInterfacesContainer(String hexCodeStr, InterfacesContainer instance) {
+        int count = instance.getCount();
+        List<InterfaceInfo> list = instance.getInterfaces();
+        int startIndex = instance.getStartIndex();
+
+        doCommon(hexCodeStr, instance, count * InterfaceInfo.BYTE_COUNT);
+
+
+
+        for(int i=0; i<count; i++) {
+            InterfaceInfo interfaceInfo = new InterfaceInfo();
+            interfaceInfo.setStartIndex(startIndex);
+            doCommon(hexCodeStr, interfaceInfo, InterfaceInfo.BYTE_COUNT);
+
+            String hexCode = interfaceInfo.getHexCode();
+            int num = HexUtils.toInt(hexCode);
+            interfaceInfo.setClassIndex(num);
+
+            startIndex = interfaceInfo.getNextIndex();
+            list.add(interfaceInfo);
+        }
+    }
+
     public static void doClassInfo(String hexCodeStr, ClassInfo instance) {
         int startIndex = instance.getStartIndex();
         int length = getCharLength(ClassInfo.BYTE_COUNT);
@@ -797,6 +904,40 @@ public class ByteCodeUtils {
             }
 
         }
+    }
+
+    public static void fillThisClassValue(ConstantPoolInfo constantPoolInfo, ThisClass instance) {
+        Map<Integer, ConstantCommonInfo> map = constantPoolInfo.getMap();
+        int classIndex = instance.getClassIndex();
+
+        ConstantCommonInfo constantCommonInfo = map.get(classIndex);
+        String value = constantCommonInfo.getValue();
+
+        instance.setValue(value);
+    }
+
+    public static void fillSuperClassValue(ConstantPoolInfo constantPoolInfo, SuperClass instance) {
+        Map<Integer, ConstantCommonInfo> map = constantPoolInfo.getMap();
+        int classIndex = instance.getClassIndex();
+
+        ConstantCommonInfo constantCommonInfo = map.get(classIndex);
+        if(constantCommonInfo == null) {
+            instance.setValue(null);
+            return;
+        }
+
+        String value = constantCommonInfo.getValue();
+        instance.setValue(value);
+    }
+
+    public static void fillInterfaceInfoValue(ConstantPoolInfo constantPoolInfo, InterfaceInfo instance) {
+        Map<Integer, ConstantCommonInfo> map = constantPoolInfo.getMap();
+        int classIndex = instance.getClassIndex();
+
+        ConstantCommonInfo constantCommonInfo = map.get(classIndex);
+        String value = constantCommonInfo.getValue();
+
+        instance.setValue(value);
     }
 
     public static void fillMemberInfoValue(ConstantPoolInfo constantPoolInfo, List<MemberInfo> list) {

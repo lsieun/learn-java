@@ -6,11 +6,11 @@ public class FieldContainer extends MemberContainer {
     @Override
     public String toString() {
         return NAME + ": {" +
-                "hexCode='" + super.hexCode + '\'' +
-                ", value='" + super.value + '\'' +
-                ", startIndex=" + super.startIndex +
+                "startIndex=" + super.startIndex +
                 ", length=" + super.length +
                 ", fieldsCount=" + super.count +
+                ", hexCode='" + super.hexCode + '\'' +
+                ", value='" + super.value + '\'' +
                 '}';
     }
 }
