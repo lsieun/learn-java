@@ -10,7 +10,7 @@ public class Example_08_Fields_0B_AccessFlags {
 
     static int staticField;
     final int finalField = 1;
-    
+
     volatile int volatileField;
     transient int transientField;
     // TODO: 对于enum类型的还没有，目前不知道怎么写

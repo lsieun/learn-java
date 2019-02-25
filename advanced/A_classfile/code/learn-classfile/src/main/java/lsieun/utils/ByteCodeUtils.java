@@ -211,13 +211,17 @@ public class ByteCodeUtils {
         System.out.println(methodContainer);
         for(int i=0; i<methodList.size(); i++) {
             MemberInfo item = methodList.get(i);
-            System.out.println("\t" + item);
+            System.out.println(item);
             AttributeContainer attributeContainer = item.getAttributeContainer();
             if(attributeContainer == null) continue;
             List<AttributeInfo> attributeInfoList = attributeContainer.getList();
             fillAttributeInfoValue(constantPoolInfo, attributeInfoList);
+
+            if(attributeInfoList != null && attributeInfoList.size() > 0) {
+                System.out.println("Method Attributes");
+            }
             for(AttributeInfo attr : attributeInfoList) {
-                System.out.println("\t\t" + attr);
+                System.out.println("\t" + attr);
             }
         }
 

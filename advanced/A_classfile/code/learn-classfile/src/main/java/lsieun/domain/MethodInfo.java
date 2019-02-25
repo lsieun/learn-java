@@ -7,21 +7,21 @@ public class MethodInfo extends MemberInfo {
     @Override
     public String toString() {
         return NAME + ": {" +
-                "startIndex=" + super.startIndex +
-                ", length=" + super.length +
-                ", value='" + super.value + '\'' +
-                ", accessFlagsHexCode=" + super.accessFlagsHexCode +
-                ", accessFlags=" + super.accessFlags +
-                ", nameIndexHexCode=" + super.nameIndexHexCode +
-                ", nameIndex=" + super.nameIndex +
-                ", name=" + super.name +
-                ", descriptorIndexHexCode=" + super.descriptorIndexHexCode +
-                ", descriptorIndex=" + super.descriptorIndex +
-                ", descriptor=" + super.descriptor +
-                ", attributesCountHexCode=" + super.attributesCountHexCode +
-                ", attributesCount=" + super.attributesCount +
-                ", pattern='" + PATTERN + '\'' +
-                ", hexCode='" + super.hexCode + '\'' +
+                "startIndex='" + super.startIndex + "'" +
+                ", length='" + super.length + "'" +
+                "\thexCode='" + super.hexCode + "'\r\n" +
+                "\tpattern='" + PATTERN + "'\r\n" +
+                "\taccessFlagsHexCode='" + super.accessFlagsHexCode + "'" +
+                ", accessFlags='" + super.accessFlags + "'\r\n" +
+                "\tnameIndexHexCode='" + super.nameIndexHexCode + "'" +
+                ", nameIndex='" + super.nameIndex + "'" +
+                ", name='" + super.name + "'\r\n" +
+                "\tdescriptorIndexHexCode='" + super.descriptorIndexHexCode + "'" +
+                ", descriptorIndex='" + super.descriptorIndex + "'" +
+                ", descriptor='" + super.descriptor + "'\r\n" +
+                "\tattributesCountHexCode='" + super.attributesCountHexCode + "'" +
+                ", attributesCount='" + super.attributesCount + "'\r\n" +
+                "\tvalue='" + super.value + "'\r\n" +
                 '}';
     }
 }

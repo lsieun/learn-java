@@ -20,7 +20,7 @@ public class ReadClass {
         }
         else {
             String dir = ReadClass.class.getResource(".").getPath();
-            String filepath = dir + "example/Example_08_Fields_0B_AccessFlags.class";
+            String filepath = dir + "example/Example_09_Methods.class";
             bytes = FileUtils.readBytes(filepath);
         }
 
