@@ -5,6 +5,10 @@
 classpath -> classloader(JVM)
 Classpath的归类JVM的classloader当中。因为在classloader加载class文件有三个层次：bootstrap、extension和user class。而classpath就是设置user class的寻找路径。
 
+- [Java Language and Virtual Machine Specifications](https://docs.oracle.com/javase/specs/)
+
+
+
 
 `javac` `javap`这些归类于jdk tools
 

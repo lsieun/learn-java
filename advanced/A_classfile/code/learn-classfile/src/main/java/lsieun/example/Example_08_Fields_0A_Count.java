@@ -1,6 +1,6 @@
 package lsieun.example;
 
-public class Example_08_Fields_0A {
+public class Example_08_Fields_0A_Count {
     private String name;
     private int age;
 

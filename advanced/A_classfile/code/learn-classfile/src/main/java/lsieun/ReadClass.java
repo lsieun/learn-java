@@ -12,7 +12,6 @@ public class ReadClass {
 
     public static void main(String[] args) {
 
-        // 10000 电信网点
         byte[] bytes = null;
         if(READ_JAR) {
             String jarPath = "/usr/local/jdk8/jre/lib/rt.jar";
@@ -21,7 +20,7 @@ public class ReadClass {
         }
         else {
             String dir = ReadClass.class.getResource(".").getPath();
-            String filepath = dir + "example/Example_08_Fields_0A.class";
+            String filepath = dir + "example/Example_08_Fields_0B_AccessFlags.class";
             bytes = FileUtils.readBytes(filepath);
         }
 

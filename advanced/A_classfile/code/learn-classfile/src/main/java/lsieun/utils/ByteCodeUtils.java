@@ -163,13 +163,6 @@ public class ByteCodeUtils {
             System.out.println("\t" + interfaceInfo);
         }
 
-        // ClassInfo
-//        ClassInfo classInfo = new ClassInfo();
-//        classInfo.setStartIndex(nextIndex);
-//        doClassInfo(hexCodeStr, classInfo);
-//        nextIndex = classInfo.getNextIndex();
-//        System.out.println(classInfo);
-
         // FieldsCount
         FieldsCount fieldsCount = new FieldsCount();
         fieldsCount.setStartIndex(nextIndex);
@@ -189,13 +182,13 @@ public class ByteCodeUtils {
         System.out.println(fieldContainer);
         for(int i=0; i<fieldList.size(); i++) {
             MemberInfo item = fieldList.get(i);
-            System.out.println("\t" + item);
+            System.out.println(item);
             AttributeContainer attributeContainer = item.getAttributeContainer();
             if(attributeContainer == null) continue;
             List<AttributeInfo> attributeInfoList = attributeContainer.getList();
             fillAttributeInfoValue(constantPoolInfo, attributeInfoList);
             for(AttributeInfo attr : attributeInfoList) {
-                System.out.println("\t\t" + attr);
+                System.out.println("\t" + attr);
             }
         }
 
@@ -688,7 +681,6 @@ public class ByteCodeUtils {
             int localIndex = memberStartIndex;
             int accessFlagsLength = getCharLength(FieldInfo.ACCESS_FLAGS_BYTE_COUNT);
             String accessFlagsHexCode = getXPart(hexCodeStr, localIndex, accessFlagsLength);
-            //String accessFlags = getFieldAccessFlags(accessFlagsHexCode);
 
             // field name index
             localIndex += accessFlagsLength;

@@ -9,13 +9,13 @@ public class ConstantUtf8Info extends ConstantCommonInfo {
     @Override
     public String toString() {
         return String.format("|%03d|", super.index) + " " + NAME + ": {" +
-                "index=" + super.index +
-                ", tagHex=" + super.tagHex + "(" + super.tag + ")" +
-                ", startIndex=" + super.startIndex +
-                ", length=" + super.length +
-                ", value='" + super.value + '\'' +
-                ", pattern='" + PATTERN + '\'' +
-                ", hexCode='" + super.hexCode + '\'' +
+                "index='" + super.index + "'" +
+                ", tagHex='0x" + super.tagHex + "'-->'(" + super.tag + ")'" +
+                ", startIndex='" + super.startIndex + "'" +
+                ", length='" + super.length + "'" +
+                ", value='" + super.value + "'" +
+                ", pattern='" + PATTERN + "'" +
+                ", hexCode='" + super.hexCode + "'" +
                 '}';
     }
 }
