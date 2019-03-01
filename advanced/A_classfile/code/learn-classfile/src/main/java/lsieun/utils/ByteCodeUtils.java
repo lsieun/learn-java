@@ -1006,7 +1006,7 @@ public class ByteCodeUtils {
         if(hasBit(byteHigh, 5)) {
             list.add("ACC_SYNTHETIC");
         }
-        if(hasBit(byteHigh, 4)) {
+        if(hasBit(byteHigh, 3)) {
             list.add("ACC_ABSTRACT");
         }
         if(hasBit(byteHigh, 2)) {
