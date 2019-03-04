@@ -28,7 +28,7 @@ As such, to guarantee a consistent behavior, a serializable class must always de
 Once the class becomes serializable (implements `Serializable` and declares `serialVersionUID`), it could be stored and retrieved using, for example, `ObjectOutputStream`/ `ObjectInputStream`:
 
 ```java
-final Path storage = new File( "object.ser" ).toPath();
+final Path storage = new File("object.ser").toPath();
 try( final ObjectOutputStream out = new ObjectOutputStream( Files.newOutputStream( storage ) ) ) {
     out.writeObject( new SerializableExample() );
 }

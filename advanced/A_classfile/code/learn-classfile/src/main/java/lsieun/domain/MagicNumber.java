@@ -11,6 +11,9 @@ public class MagicNumber extends Common {
 
     @Override
     public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(NAME + ": {");
+        sb.append("}");
         return NAME + ": {" +
                 "startIndex=" + super.startIndex +
                 ", length=" + super.length +

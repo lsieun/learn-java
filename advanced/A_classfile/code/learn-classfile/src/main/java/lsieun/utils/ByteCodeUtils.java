@@ -1075,7 +1075,7 @@ public class ByteCodeUtils {
             list.add("ACC_SYNTHETIC");
         }
         if(hasBit(byteHigh, 4)) {
-            list.add("ACC_STRICTFP");
+            list.add("ACC_STRICT");
         }
         if(hasBit(byteHigh, 3)) {
             list.add("ACC_ABSTRACT");

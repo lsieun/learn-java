@@ -1,6 +1,8 @@
 package lsieun.domain;
 
 public class Common {
+    public static InfoLevel infoLevel = InfoLevel.SIMPLE;
+
     protected int startIndex;
     protected int length;
     protected String hexCode;
