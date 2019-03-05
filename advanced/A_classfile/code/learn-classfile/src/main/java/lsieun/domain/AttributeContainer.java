@@ -3,8 +3,11 @@ package lsieun.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import lsieun.utils.StringUtils;
+
+@SuppressWarnings("Duplicates")
 public class AttributeContainer extends Common {
-    public static final String NAME = "ATTRIBUTE CONTAINER";
+    public static final String NAME = "Attributes";
 
     protected int count;
     protected List<AttributeInfo> list;
@@ -31,12 +34,30 @@ public class AttributeContainer extends Common {
 
     @Override
     public String toString() {
-        return NAME + ": {" +
-                "startIndex=" + super.startIndex +
-                ", length=" + super.length +
-                ", count=" + this.count +
-                ", hexCode='" + super.hexCode + '\'' +
-                ", value='" + super.value + '\'' +
-                '}';
+        List<String> list = new ArrayList();
+        if(infoLevel.value() >= InfoLevel.ADVANCED.value()) {
+            list.add("startIndex='" + super.startIndex +"'");
+            list.add("length='" + super.length +"'");
+        }
+
+        if(infoLevel.value() >= InfoLevel.NORMAL.value()) {
+            //list.add("value='" + super.value +"'");
+        }
+
+        if(infoLevel.value() >= InfoLevel.SIMPLE.value()) {
+            list.add("count='" + this.count +"'");
+        }
+
+        if(infoLevel.value() >= InfoLevel.ADVANCED.value()) {
+            list.add("hexCode='0x" + super.hexCode +"'");
+        }
+
+        String content = StringUtils.list2str(list, ", ");
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(NAME + ": {");
+        sb.append(content);
+        sb.append("}");
+        return sb.toString();
     }
 }

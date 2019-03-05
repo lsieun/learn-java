@@ -1,7 +1,5 @@
 package lsieun.domain;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class MemberInfo extends Common {
     public static final int BYTE_COUNT = 8;

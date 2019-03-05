@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import lsieun.domain.constant.ConstantCommonInfo;
+import lsieun.utils.StringUtils;
 
+@SuppressWarnings("Duplicates")
 public class ConstantPoolInfo extends Common {
     public static final String NAME = "CONSTANT POOL";
 
@@ -46,12 +48,28 @@ public class ConstantPoolInfo extends Common {
 
     @Override
     public String toString() {
-        return NAME + ": {" +
-                "startIndex=" + super.startIndex +
-                ", length=" + super.length +
-                ", count=" + this.count +
-                ", hexCode='" + super.hexCode + '\'' +
-                ", value='" + super.value + '\'' +
-                '}';
+        List<String> list = new ArrayList();
+        if(infoLevel.value() >= InfoLevel.ADVANCED.value()) {
+            list.add("startIndex='" + super.startIndex +"'");
+            list.add("length='" + super.length +"'");
+        }
+
+        if(infoLevel.value() >= InfoLevel.SIMPLE.value()) {
+            list.add("count='" + this.count +"'");
+        }
+
+        if(infoLevel.value() >= InfoLevel.ADVANCED.value()) {
+            list.add("hexCode='0x" + super.hexCode +"'");
+            list.add("value='" + super.value +"'");
+        }
+
+        String content = StringUtils.list2str(list, ", ");
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(NAME + ": {");
+        sb.append(content);
+        sb.append("}");
+
+        return sb.toString();
     }
 }

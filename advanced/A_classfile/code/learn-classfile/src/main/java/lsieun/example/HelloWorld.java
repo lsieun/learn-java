@@ -1,6 +1,10 @@
 package lsieun.example;
 
-public class HelloWorld {
+import java.io.Serializable;
 
+public class HelloWorld implements Serializable {
+    public void test() {
+        //
+    }
 }
 

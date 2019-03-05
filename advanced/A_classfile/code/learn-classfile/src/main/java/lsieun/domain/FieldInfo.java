@@ -1,5 +1,11 @@
 package lsieun.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import lsieun.utils.StringUtils;
+
+@SuppressWarnings("Duplicates")
 public class FieldInfo extends MemberInfo {
 
     public static final String NAME = "Field Info";
@@ -7,22 +13,35 @@ public class FieldInfo extends MemberInfo {
 
     @Override
     public String toString() {
-        return NAME + ": {" +
-                "startIndex='" + super.startIndex + "'" +
-                ", length='" + super.length + "\', \r\n" +
-                "\thexCode='" + super.hexCode + "\', \r\n" +
-                "\tpattern='" + PATTERN + "\', \r\n" +
-                "\taccessFlagsHexCode='0x" + super.accessFlagsHexCode + "'" +
-                ", accessFlags='" + super.accessFlags + "\', \r\n" +
-                "\tnameIndexHexCode='0x" + super.nameIndexHexCode + "'" +
-                ", nameIndex='" + super.nameIndex + "'" +
-                ", name='" + super.name + "\', \r\n" +
-                "\tdescriptorIndexHexCode='0x" + super.descriptorIndexHexCode + "'" +
-                ", descriptorIndex='" + super.descriptorIndex + "'" +
-                ", descriptor='" + super.descriptor + "\', \r\n" +
-                "\tattributesCountHexCode='0x" + super.attributesCountHexCode + "'" +
-                ", attributesCount='" + super.attributesCount + "\', \r\n" +
-                "\tvalue='" + super.value + "\'\r\n" +
-                '}';
+
+        List<String> list = new ArrayList();
+        if(infoLevel.value() >= InfoLevel.ADVANCED.value()) {
+            list.add("startIndex='" + super.startIndex +"'");
+            list.add("length='" + super.length +"'");
+        }
+
+        if(infoLevel.value() >= InfoLevel.NORMAL.value()) {
+            list.add("value='" + super.value +"'");
+            list.add("accessFlags='" + super.accessFlags +"'");
+            list.add("name='" + super.name +"'");
+            list.add("descriptor='" + super.descriptor +"'");
+        }
+
+        if(infoLevel.value() >= InfoLevel.SIMPLE.value()) {
+            list.add("accessFlagsHexCode='0x" + super.accessFlagsHexCode +"'");
+            list.add("nameIndexHexCode='0x" + super.nameIndexHexCode + "(" + super.nameIndex +")'");
+            list.add("descriptorIndexHexCode='0x" + super.descriptorIndexHexCode + "(" + super.descriptorIndex +")'");
+            list.add("attributesCountHexCode='0x" + super.attributesCountHexCode + "(" + super.attributesCount +")'");
+            list.add("pattern='" + PATTERN +"'");
+            list.add("hexCode='0x" + super.hexCode +"'");
+        }
+
+        String content = StringUtils.list2str(list, ", ");
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(NAME + ": {");
+        sb.append(content);
+        sb.append("}");
+        return sb.toString();
     }
 }

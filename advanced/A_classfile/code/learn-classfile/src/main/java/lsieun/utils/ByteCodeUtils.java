@@ -9,7 +9,6 @@ import lsieun.domain.AccessFlags;
 import lsieun.domain.AttributeContainer;
 import lsieun.domain.AttributeInfo;
 import lsieun.domain.AttributesCount;
-import lsieun.domain.ClassInfo;
 import lsieun.domain.Common;
 import lsieun.domain.ConstantPoolCount;
 import lsieun.domain.ConstantPoolInfo;
@@ -182,7 +181,7 @@ public class ByteCodeUtils {
         System.out.println(fieldContainer);
         for(int i=0; i<fieldList.size(); i++) {
             MemberInfo item = fieldList.get(i);
-            System.out.println(item);
+            System.out.println("\t" + item);
             AttributeContainer attributeContainer = item.getAttributeContainer();
             if(attributeContainer == null) continue;
             List<AttributeInfo> attributeInfoList = attributeContainer.getList();
@@ -211,15 +210,12 @@ public class ByteCodeUtils {
         System.out.println(methodContainer);
         for(int i=0; i<methodList.size(); i++) {
             MemberInfo item = methodList.get(i);
-            System.out.println(item);
+            System.out.println("\t" + item);
             AttributeContainer attributeContainer = item.getAttributeContainer();
             if(attributeContainer == null) continue;
             List<AttributeInfo> attributeInfoList = attributeContainer.getList();
             fillAttributeInfoValue(constantPoolInfo, attributeInfoList);
 
-            if(attributeInfoList != null && attributeInfoList.size() > 0) {
-                System.out.println("Method Attributes");
-            }
             for(AttributeInfo attr : attributeInfoList) {
                 System.out.println("\t" + attr);
             }
@@ -271,7 +267,7 @@ public class ByteCodeUtils {
         String hexCode = instance.getHexCode();
 
         int num = HexUtils.toInt(hexCode);
-        String value = hexCode + "(" + num + ")";
+        String value = String.valueOf(num);
         instance.setValue(value);
     }
 
@@ -281,7 +277,7 @@ public class ByteCodeUtils {
 
         int num = HexUtils.toInt(hexCode);
         int jdkVersion = num - 44;
-        String value = "JDK " + jdkVersion + "(" + num + ")";
+        String value = num + "(" + "JDK " + jdkVersion + ")";
         instance.setValue(value);
     }
 
@@ -293,7 +289,7 @@ public class ByteCodeUtils {
         int count = sum - 1;
 
         instance.setCount(count);
-        instance.setValue("Constant Pool Count " + sum + "(" + count + ")");
+        instance.setValue(sum + "(" + count + ")");
     }
 
     public static void doConstantPool(String hexCodeStr, ConstantPoolInfo instance) {
@@ -350,6 +346,7 @@ public class ByteCodeUtils {
                 String bytesHexCode = getXPart(sectionHexCode, sectionIndex, bytesLength);
                 int intValue = HexUtils.toInt(bytesHexCode);
                 section.setIntValue(intValue);
+                section.setValue(String.valueOf(intValue));
 
                 cpInfo = section;
             }
@@ -575,6 +572,7 @@ public class ByteCodeUtils {
 
         int num = HexUtils.toInt(hexCode);
         instance.setCount(num);
+        instance.setValue(String.valueOf(num));
     }
 
     public static void doInterfacesContainer(String hexCodeStr, InterfacesContainer instance) {
@@ -600,55 +598,12 @@ public class ByteCodeUtils {
         }
     }
 
-    public static void doClassInfo(String hexCodeStr, ClassInfo instance) {
-        int startIndex = instance.getStartIndex();
-        int length = getCharLength(ClassInfo.BYTE_COUNT);
-        String hexCode = getXPart(hexCodeStr, startIndex, length);
-
-        int index = 0;
-        int accessFlagsLength = getCharLength(ClassInfo.ACCESS_FLAGS_BYTE_COUNT);
-        String accessFlagsHexCode = getXPart(hexCode, index, accessFlagsLength);
-        String accessFlags = getClassAccessFlags(accessFlagsHexCode);
-
-        index += accessFlagsLength;
-        int thisClassLength = getCharLength(ClassInfo.THIS_CLASS_BYTE_COUNT);
-        String thisClassHexCode = getXPart(hexCode, index, thisClassLength);
-
-        index += thisClassLength;
-        int superClassLength = getCharLength(ClassInfo.SUPER_CLASS_BYTE_COUNT);
-        String superClassHexCode = getXPart(hexCode, index, superClassLength);
-
-        index += superClassLength;
-        int interfacesCountLength = getCharLength(ClassInfo.INTERFACES_COUNT_BYTE_COUNT);
-        String interfacesCountHexCode = getXPart(hexCode, index, interfacesCountLength);
-        int interfacesCount = HexUtils.toInt(interfacesCountHexCode);
-
-        //重新计算hexCode和length
-        length = getCharLength(ClassInfo.BYTE_COUNT + interfacesCount * ClassInfo.INTERFACES_BYTE_COUNT);
-        hexCode = getXPart(hexCodeStr, startIndex, length);
-
-        index += interfacesCountLength;
-        int interfacesLength = getCharLength(interfacesCount * ClassInfo.INTERFACES_BYTE_COUNT);
-        String interfacesHexCode = getXPart(hexCode, index, interfacesLength);
-
-        instance.setAccessFlagsHexCode(accessFlagsHexCode);
-        instance.setAccessFlags(accessFlags);
-        instance.setThisClassHexCode(thisClassHexCode);
-        instance.setSuperClassHexCode(superClassHexCode);
-        instance.setInterfacesCountHexCode(interfacesCountHexCode);
-        instance.setInterfacesCount(interfacesCount);
-        instance.setInterfacesHexCode(interfacesHexCode);
-
-        instance.setHexCode(hexCode);
-        instance.setLength(length);
-    }
-
     public static void doFieldsCount(String hexCodeStr, FieldsCount instance) {
         doCommon(hexCodeStr, instance, FieldsCount.BYTE_COUNT);
         String hexCode = instance.getHexCode();
 
         int num = HexUtils.toInt(hexCode);
-        String value = hexCode + "(" + num + ")";
+        String value = String.valueOf(num);
 
         instance.setValue(value);
         instance.setFieldsCount(num);
@@ -663,6 +618,9 @@ public class ByteCodeUtils {
         String hexCode = instance.getHexCode();
 
         int num = HexUtils.toInt(hexCode);
+        String value = String.valueOf(num);
+
+        instance.setValue(value);
         instance.setMethodsCount(num);
     }
 
@@ -767,7 +725,7 @@ public class ByteCodeUtils {
         String hexCode = instance.getHexCode();
 
         int num = HexUtils.toInt(hexCode);
-        String value = hexCode + "(" + num + ")";
+        String value = String.valueOf(num);
 
         instance.setValue(value);
         instance.setCount(num);
@@ -1156,13 +1114,8 @@ public class ByteCodeUtils {
         StringBuilder sb = new StringBuilder();
         sb.append(start);
 
-        int size = list.size();
-        for(int i=0; i<size-1; i++) {
-            String item = list.get(i);
-            sb.append(item + separator);
-        }
-        String theLast = list.get(size-1);
-        sb.append(theLast);
+        String content = StringUtils.list2str(list, separator);
+        sb.append(content);
 
         sb.append(stop);
         return sb.toString();

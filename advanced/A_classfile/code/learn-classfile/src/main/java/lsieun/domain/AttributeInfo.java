@@ -1,5 +1,11 @@
 package lsieun.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import lsieun.utils.StringUtils;
+
+@SuppressWarnings("Duplicates")
 public class AttributeInfo extends Common {
     public static final int BYTE_COUNT = 6;
     public static final int ATTRIBUTE_NAME_INDEX_BYTE_COUNT = 2;
@@ -55,18 +61,32 @@ public class AttributeInfo extends Common {
 
     @Override
     public String toString() {
-        return NAME + ": {" +
-                "startIndex=" + super.startIndex +
-                ", length=" + super.length +
-                ", value='" + super.value + '\'' +
-                ", attributeNameIndexHexCode=" + this.attributeNameIndexHexCode +
-                ", attributeNameIndex=" + this.attributeNameIndex +
-                ", attributeName=" + this.attributeName +
-                ", attributeLengthHexCode=" + this.attributeLengthHexCode +
-                ", attributeLength=" + this.attributeLength +
-                ", pattern='" + PATTERN + '\'' +
-                ", hexCode='" + super.hexCode + '\'' +
-                '}';
+        List<String> list = new ArrayList();
+        if(infoLevel.value() >= InfoLevel.ADVANCED.value()) {
+            list.add("startIndex='" + super.startIndex +"'");
+            list.add("length='" + super.length +"'");
+        }
+
+        if(infoLevel.value() >= InfoLevel.NORMAL.value()) {
+            list.add("value='" + super.value +"'");
+            //list.add("attributeName='" + this.attributeName +"'");
+        }
+
+        if(infoLevel.value() >= InfoLevel.SIMPLE.value()) {
+            list.add("attributeNameIndexHexCode='0x" + this.attributeNameIndexHexCode + "(" + this.attributeNameIndex +")'");
+            list.add("attributeLengthHexCode='0x" + this.attributeLengthHexCode + "(" + this.attributeLength +")'");
+
+            list.add("pattern='" + PATTERN +"'");
+            list.add("hexCode='0x" + super.hexCode +"'");
+        }
+
+        String content = StringUtils.list2str(list, ", ");
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(NAME + ": {");
+        sb.append(content);
+        sb.append("}");
+        return sb.toString();
     }
 
 }
