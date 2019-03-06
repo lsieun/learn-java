@@ -2,6 +2,7 @@ package lsieun.utils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,7 +10,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FileUtils {
     public static String getFilePath(String relativePath) {
@@ -19,8 +24,6 @@ public class FileUtils {
     }
 
     public static byte[] readBytes(String filename) {
-        System.out.println("Read File: " + filename);
-
         File file = new File(filename);
         if(!file.exists()) {
             return null;
@@ -69,5 +72,44 @@ public class FileUtils {
         } finally {
             IOUtils.closeQuietly(out);
         }
+    }
+
+    public static List<String> readLines(String filename) {
+        return readLines(filename, "UTF8");
+    }
+
+    public static List<String> readLines(String filename, String charsetName) {
+        File file = new File(filename);
+        if(!file.exists()) {
+            return null;
+        }
+
+        InputStream in = null;
+        Reader reader = null;
+        BufferedReader bufferReader = null;
+
+        try {
+            in = new FileInputStream(file);
+            reader = new InputStreamReader(in, charsetName);
+            bufferReader = new BufferedReader(reader);
+            String line = null;
+
+            List<String> list = new ArrayList();
+            while((line = bufferReader.readLine()) != null) {
+                list.add(line);
+            }
+            return list;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            IOUtils.closeQuietly(bufferReader);
+            IOUtils.closeQuietly(reader);
+            IOUtils.closeQuietly(in);
+        }
+
+        return null;
     }
 }

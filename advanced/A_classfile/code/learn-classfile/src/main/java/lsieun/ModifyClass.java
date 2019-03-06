@@ -1,7 +1,6 @@
 package lsieun;
 
 import lsieun.utils.FileUtils;
-import lsieun.utils.IOUtils;
 
 public class ModifyClass {
     public static void main(String[] args) {
