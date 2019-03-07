@@ -2,10 +2,18 @@ package lsieun.structure;
 
 public class Item {
     private ItemType type;
-    private String typeName;
     private String itemName;
-    private String countExpression;
     private int count;
+
+    /**
+     * typeName是type的扩展
+     */
+    private String typeName;
+    /**
+     * countExpression是count的扩展
+     */
+    private String countExpression;
+
 
     public ItemType getType() {
         return type;

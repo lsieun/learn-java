@@ -1,10 +1,7 @@
 package lsieun;
 
-import java.util.List;
-
-import lsieun.structure.FileBytes;
-import lsieun.structure.StructHelper;
-import lsieun.structure.StructParser;
+import lsieun.file.FileBytes;
+import lsieun.structure.StructFrame;
 import lsieun.utils.ByteUtils;
 import lsieun.utils.FileUtils;
 import lsieun.utils.HexUtils;
@@ -39,8 +36,9 @@ public class ReadClass {
         System.out.println(dir);
         String ext = "c";
         String mainStructName = "ClassFile";
-        StructHelper helper = new StructHelper(dir, ext, mainStructName);
-        helper.analyze(fileBytes);
+        StructFrame frame = new StructFrame(dir, ext, mainStructName);
+        frame.init();
+        frame.print();
 
 //        String dir = ReadClass.class.getResource("/").getPath();
 //        String filename = dir + "structure/ClassFile.c";
@@ -51,6 +49,6 @@ public class ReadClass {
 //            System.out.println(line);
 //        }
 //
-//        StructParser.parse(lines);
+//        StructParser.parseConcreteStruct(lines);
     }
 }

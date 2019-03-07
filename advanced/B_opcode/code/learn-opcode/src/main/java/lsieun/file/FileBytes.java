@@ -1,4 +1,4 @@
-package lsieun.structure;
+package lsieun.file;
 
 public class FileBytes {
     private String url;
