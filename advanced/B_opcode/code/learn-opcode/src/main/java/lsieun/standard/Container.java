@@ -5,26 +5,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Container {
-    private String name;
+public class Container extends OneThing {
     private List<Entry> entryList;
     private Map<String, Entry> entryMap;
 
-    public Container(String name) {
-        this.name = name;
+    public Container() {
         this.entryList = new ArrayList();
         this.entryMap = new HashMap();
     }
 
     // region getters and setters
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public List<Entry> getEntryList() {
         return entryList;
     }
@@ -37,4 +27,28 @@ public class Container {
         return entryMap;
     }
     // endregion
+
+    public void addEntry(Entry entry) {
+        this.entryList.add(entry);
+        String name = entry.getName();
+        this.entryMap.put(name, entry);
+    }
+
+    public Entry getEntry(String entryName) {
+        Entry entry = this.entryMap.get(entryName);
+        return entry;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.name);
+//        sb.append("===>" + this.name + "\r\n");
+//        for(int i=0; i<this.entryList.size(); i++) {
+//            OneThing oneThing = this.entryList.get(i);
+//            sb.append(oneThing.toString() + "\r\n");
+//        }
+//        sb.append("<===" + this.name + "\r\n");
+        return sb.toString();
+    }
 }

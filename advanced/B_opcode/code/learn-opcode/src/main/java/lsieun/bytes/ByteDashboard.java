@@ -1,13 +1,13 @@
-package lsieun.file;
+package lsieun.bytes;
 
-public class FileBytes {
+public class ByteDashboard {
     private String url;
     private byte[] bytes;
     private int start;
     private int stop;
     private int index;
 
-    public FileBytes(String url, byte[] bytes) {
+    public ByteDashboard(String url, byte[] bytes) {
         this.url = url;
         this.bytes = bytes;
         this.start = 0;
@@ -63,13 +63,23 @@ public class FileBytes {
         return b;
     }
 
+    public byte[] peek(int n) {
+        byte[] bytes = new byte[n];
+        for(int i=0; i<n; i++) {
+            int idx = this.index + i;
+            byte b = this.bytes[idx];
+            bytes[i] = b;
+        }
+        return bytes;
+    }
+
     public void reset() {
         this.index = this.start;
     }
 
     @Override
     public String toString() {
-        return "FileBytes{" +
+        return "ByteDashboard {" +
                 "start=" + start +
                 ", stop=" + stop +
                 ", index=" + index +

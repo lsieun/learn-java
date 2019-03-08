@@ -6,17 +6,19 @@ import java.util.List;
 import lsieun.utils.ByteUtils;
 import lsieun.utils.StringUtils;
 
-public class Entry {
-    private String key;
+public class Entry extends OneThing {
+    private EntryType type;
     private byte[] bytes;
+    private List<OneThing> members;
+    private Container parent;
 
     // region getters and setters
-    public String getKey() {
-        return key;
+    public EntryType getType() {
+        return type;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setType(EntryType type) {
+        this.type = type;
     }
 
     public byte[] getBytes() {
@@ -26,20 +28,65 @@ public class Entry {
     public void setBytes(byte[] bytes) {
         this.bytes = bytes;
     }
+
+    public List<OneThing> getMembers() {
+        return members;
+    }
+
+    public void setMembers(List<OneThing> members) {
+        this.members = members;
+    }
+
+    public Container getParent() {
+        return parent;
+    }
+
+    public void setParent(Container parent) {
+        this.parent = parent;
+    }
+
     // endregion
 
     @Override
     public String toString() {
-        List<String> list = new ArrayList();
-        list.add("HexCode='" + ByteUtils.toHex(bytes) +"'");
+        if(this.type == EntryType.ONE_ENTRY) {
+            List<String> list = new ArrayList();
+            list.add("HexCode='" + ByteUtils.toHex(bytes) +"'");
 
-        String content = StringUtils.list2str(list, ", ");
+            String content = StringUtils.list2str(list, ", ");
 
-        StringBuilder sb = new StringBuilder();
-        sb.append(this.key + ": {");
-        sb.append(content);
-        sb.append("}");
+            StringBuilder sb = new StringBuilder();
+            sb.append(this.name + ": {");
+            sb.append(content);
+            sb.append("}");
 
-        return sb.toString();
+            return sb.toString();
+        }
+        else if(this.type == EntryType.MULTI_ENTRIES) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(this.name);
+            for(int i=0; i<this.members.size(); i++) {
+                OneThing oneThing = this.members.get(i);
+                sb.append(oneThing.toString() + "\r\n");
+            }
+            return sb.toString();
+        }
+        else if(this.type == EntryType.ONE_CONTAINER) {
+            OneThing oneThing = this.members.get(0);
+            return this.name + " " + oneThing.toString();
+        }
+        else if(this.type == EntryType.MULTI_CONTAINERS) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(this.name);
+//            for(int i=0; i<this.members.size(); i++) {
+//                OneThing oneThing = this.members.get(i);
+//                sb.append(oneThing.toString() + "\r\n");
+//            }
+            return sb.toString();
+        }
+        else {
+            return "EntryType ERROR: " + this.type;
+        }
+
     }
 }

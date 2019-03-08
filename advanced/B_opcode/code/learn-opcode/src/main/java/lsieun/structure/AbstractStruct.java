@@ -52,6 +52,10 @@ public class AbstractStruct extends Struct {
     }
     // endregion
 
+    public String getStruct(Integer key) {
+        return this.structMap.get(key);
+    }
+
     @Override
     public void print() {
         System.out.println(super.getName());

@@ -8,6 +8,6 @@ public class ByteUtils {
         for (int i = 0; i < bytes.length; ++i) {
             sb.append(Integer.toHexString((bytes[i] & 0xFF) | 0x100).substring(1,3));
         }
-        return sb.toString();
+        return sb.toString().toUpperCase();
     }
 }

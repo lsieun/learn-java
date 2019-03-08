@@ -30,6 +30,8 @@ public class HexUtils {
 
 
     public static int toInt(String hexCode) {
+        hexCode = hexCode.toUpperCase();
+
         int base = 16;
         int sum = 0;
 

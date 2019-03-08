@@ -6,10 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import lsieun.file.FileBytes;
+import lsieun.bytes.ByteDashboard;
 import lsieun.standard.Entry;
 import lsieun.utils.FileUtils;
-import lsieun.utils.StringUtils;
 
 public class StructFrame {
     private String dir;
@@ -27,6 +26,50 @@ public class StructFrame {
 
         this.addStruct(mainStructName);
     }
+
+    // region getters and setters
+
+    public String getDir() {
+        return dir;
+    }
+
+    public void setDir(String dir) {
+        this.dir = dir;
+    }
+
+    public String getExt() {
+        return ext;
+    }
+
+    public void setExt(String ext) {
+        this.ext = ext;
+    }
+
+    public String getMainStructName() {
+        return mainStructName;
+    }
+
+    public void setMainStructName(String mainStructName) {
+        this.mainStructName = mainStructName;
+    }
+
+    public List<String> getStructList() {
+        return structList;
+    }
+
+    public void setStructList(List<String> structList) {
+        this.structList = structList;
+    }
+
+    public Map<String, Struct> getStructMap() {
+        return structMap;
+    }
+
+    public void setStructMap(Map<String, Struct> structMap) {
+        this.structMap = structMap;
+    }
+
+    // endregion
 
     private void addStruct(String structName) {
         if(this.structList.contains(structName)) return;
@@ -128,70 +171,5 @@ public class StructFrame {
             this.addStruct(fullStructName);
         }
     }
-
-
-
-    public Struct getStruct(String structName) {
-        if(this.structMap.containsKey(structName)) {
-            Struct oldResult = this.structMap.get(structName);
-            return oldResult;
-        }
-        return null;
-    }
-
-    public List<Entry> analyze(FileBytes fileBytes) {
-        return this.analyze(fileBytes, this.mainStructName);
-    }
-
-    public List<Entry> analyze(FileBytes fileBytes, String structName) {
-        return null;
-//        Struct mainStruct = getStruct(structName);
-//        List<Item> items = mainStruct.getItems();
-//        int size = items.size();
-//
-//        List<Entry> list = new ArrayList();
-//
-//        for(int i=0; i<size; i++) {
-//            Item item = items.get(i);
-//            Entry pair = toPair(fileBytes, item);
-//            System.out.println(pair);
-//            list.add(pair);
-//
-//            ItemType type = item.getType();
-//            int value = type.value();
-//            if(value < 1) break;
-//        }
-//
-//        return list;
-    }
-
-    public Entry toPair(FileBytes fileBytes, Item item) {
-        ItemType type = item.getType();
-        String typeName = item.getTypeName();
-        String itemName = item.getItemName();
-        String countExpression = item.getCountExpression();
-        int count = item.getCount();
-
-        Entry pair = new Entry();
-        pair.setKey(itemName);
-
-        int size = type.value();
-        if(size > 0) {
-            byte[] bytes = new byte[size];
-            for(int i=0; i<size; i++) {
-                byte b = fileBytes.readByte();
-                bytes[i] = b;
-            }
-            pair.setBytes(bytes);
-
-        }
-        else {
-            System.out.println(typeName);
-            System.out.println(countExpression);
-        }
-
-        return pair;
-    }
-
 
 }

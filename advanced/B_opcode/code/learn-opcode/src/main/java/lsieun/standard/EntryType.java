@@ -1,6 +1,8 @@
 package lsieun.standard;
 
 public enum EntryType {
-    BYTES,
-    CONTAINER
+    ONE_ENTRY,
+    MULTI_ENTRIES,
+    ONE_CONTAINER,
+    MULTI_CONTAINERS
 }
