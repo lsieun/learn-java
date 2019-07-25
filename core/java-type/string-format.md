@@ -4,7 +4,19 @@ URL:
 
 - https://www.novixys.com/blog/java-string-format-examples/
 
+<!-- TOC -->
 
+- [1. Introduction](#1-introduction)
+- [2. String Formatting](#2-string-formatting)
+- [3. Format Specifiers](#3-format-specifiers)
+- [4. Argument Index](#4-argument-index)
+- [5. Integer Formatting](#5-integer-formatting)
+- [6. String Formatting](#6-string-formatting)
+- [7. Date and Time Formatting](#7-date-and-time-formatting)
+  - [7.1. 三个概念: CST/UTC/GMT](#71-%E4%B8%89%E4%B8%AA%E6%A6%82%E5%BF%B5-cstutcgmt)
+  - [7.2. The Difference Between GMT and UTC](#72-the-difference-between-gmt-and-utc)
+
+<!-- /TOC -->
 
 ## 1. Introduction
 
@@ -564,7 +576,7 @@ Note: Using the formatting characters with “`%T`” instead of “`%t`” in t
 | `%tZ`  | Time zone abbreviation. e.g. “`UTC`“, “`PST`“, etc.          |
 | `%tz`  | Time Zone Offset from GMT e.g. “`-0800`“.                    |
 
-### 三个概念: CST/UTC/GMT
+### 7.1. 三个概念: CST/UTC/GMT
 
 三个概念：
 
@@ -583,7 +595,7 @@ CST可以为如下4个不同的时区的缩写：
 
 Greenwich Mean Time (**GMT**) 世界标准时刻；格林威治时间
 
-### The Difference Between GMT and UTC
+### 7.2. The Difference Between GMT and UTC
 
 There is no time difference between **Coordinated Universal Time** and **Greenwich Mean Time**. **2:44 a.m. Tuesday, Coordinated Universal Time (UTC)** is
 **2:44 a.m. Tuesday, Greenwich Mean Time (GMT)**.
