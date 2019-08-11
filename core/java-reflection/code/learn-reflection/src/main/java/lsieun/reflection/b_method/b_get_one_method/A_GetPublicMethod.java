@@ -1,8 +1,6 @@
-package lsieun.reflection.method;
+package lsieun.reflection.b_method.b_get_one_method;
 
 import java.lang.reflect.Method;
-
-import lsieun.reflection.entity.Operations;
 
 /**
  * <code>getMethod()</code> to find any public method,
@@ -13,7 +11,7 @@ import lsieun.reflection.entity.Operations;
  *     followed by <b>the types</b> of the method’s arguments.
  * </p>
  */
-public class GetPublicMethod {
+public class A_GetPublicMethod {
     public static void main(String[] args) {
         getInstanceMethod();
         getStaticMethod();
@@ -21,7 +19,7 @@ public class GetPublicMethod {
 
     private static void getInstanceMethod()  {
         try {
-            Method sumInstanceMethod = Operations.class.getMethod("publicSum", int.class, double.class);
+            Method sumInstanceMethod = Example.class.getMethod("publicSum", int.class, double.class);
             System.out.println(sumInstanceMethod);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
@@ -31,7 +29,7 @@ public class GetPublicMethod {
 
     private static void getStaticMethod() {
         try {
-            Method multiplyStaticMethod = Operations.class.getMethod("publicStaticMultiply", float.class, long.class);
+            Method multiplyStaticMethod = Example.class.getMethod("publicStaticMultiply", float.class, long.class);
             System.out.println(multiplyStaticMethod);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();

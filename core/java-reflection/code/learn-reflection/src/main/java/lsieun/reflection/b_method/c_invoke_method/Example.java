@@ -1,6 +1,6 @@
-package lsieun.reflection.entity;
+package lsieun.reflection.b_method.c_invoke_method;
 
-public class Operations {
+class Example {
     public double publicSum(int a, double b) {
         return a + b;
     }
