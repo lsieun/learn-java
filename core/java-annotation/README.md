@@ -1,4 +1,170 @@
+# Annotations
 
+## Annotations as special interfaces
+
+As we mentioned before, **annotations are the syntactic sugar used to associate the metadata with different elements of Java language**.
+
+Annotations by themselves do not have any direct effect on the element they are annotating. However, depending on the annotations and the way they are defined, they may be used by Java compiler (the great example of that is the `@Override`), by **annotation processors** and by **the code at runtime using reflection and other introspection techniques**.
+
+Let us take a look at the simplest annotation declaration possible:
+
+```java
+public @interface SimpleAnnotation {
+}
+```
+
+The `@interface` keyword introduces new annotation type. That is why annotations could be treated as specialized interfaces. Annotations may declare the attributes with or without default values, for example:
+
+```java
+public @interface SimpleAnnotationWithAttributes {
+    String name();
+    int order() default 0;
+}
+```
+
+If an annotation declares an attribute without a default value, it should be provided in all places the annotation is being applied. For example:
+
+```java
+@SimpleAnnotationWithAttributes(name = "new annotation")
+```
+
+By convention, if the annotation has an attribute with the name `value` and it is the only one which is required to be specified, the name of the attribute could be omitted, for example:
+
+```java
+public @interface SimpleAnnotationWithValue {
+    String value();
+}
+```
+
+It could be used like this:
+
+```java
+@SimpleAnnotationWithValue("new annotation")
+```
+
+There are a couple of limitations which in certain use cases make working with annotations not very convenient. Firstly, annotations do not support any kind of inheritance: one annotation cannot extend another annotation. Secondly, it is not possible to create an instance of annotation programmatically using the `new` operator. And thirdly, annotations can declare only attributes of **primitive types**, `String` or `Class<?>` types and **arrays of those**. No methods or constructors are allowed to be declared in the annotations.
+
+这里说了annotation的三个限制：
+
+- （1） 不能继承
+- （2） 不能使用new创建实例
+- （3） 只能定义attributes，而不能定义methods和构造constructors。
+
+## Annotations and retention policy
+
+Each annotation has the very important characteristic called **retention policy** which is an enumeration (of type `RetentionPolicy`) with the set of policies on how to retain annotations. It could be set to one of the following values.
+
+| Policy    | Description                                                  |
+| --------- | ------------------------------------------------------------ |
+| `CLASS`   | Annotations are to be recorded in the class file by the compiler but need not be retained by the VM at run time |
+| `RUNTIME` | Annotations are to be recorded in the class file by the compiler and retained by the VM at run time, so they may be read reflectively. |
+| `SOURCE`  | Annotations are to be discarded by the compiler.             |
+
+Retention policy has a crucial effect on when the annotation will be available for processing. The retention policy could be set using `@Retention` annotation. For example:
+
+```java
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+@Retention(RetentionPolicy.RUNTIME)
+public @interface AnnotationWithRetention {
+}
+```
+
+Setting annotation retention policy to `RUNTIME` will guarantee its presence in the compilation process and in the running application.
+
+## Annotations and element types
+
+Another characteristic which each annotation must have is the element types it could be applied to. Similarly to the **retention policy**, it is defined as **enumeration** (`ElementType`) with the set of possible element types.
+
+| Element Type    | Description                                                  |
+| --------------- | ------------------------------------------------------------ |
+| ANNOTATION_TYPE | Annotation type declaration                                  |
+| CONSTRUCTOR     | Constructor declaration                                      |
+| FIELD           | Field declaration (includes enum constants)                  |
+| LOCAL_VARIABLE  | Local variable declaration                                   |
+| METHOD          | Method declaration                                           |
+| PACKAGE         | Package declaration                                          |
+| PARAMETER       | Parameter declaration                                        |
+| TYPE            | Class, interface (including annotation type), or enum declaration |
+
+Additionally to the ones described above, Java 8 introduces two new element types the annotations can be applied to.
+
+| Element Type   | Description                |
+| -------------- | -------------------------- |
+| TYPE_PARAMETER | Type parameter declaration |
+| TYPE_USE       | Use of a type              |
+
+
+
+In contrast to the **retention policy**, an annotation may declare **multiple element types** it can be associated with, using the `@Target` annotation. For example:
+
+```java
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Target;
+
+@Target({ElementType.FIELD, ElementType.METHOD})
+public @interface AnnotationWithTarget {
+}
+```
+
+Mostly all annotations you are going to create should have both **retention policy** and **element types** specified in order to be useful.
+
+## Annotations and inheritance
+
+The important relation exists between **declaring annotations** and **inheritance** in Java. By default, the subclasses do not inherit the annotation declared on the parent class. However, there is a way to propagate particular annotations throughout the class hierarchy using the `@Inherited` annotation. For example:
+
+```java
+@Target({ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Inherited
+@interface InheritableAnnotation {
+}
+
+@InheritableAnnotation
+public class Parent {
+}
+
+public class Child extends Parent {
+}
+```
+
+In this example, the `@InheritableAnnotation` annotation declared on the `Parent` class will be inherited by the `Child` class as well.
+
+## Repeatable annotations
+
+In pre-Java 8 era there was another limitation related to the annotations which was not discussed yet: the same annotation could appear only once at the same place, it cannot be repeated multiple times. Java 8 eased this restriction by providing support for repeatable annotations. For example:
+
+```java
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface RepeatableAnnotations {
+    RepeatableAnnotation[] value();
+}
+
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+@Repeatable(RepeatableAnnotations.class)
+public @interface RepeatableAnnotation {
+    String value();
+}
+
+@RepeatableAnnotation("repeatition 1")
+@RepeatableAnnotation("repeatition 2")
+public void performAction() {
+    // Some code here
+}
+```
+
+Although in Java 8 the repeatable annotations feature requires a bit of work to be done in order to allow your annotation to be repeatable (using `@Repeatable`), the final result is worth it: more clean and compact annotated code.
+
+## Annotation processors
+
+The Java compiler supports a special kind of plugins called **annotation processors** (using the `-processor` command line argument) which could process the annotations during the compilation phase. **Annotation processors** can analyze the annotations usage (perform static code analysis), create additional Java source files or resources (which in turn could be compiled and processed) or mutate the annotated code.
+
+The **retention policy** plays a key role by instructing the compiler which annotations should be available for processing by annotation processors.
+
+Annotation processors are widely used, however to write one it requires some knowledge of how Java compiler works and the compilation process itself.
 
 Annotation是一个接口，程序可以通过反射来获取指定程序元素的Annotation对象，然后通过Annotation对象来取得注释里的元数据。
 
@@ -20,7 +186,7 @@ Annotation是一个接口，程序可以通过反射来获取指定程序元素�
 
 ## About
 
-##诞生
+## 诞生
 
 从JDK5开始，Java增加了元数据（MetaData）的支持，也就是Annotation（注释）。
 

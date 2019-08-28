@@ -145,7 +145,7 @@ public class JMXMainLauncher {
         try {
             MBeanServer server = ManagementFactory.getPlatformMBeanServer();
             Game gameObj = new Game();
-            
+
             ObjectName objectName = new ObjectName("lsieun.jmx.config:type=basic,name=game");
             server.registerMBean(gameObj, objectName);
         } catch (MalformedObjectNameException e) {

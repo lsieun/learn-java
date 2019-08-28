@@ -13,7 +13,7 @@ URL:
 - [5. Integer Formatting](#5-integer-formatting)
 - [6. String Formatting](#6-string-formatting)
 - [7. Date and Time Formatting](#7-date-and-time-formatting)
-  - [7.1. 三个概念: CST/UTC/GMT](#71-%E4%B8%89%E4%B8%AA%E6%A6%82%E5%BF%B5-cstutcgmt)
+  - [7.1. 三个概念: CST/UTC/GMT](#71-%e4%b8%89%e4%b8%aa%e6%a6%82%e5%bf%b5-cstutcgmt)
   - [7.2. The Difference Between GMT and UTC](#72-the-difference-between-gmt-and-utc)
 
 <!-- /TOC -->
@@ -29,9 +29,9 @@ This guide is an attempt to bring some clarity and ease the usage of string form
 - String Formatting介绍三种方法，最常用的是`String.format()`
 - 各种时间的说明符
 - 三种类型数据的举例
-    - Integer
-    - String
-    - Date And Time
+  - Integer
+  - String
+  - Date And Time
 
 
 ## 2. String Formatting
