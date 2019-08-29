@@ -43,7 +43,7 @@ public class ZipDirectory {
 
     public static void writeZipFile(File directoryToZip, List<File> fileList) {
         try {
-            FileOutputStream fos = new FileOutputStream(directoryToZip.getCanonicalPath() + ".zip");
+            FileOutputStream fos = new FileOutputStream(directoryToZip.getCanonicalPath() + ".jar");
             ZipOutputStream zos = new ZipOutputStream(fos);
 
             for (File file : fileList) {
