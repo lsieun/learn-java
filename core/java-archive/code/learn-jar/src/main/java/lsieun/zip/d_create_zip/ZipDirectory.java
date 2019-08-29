@@ -69,6 +69,8 @@ public class ZipDirectory {
         // we want the zipEntry's path to be a relative path that is relative
         // to the directory being zipped, so chop off the rest of the path
         String zipFilePath = file.getCanonicalPath().substring(directoryToZip.getCanonicalPath().length() + 1);
+        // 在Windows操作系统下，路径分隔符是'\'，而在ZIP或jar包要求的路径分隔符是'/'
+        zipFilePath = zipFilePath.replace(File.separatorChar, '/');
         System.out.println("Writing '" + zipFilePath + "' to zip file");
         ZipEntry zipEntry = new ZipEntry(zipFilePath);
         zos.putNextEntry(zipEntry);
