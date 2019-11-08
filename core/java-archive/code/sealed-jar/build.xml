@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<project name="sealed-jar" default="execute" basedir=".">
+
+    <property name="src.dir" location="src"/>
+    <property name="src1.dir" location="src1"/>
+    <property name="src2.dir" location="src2"/>
+
+    <property name="build.dir" location="build"/>
+    <property name="build.classes.dir" location="${build.dir}/classes"/>
+    <property name="build.classes1.dir" location="${build.dir}/classes1"/>
+    <property name="build.classes2.dir" location="${build.dir}/classes2"/>
+
+    <property name="project.name" value="${ant.project.name}"/>
+    <property name="project.version" value="1.0.0"/>
+
+    <property name="dist.dir" location="dist"/>
+    <property name="target.jar" location="${dist.dir}/${project.name}-${project.version}.jar"/>
+    <property name="target1.jar" location="${dist.dir}/${project.name}1.jar"/>
+    <property name="target2.jar" location="${dist.dir}/${project.name}2.jar"/>
+
+    <!-- Creates the output directories -->
+    <target name="init">
+        <mkdir dir="${build.classes.dir}"/>
+        <mkdir dir="${build.classes1.dir}"/>
+        <mkdir dir="${build.classes2.dir}"/>
+        <mkdir dir="${dist.dir}"/>
+    </target>
+
+    <!-- Compiles into the output directories -->
+    <target name="compile-jar-source" depends="init">
+        <javac srcdir="${src1.dir}" destdir="${build.classes1.dir}" includeantruntime="false"/>
+        <javac srcdir="${src2.dir}" destdir="${build.classes2.dir}" includeantruntime="false"/>
+    </target>
+
+    <!-- Creates the archive -->
+    <target name="archive" depends="compile-jar-source">
+        <property name="manifest.mf" location="${build.dir}/manifest.mf"/>
+
+        <manifest file="${manifest.mf}">
+            <attribute name="Sealed" value="true"/>
+        </manifest>
+
+        <jar destfile="${target1.jar}" basedir="${build.classes1.dir}" manifest="${manifest.mf}"/>
+        <jar destfile="${target2.jar}" basedir="${build.classes2.dir}" manifest="${manifest.mf}"/>
+    </target>
+
+    <path id="compile.classpath">
+        <fileset dir="${dist.dir}" includes="**/*.jar"/>
+    </path>
+
+    <target name="compile" depends="archive">
+        <javac srcdir="${src.dir}"
+               destdir="${build.classes.dir}"
+               includeantruntime="false">
+            <classpath refid="compile.classpath"/>
+        </javac>
+    </target>
+
+    <path id="run.classpath">
+        <path refid="compile.classpath"/>
+        <pathelement location="${build.classes.dir}"/>
+    </path>
+
+    <target name="execute" depends="compile">
+        <property name="path.string" refid="run.classpath"/>
+        <echo message="run.classpath = ${path.string}"/>
+
+        <java classname="com.example.test.C"
+              classpathref="run.classpath"
+              fork="true">
+        </java>
+    </target>
+
+    <!-- Deletes the output directories -->
+    <target name="clean" depends="init">
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+    </target>
+
+</project>

@@ -1,20 +1,28 @@
-# Regex Constructs #
+# Regex Constructs
+
+<!-- TOC -->
+
+- [1. Summary of regular-expression constructs](#1-summary-of-regular-expression-constructs)
+  - [1.1. Predefined character classes](#11-predefined-character-classes)
+  - [1.2. Character classes](#12-character-classes)
+  - [1.3. Characters](#13-characters)
+  - [1.4. Greedy quantifiers](#14-greedy-quantifiers)
+  - [1.5. Logical operators](#15-logical-operators)
+  - [1.6. Boundary matchers](#16-boundary-matchers)
+- [2. Backslashes and escapes](#2-backslashes-and-escapes)
+- [3. Groups and capturing](#3-groups-and-capturing)
+  - [3.1. Group number](#31-group-number)
+- [4. Reference](#4-reference)
+
+<!-- /TOC -->
 
 首先，说一下标题“Regex Constructs”，更完整的可以写成“regular-expression constructs”，翻译成中文就是“正则表达式的构建”。在“正则表达式的构建”中，“正则表达式”没有什么说的，而“构建(Contructs)”该怎么理解呢？我的理解是：通过不同的字符的组合来达到一种结构，而组合的过程称之为“构建(Contructs)”。
 
 我理解的Regex中的Characters、Character classes和Predefined character classes的三者是一种不断进行高度抽象的过程。首先，三者都表示1个字符；而Characters表示一个确定的字符，Character classes在Characters的基础上加上了“范围”和“逻辑的与、或、非”，它（Character classes）加上classes应该是指一类字符的意思，一组字符范围的集合；Predefined character classes是更高一层的抽象，它能够由Character classes组合而来。
 
-URL:
+## 1. Summary of regular-expression constructs
 
-- [ ] [Java Class `Pattern`](https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html)
-
-- [ ] https://docs.oracle.com/javase/tutorial/essential/regex/pre_char_classes.html
-
-
-
-## Summary of regular-expression constructs ##
-
-### Predefined character classes ###
+### 1.1. Predefined character classes
 
 
 |Construct|Matches|
@@ -35,7 +43,7 @@ URL:
     System.out.println("^".matches("\\S"));
     System.out.println("a".matches("\\w"));
 
-### Character classes ###	
+### 1.2. Character classes
 
 |Construct|Matches|
 |:--------|:------|
@@ -60,7 +68,7 @@ URL:
     System.out.println( "tretrt".matches("[a-z&&[^b-c]]{5,}"));
 
 
-### Characters ###
+### 1.3. Characters
 
 |Construct|Matches|
 |:--------|:------|
@@ -70,7 +78,7 @@ URL:
 |`\n`|The newline (line feed) character ('\u000A')|
 |`\r`|The carriage-return character ('\u000D')|
 
-### Greedy quantifiers ###
+### 1.4. Greedy quantifiers
 
 |Construct|Matches|
 |:--------|:------|
@@ -91,7 +99,7 @@ URL:
     System.out.println( "aaa".matches("a{5,}") );
     System.out.println( "aaaaab".matches("a{5,}") );
 
-### Logical operators ###
+### 1.5. Logical operators
 
 |Construct|Matches|
 |:--------|:------|
@@ -99,7 +107,7 @@ URL:
 |`X\|Y`|Either X or Y|
 |`(X)`|X, as a capturing group|
 
-### Boundary matchers ###
+### 1.6. Boundary matchers
 
 |Construct|Matches|
 |:--------|:------|
@@ -108,7 +116,7 @@ URL:
 |`\b`|A word boundary|
 |`\B`|A non-word boundary|
 
-## Backslashes and escapes ##
+## 2. Backslashes and escapes
 
 **The backslash character (`\`) serves to introduce escaped constructs** that otherwise would be interpreted as unescaped constructs. Thus the expression `\\` matches a single backslash and `\{` matches a left brace.
 
@@ -122,9 +130,9 @@ Backslashes within string literals in Java source code are interpreted as either
 
 >使用Java语言时要注意：在正则表达式中，要表达backslash时，要使用double backslashs
 
-## Groups and capturing ##
+## 3. Groups and capturing
 
-### Group number ###
+### 3.1. Group number
 
 Capturing groups are numbered by counting their opening parentheses from left to right. In the expression `((A)(B(C)))`, for example, there are four such groups:
 
@@ -132,10 +140,10 @@ Capturing groups are numbered by counting their opening parentheses from left to
 
 |number|capturing groups|
 |:----:|:--------------:|
-|1     |	((A)(B(C))) |
-|2     |	(A)         |
-|3     |	(B(C))      |
-|4     |	(C)         |
+|1     |    ((A)(B(C))) |
+|2     |    (A)         |
+|3     |    (B(C))      |
+|4     |    (C)         |
 
 Group zero always stands for the entire expression.
 
@@ -145,11 +153,7 @@ Capturing groups are so named because, during a match, each subsequence of the i
 
 > 讲了一下capturing group为什么会如此命名？其实，命名倒是不重要的，重要的是在后续的表达式中可以“复用”它。
 
+## 4. Reference
 
-
-
-
-
-
-
-
+- [ ] [Java Class `Pattern`](https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html)
+- [ ] [Predefined Character Classes](https://docs.oracle.com/javase/tutorial/essential/regex/pre_char_classes.html)
