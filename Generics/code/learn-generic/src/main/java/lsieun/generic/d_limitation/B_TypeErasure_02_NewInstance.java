@@ -7,4 +7,5 @@ public class B_TypeErasure_02_NewInstance {
 
         //T obj = T.class.newInstance();
     }
+
 }

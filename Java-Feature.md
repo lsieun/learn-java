@@ -1,10 +1,23 @@
 # Java Feature
 
+<!-- TOC -->
+
+- [1. History](#1-history)
+- [2. Java 5](#2-java-5)
+- [3. Java 8](#3-java-8)
+
+<!-- /TOC -->
+
 Java is a general-purpose programming language. It was first made available for public use in 1996. It has evolved a lot during this long period of 20+ years of use. The below infographic shows the version history of Java programming language.
 
 ![History-of-Java](History-of-Java.png)
 
-## Java 5
+## 1. History
+
+- 1996, Java 1.0
+- 2011, Java 7
+
+## 2. Java 5
 
 - `Java 5`: Generics, Enum, Annotation, Java Agent
 
@@ -15,4 +28,9 @@ Another two great features introduced into the language as part of Java 5 releas
 **The idea of enums** is simple, but quite handy: it represents a fixed, constant set of values. What it means in practice is that enums are often used to design the concepts which have a constant set of possible states. For example, the days of week are a great example of the enums: they are limited to Monday, Tuesday, Wednesday, Thursday, Friday, Saturday and Sunday.
 
 From the other side, **annotations are a special kind of metadata** which could be associated with different elements and constructs of the Java language. Interestingly, annotations have contributed a lot into the elimination of boilerplate XML descriptors used in Java ecosystem mostly everywhere. They introduced the new, type-safe and robust way of configuration and customization techniques.
+
+## 3. Java 8
+
+lambda expressions, method references, streams, and default methods
+
 

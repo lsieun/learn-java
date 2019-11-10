@@ -1,36 +1,35 @@
 package lsieun.java8.functional_thinking;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodHandles.Lookup;
+import java.lang.invoke.MethodType;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.stream.IntStream;
+import java.util.List;
 
 public class Demo {
     public static void main(String[] args) {
-        int[] array = new int[]{1, 2, 3, 4, 5};
-        int[] newArray = Arrays.copyOf(array, array.length);
-        System.out.println(Arrays.toString(newArray));
+        Lookup l = MethodHandles.lookup();
+        lookupDefineClass(l);
+        String[] words = {"Hello World!", "Hello Generic"};
+        Object[] objects = words;
+        System.out.println(Arrays.toString(objects));
 
-//        double[] array = new double[5];
-//        //Arrays.parallelSetAll(array, i -> (i % 2 == 0) ? i + 3 : i + 6);
-//        Arrays.parallelSetAll(array, i -> i);
-//        System.out.println(Arrays.toString(array));
-//
-//        double[] sums = Arrays.copyOf(array, array.length);
-//        Arrays.parallelPrefix(sums, Double::sum);
-//        System.out.println(Arrays.toString(sums));
-//
-//        double[] averages = simpleMovingAverage(array, 3);
-//        System.out.println(Arrays.toString(averages));
     }
 
-    public static double[] simpleMovingAverage(double[] values, int n) {
-        double[] sums = Arrays.copyOf(values, values.length);
-        Arrays.parallelPrefix(sums, Double::sum);
-        int start = n - 1;
-        return IntStream.range(start, sums.length)
-                .mapToDouble(i -> {
-                    double prefix = i == start ? 0 : sums[i - n];
-                    return (sums[i] - prefix) / n;
-                })
-                .toArray();
+    public static void lookupDefineClass(Lookup l) {
+        // Class<?> defineClass(String name, byte[] b, int off, int len)
+        MethodType mt = MethodType.methodType(Class.class, String.class,
+                byte[].class, int.class,
+                int.class);
+        try {
+            MethodHandle mh = l.findVirtual(ClassLoader.class, "defineClass", mt);
+            System.out.println(mh);
+        } catch (NoSuchMethodException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
+
+
 }
