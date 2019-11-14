@@ -27,18 +27,3 @@ Use Case:
 - 从时间上来说，Collections是在Java 1.2加入的，而Generics是在Java 5加入的，以前的Collections的代码需要经过重构才能支持泛型，而泛型在实现上也是不完全的，它采用了Type Erase的方式来实现对过去的代码的兼容性
 - 从我现在的理解来说，Generics是对Type的参数化，现在的Collections和Generics进行结合之后，就是对Collections内的Class、Field和Methods中的Type的进行一种有效的约束。
 
-## Accessing generic type parameters
-
-As you already know from the section Limitation of generics, it is not possible to **get the class of the generic type parameter**. One simple trick to work-around that is to require additional argument to be passed, `Class<T>`, in places where it is necessary to know the class of the type parameter `T`. For example:
-
-```java
-public <T> void performAction(final T action, final Class<T> clazz) {
-    // Some implementation here
-}
-```
-
-It might blow the amount of arguments required by the methods but with careful design it is not as bad as it looks at the first glance.
-
-Another interesting use case which often comes up while working with generics in Java is to **determine the concrete class of the type** which generic instance has been parameterized with. It is not as straightforward and requires **Java reflection API** to be involved. The `ParameterizedType` instance is the central point to do the **reflection** over **generics**.
-
-
