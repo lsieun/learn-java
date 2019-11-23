@@ -9,6 +9,7 @@
   - [2.3. Annotation](#23-annotation)
   - [2.4. Varargs](#24-varargs)
 - [3. Java 7](#3-java-7)
+  - [Diamond Syntax](#diamond-syntax)
   - [3.1. try-with-resources](#31-try-with-resources)
   - [3.2. Method Handles](#32-method-handles)
 - [4. Java 8](#4-java-8)
@@ -25,7 +26,11 @@ Java is a general-purpose programming language. It was first made available for 
 ## 1. History
 
 - 1996, Java 1.0
+- 2004, Java 5
+- 2006, Java 6
 - 2011, Java 7
+- 2014, Java 8
+- 2017, Java 9
 
 ## 2. Java 5
 
@@ -58,6 +63,12 @@ Varargs are straightforward to use. But there're a few rules we have to keep in 
 [Varargs in Java](https://www.baeldung.com/java-varargs)
 
 ## 3. Java 7
+
+### Diamond Syntax
+
+```java
+List<String> list = new ArrayList<>();
+```
 
 ### 3.1. try-with-resources
 

@@ -1,7 +1,5 @@
 # Functional interfaces, default and static methods
 
-With **the release of Java 8**, interfaces have obtained new very interesting capabilities: **static methods**, **default methods** and **automatic conversion from lambdas (functional interfaces)**.
-
 <!-- TOC -->
 
 - [1. default methods](#1-default-methods)
@@ -9,6 +7,9 @@ With **the release of Java 8**, interfaces have obtained new very interesting ca
 - [3. functional interfaces](#3-functional-interfaces)
 
 <!-- /TOC -->
+
+
+With **the release of Java 8**, interfaces have obtained new very interesting capabilities: **static methods**, **default methods** and **automatic conversion from lambdas (functional interfaces)**.
 
 ## 1. default methods
 

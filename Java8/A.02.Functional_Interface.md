@@ -17,13 +17,15 @@
   - [4.4. Using local variables](#44-using-local-variables)
   - [4.5. Restrictions on local variables](#45-restrictions-on-local-variables)
   - [4.6. Closure](#46-closure)
-- [Example](#example)
+- [5. @FunctionalInterface in Java API](#5-functionalinterface-in-java-api)
+  - [5.1. java.io.FileFilter](#51-javaiofilefilter)
+  - [5.2. Common functional interfaces in Java 8](#52-common-functional-interfaces-in-java-8)
 
 <!-- /TOC -->
 
 ## 1. Where and how to use lambdas
 
-So where exactly can you use lambdas? You can use **a lambda expression** in the context of **a functional interface**.
+So where exactly can you use **lambdas**? You can use **a lambda expression** in the context of **a functional interface**.
 
 ### 1.1. Functional interface
 
@@ -62,6 +64,25 @@ process(() -> System.out.println("This is awesome!!"));
 If you explore the new Java API, you’ll notice that functional interfaces are annotated with `@FunctionalInterface`. This annotation is used to indicate that the interface is intended to be a functional interface. The compiler will return a meaningful error if you define an interface using the `@FunctionalInterface` annotation and it isn’t a functional interface.
 
 For example, an error message could be “Multiple non-overriding abstract methods found in interface Foo” to indicate that more than one abstract method is available.
+
+```java
+// File: Foo.java
+@FunctionalInterface
+public interface Foo {
+    void firstMethod();
+    void secondMethod();
+}
+```
+
+```bash
+$ javac Foo.java
+Foo.java:1: error: Unexpected @FunctionalInterface annotation
+@FunctionalInterface
+^
+  Foo is not a functional interface
+    multiple non-overriding abstract methods found in interface Foo
+1 error
+```
 
 Note that the `@FunctionalInterface` annotation isn’t mandatory, but it’s good practice to use it when an interface is designed for that purpose. You can think of it like the `@Override` notation to indicate that a method is overridden.
 
@@ -169,13 +190,71 @@ You may have heard of the term **closure** and may be wondering whether lambdas 
 
 Now Java 8 lambdas and anonymous classes do something similar to closures: they can be passed as argument to methods and can access variables outside their scope. But they have a restriction: they can’t modify the content of local variables of a method in which the lambda is defined. Those variables have to be implicitly `final`. It helps to think that lambdas close over values rather than variables. As explained previously, this restriction exists because local variables live on the stack and are implicitly confined to the thread they’re in. Allowing capture of mutable local variables opens new thread-unsafe possibilities, which are undesirable (instance variables are fine because they live on the heap, which is shared across threads).
 
-## Example
+## 5. @FunctionalInterface in Java API
 
 - `java.lang.Runnable`
 - `java.util.function.*`
+- `java.io.FileFilter`
+- `java.util.Comparator`
+- `java.util.concurrent.Callable`
+- `java.security.PrivilegedAction`
+- `java.awt.event.ActionListener`并没有`@FunctionalInterface`注释
 
+### 5.1. java.io.FileFilter
 
+Before Java 8
 
+```java
+File[] hiddenFiles = new File(".").listFiles(new FileFilter() {
+    @Override
+    public boolean accept(File file) {
+        return file.isHidden();
+    }
+});
+System.out.println(Arrays.toString(hiddenFiles));
+```
 
+Java 8:
 
+```java
+File[] hiddenFiles = new File(".").listFiles(File::isHidden);
+System.out.println(Arrays.toString(hiddenFiles));
+```
+
+### 5.2. Common functional interfaces in Java 8
+
+- `Predicate<T>`
+  - Function descriptor: `T -> boolean`
+  - Primitive specializations: `IntPredicate`, `LongPredicate`, `DoublePredicate`
+
+- `Consumer<T>`
+  - Function descriptor: `T -> void`
+  - Primitive specializations: `IntConsumer`, `LongConsumer`, `DoubleConsumer`
+
+- `Function<T, R>`
+  - Function descriptor: `T -> R`
+  - Primitive specializations: `IntFunction<R>`, `IntToDoubleFunction`, `LongFunction<R>`, `IntToLongFunction`, `LongToDoubleFunction`, `LongToIntFunction`, `DoubleFunction<R>`, `ToIntFunction<T>`, `ToDoubleFunction<T>`, `ToLongFunction<T>`
+
+- `Supplier<T>`
+  - Function descriptor: `() -> T`
+  - Primitive specializations: `BooleanSupplier`, `IntSupplier`, `LongSupplier`, `DoubleSupplier`
+
+- `UnaryOperator<T>`
+  - Function descriptor: `T -> T`
+  - Primitive specializations: `IntUnaryOperator`, `LongUnaryOperator`, `DoubleUnaryOperator`
+
+- `BinaryOperator<T>`
+  - Function descriptor: `(T, T) -> T`
+  - Primitive specializations: `IntBinaryOperator`, `LongBinaryOperator`, `DoubleBinaryOperator`
+
+- `BiPredicate<L, R>`
+  - Function descriptor: `(L, R) -> boolean`
+
+- `BiConsumer<T, U>`
+  - Function descriptor: `(T, U) -> void`
+  - Primitive specializations: `ObjIntConsumer<T>`, `ObjLongConsumer<T>`, `ObjDoubleConsumer<T>`
+
+- `BiFunction<T, U, R>`
+  - Function descriptor: `(T, U) -> R`
+  - Primitive specializations: `ToIntBiFunction<T, U>`, `ToLongBiFunction<T, U>`, `ToDoubleBiFunction<T, U>`
 

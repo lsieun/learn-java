@@ -8,7 +8,7 @@
 
 <!-- /TOC -->
 
-For now you can think of **lambda expressions** as **anonymous functions**, basically methods without declared names, but which can also be passed as arguments to a method as you can with an anonymous class.
+For now you can think of **lambda expressions** as **anonymous functions**, basically methods without declared names, but which can also be passed as **arguments to a method** as you can with an anonymous class.
 
 ```txt
 behavior parameterization = 将“代码”作为“参数”进行传递。
@@ -20,7 +20,7 @@ behavior parameterization = 将“代码”作为“参数”进行传递。
 - （2） 使用匿名类，实现那个“接口”中的方法 anonymous class
 
 在Java 8之后，
-- （1） 使用普通方法 named functions
+- （1） 使用普通方法method reference = named functions
 - （2） 使用lambda expression = anonymous functions
 ```
 

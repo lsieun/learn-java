@@ -6,10 +6,13 @@
   - [1.1. Method: of and get](#11-method-of-and-get)
   - [1.2. Method: empty and ofNullable](#12-method-empty-and-ofnullable)
   - [1.3. Method: isPresent, orElse and orElseGet](#13-method-ispresent-orelse-and-orelseget)
+  - [1.4. Method: ifPresent](#14-method-ifpresent)
 
 <!-- /TOC -->
 
 `Optional` is a new core library data type that is designed to provide a better alternative to `null`.
+
+The `Optional<T>` class (`java.util.Optional`) is a container class to represent the existence or absence of a value.
 
 `null` is often used to represent the absence of a value, and this is the use case that `Optional` is replacing. The problem with using `null` in order to represent absence is the dreaded `NullPointerException`. If you refer to a variable that is `null` , your code blows up.
 
@@ -50,4 +53,6 @@ String strB = emptyOptional.orElseGet(() -> "B");
 System.out.println(strB);
 ```
 
+### 1.4. Method: ifPresent
 
+`ifPresent(Consumer<T> block)` executes the given block if a value is present. It lets you pass a lambda that takes an argument of type `T` and returns `void`.

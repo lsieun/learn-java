@@ -9,12 +9,3 @@ default void forEach(Consumer<? super T> action) {
     }
 }
 ```
-
-
-
-
-
-
-
-
-

@@ -8,7 +8,7 @@
   - [2.2. one-argument constructor](#22-one-argument-constructor)
   - [2.3. two-argument constructor](#23-two-argument-constructor)
   - [2.4. interesting applications](#24-interesting-applications)
-- [create arrays](#create-arrays)
+- [3. create arrays](#3-create-arrays)
 
 <!-- /TOC -->
 
@@ -136,7 +136,7 @@ public interface TriFunction<T, U, V, R>{
 }
 ```
 
-## create arrays
+## 3. create arrays
 
 It’s also possible to create arrays using this method. Here is how you would create a String array: `String[]::new`.
 

@@ -1,6 +1,8 @@
 # Stream Source
 
-## Collection
+## Collections
+
+Collections in Java 8 support a new `stream` method that returns a stream (the interface definition is available in `java.util.stream.Stream`).
 
 - `Arrays.stream(T[] array)`: 将一个数组转换成Stream对象。
 - `Collection.stream()`: 将一个Collection对象转换成Stream对象。

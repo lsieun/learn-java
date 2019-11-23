@@ -1,3 +1,14 @@
 # Java8
 
+A takeaway line might be this: **languages need to evolve to track changing hardware or programmer expectations** (if you need convincing, then consider that COBOL was once one of the most important languages commercially). To endure, Java has to evolve by adding new features. This evolution will be pointless unless the new features are used, so in using Java 8 you’re protecting your way of life as a Java programmer.
+
 The biggest language change in Java 8 is the introduction of lambda expressions—a compact way of passing around behavior.
+
+The word `function` in programming languages is commonly used as a synonym for `method`, particularly **a static method**; this is in addition to it being used for mathematical function, **one without side effects**.
+
+Java 8 adds **functions** as **new forms of value**. These facilitate the use of Streams, which Java 8 provides to exploit parallel programming on multicore processors.
+
+Think about **the possible values** manipulated by Java programs. First, there are **primitive values** such as `42` (of type `int`) and `3.14` (of type `double`). Second, values can be objects (more strictly, references to objects). The only way to get one of these is by using `new`, perhaps via **a factory method** or **a library function**; object references point to instances of a class. Examples include `"abc"` (of type `String`), `new Integer(1111)` (of type `Integer`), and the result `new HashMap<Integer, String>(100)` of explicitly calling a constructor for `HashMap`. Even arrays are objects. So what’s the problem?
+
+To help answer this, we’ll note that **the whole point of a programming language is to manipulate values**, which, following historical programming-language tradition, are therefore called **first-class values** (or citizens, in the terminology borrowed from the 1960s civil rights movement in the United States). Other structures in our programming languages, which perhaps help us express the structure of values but which can’t be passed around during program execution, are **second-class citizens**. Values as listed previously are first-class Java citizens, but various other Java concepts, such as **methods** and **classes**, exemplify **second-class citizens**. Methods are fine when used to define classes, which in turn may be instantiated to produce values, but neither are values themselves. So does this matter? Yes, it turns out that being able to pass methods around at run-time, and hence making them first-class citizens, is very useful in programming, and so the Java 8 designers added this ability to Java. Incidentally, you might wonder whether making other second-class citizens such as classes into first-class-citizen values might also be a good idea. Various languages such as Smalltalk and JavaScript have explored this route.
+

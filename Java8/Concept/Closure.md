@@ -60,6 +60,35 @@ $ echo $x # does this print 1, or 2?
 
 So, what exactly does this program print? It depends on **the scoping rules**. If the language of this program is one that uses **lexical scoping**, then `g` prints and modifies the global variable `x` (because `g` is defined outside `f`), so the program prints `1` and then `2`. By contrast, if this language uses **dynamic scoping**, then `g` prints and modifies `f`'s local variable `x` (because `g` is called from within `f`), so the program prints `3` and then `1`. (As it happens, the language of the program is **Bash**, which uses **dynamic scoping**; so the program prints `3` and then `1`.)
 
+```java
+// HelloWorld.java
+public class HelloWorld {
+    static int x = 1;
+
+    static void g() {
+        System.out.println("x = " + x);
+        x = 2;
+    }
+
+    static void f() {
+        int x = 3;
+        g();
+    }
+
+    public static void main(String[] args) {
+        f();
+        System.out.println("x = " + x);
+    }
+}
+```
+
+Output:
+
+```txt
+x = 1
+x = 2
+```
+
 ### 2.3. First-class function
 
 In computer science, a programming language is said to have **first-class functions** if it treats functions as **first-class citizens**. This means the language supports **passing functions as arguments to other functions**, **returning them as the values from other functions**, and **assigning them to variables** or **storing them in data structures**. Some programming language theorists require support for **anonymous functions** (function literals) as well. In languages with **first-class functions**, the names of functions **do not have any special status**; they are treated like **ordinary variables** with **a function type**. The term was coined by Christopher Strachey in the context of "functions as first-class citizens" in the mid-1960s.

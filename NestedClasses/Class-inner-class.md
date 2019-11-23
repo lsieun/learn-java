@@ -2,7 +2,6 @@
 
 Java inner class is defined inside the body of another class. 
 
-
 **Java inner class** can be declared `private`, `public`, `protected`, or with `default` access whereas **an outer class** can have only `public` or `default` access.
 
 > 访问修饰符  
@@ -16,13 +15,12 @@ Java Nested classes are divided into two types:
 
 <!-- TOC -->
 
-- [Java Inner Class](#java-inner-class)
-    - [1. static nested class](#1-static-nested-class)
-    - [2. non-static nested class](#2-non-static-nested-class)
-        - [2.1 java inner class](#21-java-inner-class)
-        - [2.2 local inner class](#22-local-inner-class)
-        - [2.3 anonymous inner class](#23-anonymous-inner-class)
-    - [3. Benefits of Java Inner Class](#3-benefits-of-java-inner-class)
+- [1. static nested class](#1-static-nested-class)
+- [2. non-static nested class](#2-non-static-nested-class)
+  - [2.1 java inner class](#21-java-inner-class)
+  - [2.2 local inner class](#22-local-inner-class)
+  - [2.3 anonymous inner class](#23-anonymous-inner-class)
+- [3. Benefits of Java Inner Class](#3-benefits-of-java-inner-class)
 
 <!-- /TOC -->
 
@@ -95,12 +93,12 @@ Local inner class can be defined as:
 ```java
 
 public void print() {
-        //local inner class inside the method
-        class Logger {
-            String name;
-        }
-        //instantiate local inner class in the method to use
-        Logger logger = new Logger();
+    //local inner class inside the method
+    class Logger {
+        String name;
+    }
+    //instantiate local inner class in the method to use
+    Logger logger = new Logger();
 }
 ```
 
