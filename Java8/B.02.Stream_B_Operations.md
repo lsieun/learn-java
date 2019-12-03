@@ -20,8 +20,9 @@
   - [3.7. When to use findFirst and findAny](#37-when-to-use-findfirst-and-findany)
 - [4. Reducing](#4-reducing)
   - [4.1. Summing the elements](#41-summing-the-elements)
-  - [No initial value](#no-initial-value)
-  - [Maximum and minimum](#maximum-and-minimum)
+  - [4.2. No initial value](#42-no-initial-value)
+  - [4.3. Maximum and minimum](#43-maximum-and-minimum)
+  - [4.4. count](#44-count)
 
 <!-- /TOC -->
 
@@ -176,7 +177,7 @@ int sum = numbers.stream().reduce(0, Integer::sum);
 int product = numbers.stream().reduce(1, (a, b) -> a * b);
 ```
 
-### No initial value
+### 4.2. No initial value
 
 There’s also an overloaded variant of `reduce` that doesn’t take an **initial value**, but it returns an `Optional` object:
 
@@ -186,10 +187,16 @@ Optional<Integer> sum = numbers.stream().reduce((a, b) -> (a + b));
 
 Why does it return an `Optional<Integer>`? Consider the case when the stream contains no elements. The `reduce` operation can’t return a sum because it doesn’t have an initial value. This is why the result is wrapped in an `Optional` object to indicate that the sum may be absent.
 
-### Maximum and minimum
+### 4.3. Maximum and minimum
 
 ```java
 Optional<Integer> max = numbers.stream().reduce(Integer::max);
 Optional<Integer> min = numbers.stream().reduce(Integer::min);
 ```
 
+### 4.4. count
+
+```java
+int count = menu.stream().map(d -> 1).reduce(0, (a, b) -> a + b);
+long count = menu.stream().count();
+```

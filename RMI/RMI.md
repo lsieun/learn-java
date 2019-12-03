@@ -38,7 +38,7 @@ Writing distributed RMI applications usually consists of the following steps:
 - (6) Starting the server application on the remote machine
 - (7) Starting the Java application that is either located on the client machine
 
-## Important Observations:
+## Important Observations
 
 - (1) RMI is a pure java solution to Remote Procedure Calls (RPC) and is used to create distributed application in java.
 - (2) Stub and Skeleton objects are used for communication between client and server side.

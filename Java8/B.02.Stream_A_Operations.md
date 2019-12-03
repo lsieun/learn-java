@@ -12,7 +12,7 @@
   - [4.1. the source of the data](#41-the-source-of-the-data)
   - [4.2. operations change encounter order](#42-operations-change-encounter-order)
   - [4.3. eliminating ordering](#43-eliminating-ordering)
-- [stateless vs. stateful](#stateless-vs-stateful)
+- [5. stateless vs. stateful](#5-stateless-vs-stateful)
 
 <!-- /TOC -->
 
@@ -56,7 +56,10 @@ menu.stream().forEach(System.out::println);
 方法列表：
 
 - `forEach`
+- `findFirst`
+- `anyMatch`
 - `count`
+- `reduce`
 - `collect`
 
 ### 1.3. Working with streams
@@ -187,7 +190,7 @@ Some operations are more expensive on **ordered streams**. This problem can be s
 
 This can cause unexpected behavior, for example, `forEach` provides no guarantees as to encounter order if you’re using parallel streams.
 
-## stateless vs. stateful
+## 5. stateless vs. stateful
 
 There are issues about what **internal state** they need to operate.
 
