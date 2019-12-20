@@ -1,6 +1,7 @@
 package lsieun.generic.c_method;
 
 import java.util.Collection;
+import java.util.HashSet;
 
 public abstract class A_GenericsMethod {
 
@@ -18,5 +19,11 @@ public abstract class A_GenericsMethod {
         final R result = null;
         // Implementation here
         return result;
+    }
+
+    public static void invoke_generic_method() {
+        Collection<String> c = new HashSet<>();
+        Integer value = A_GenericsMethod.<String, Integer>performStaticAction(c);
+        System.out.println(value);
     }
 }

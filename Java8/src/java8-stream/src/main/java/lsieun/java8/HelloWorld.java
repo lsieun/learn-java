@@ -6,22 +6,12 @@ import java.util.function.Predicate;
 
 public class HelloWorld {
     public static void main(String[] args) {
-        final List<String> friends =
-                Arrays.asList("Brian", "Nate", "Neal", "Raju", "Sara", "Scott");
-        final List<String> editors =
-                Arrays.asList("Brian", "Jackie", "John", "Mike");
-        final List<String> comrades =
-                Arrays.asList("Kate", "Ken", "Nick", "Paula", "Zach");
-
-        final long countFriendsStartN =
-                friends.stream()
-                        .filter(checkIfStartsWith("N")).count();
-        final long countFriendsStartB =
-                friends.stream()
-                        .filter(checkIfStartsWith("B")).count();
+        sort(null, 1, 10);
     }
 
-    public static Predicate<String> checkIfStartsWith(final String letter) {
-        return name -> name.startsWith(letter);
+    private static void sort(long a[], int offset, int length) {
+        assert a != null;
+        assert offset >= 0 && offset <= a.length;
+        assert length >= 0 && length <= a.length - offset;
     }
 }

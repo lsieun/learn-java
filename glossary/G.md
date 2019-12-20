@@ -6,6 +6,6 @@ In computer programming, **glob** patterns specify sets of filenames with **wild
 
 The **glob** command, short for global, originates in the earliest versions of Bell Labs' Unix. Later, this functionality was provided as a library function, `glob()`, used by programs such as the shell.
 
+## Wild card (cards)
 
-
-
+A **wild card** in card games is one that may be used to represent any other playing card, sometimes with certain restrictions. A card which is not **wild** may be referred to as a **natural card**.
