@@ -8,13 +8,11 @@
 
 <!-- /TOC -->
 
-
 With **the release of Java 8**, interfaces have obtained new very interesting capabilities: **static methods**, **default methods** and **automatic conversion from lambdas (functional interfaces)**.
 
 ## 1. default methods
 
-In previous, we have emphasized on the fact that interfaces in Java can only declare methods but are not allowed to
-provide their implementations.
+In previous, we have emphasized on the fact that interfaces in Java can only declare methods but are not allowed to provide their implementations.
 
 > Java 8以前的情况
 

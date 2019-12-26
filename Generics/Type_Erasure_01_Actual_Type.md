@@ -2,9 +2,9 @@
 
 <!-- TOC -->
 
-- [1. What is the type erasure of a parameterized type?](#1-what-is-the-type-erasure-of-a-parameterized-type)
-- [2. What is the type erasure of a type parameter?](#2-what-is-the-type-erasure-of-a-type-parameter)
-- [3. What is the type erasure of a generic method?](#3-what-is-the-type-erasure-of-a-generic-method)
+- [1. parameterized type](#1-parameterized-type)
+- [2. type parameter](#2-type-parameter)
+- [3. generic method](#3-generic-method)
 - [4. Example](#4-example)
   - [4.1. T](#41-t)
   - [4.2. T extends Number](#42-t-extends-number)
@@ -13,9 +13,11 @@
 
 <!-- /TOC -->
 
-In the process of **type erasure** the compiler replaces **type parameters** by their **leftmost bound**, or type `Object` if no bound was specified.
+What is the type erasure of xxx?
 
-## 1. What is the type erasure of a parameterized type?
+## 1. parameterized type
+
+What is the type erasure of a parameterized type?
 
 **The type without any type arguments**.
 
@@ -32,7 +34,9 @@ Examples:
 
 The type erasure of a non-parameterized type is the type itself.
 
-## 2. What is the type erasure of a type parameter?
+## 2. type parameter
+
+What is the type erasure of a type parameter?
 
 **The type erasure of its leftmost bound, or type `Object` if no bound was specified**.
 
@@ -49,21 +53,19 @@ Examples:
 | `<T extends Object & Comparable<T>>`    | `Object`        |
 | `<S, T extends S>`                      | `Object,Object` |
 
-## 3. What is the type erasure of a generic method?
+## 3. generic method
 
-A method with the same name and the types of all method parameters replaced by their respective type erasures.
+What is the type erasure of a generic method?
 
-The erasure of a method signature is a signature consisting of the same name and the erasures of all the formal method parameter types.
+**A method with the same name and the types of all method parameters replaced by their respective type erasures**.
 
 Examples:
 
-| *parameterized method*                                       | *type erasure*                                               |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| `Iterator<E> iterator()`                                     | `Iterator iterator()`                                        |
-| `<T> T[] toArray(T[] a)`                                     | `Object[] toArray(Object[] a)`                               |
-| `<U> AtomicLongFieldUpdater<U> ` `newUpdater(Class<U> tclass, String fieldName)` | `AtomicLongFieldUpdater` `newUpdater(Class tclass,String fieldName)` |
-
-
+| *parameterized method* | *type erasure* |
+| --- | --- |
+| `Iterator<E> iterator()` | `Iterator iterator()` |
+| `<T> T[] toArray(T[] a)` | `Object[] toArray(Object[] a)` |
+| `<U> AtomicLongFieldUpdater<U> newUpdater(Class<U> tclass, String fieldName)` | `AtomicLongFieldUpdater newUpdater(Class tclass,String fieldName)` |
 
 ## 4. Example
 
@@ -75,8 +77,12 @@ public class HelloWorld<T> {
 }
 ```
 
-```txt
-FieldInfo {Value='value:Ljava/lang/Object;', AccessFlags='[ACC_PRIVATE]', Attrs='[Signature]', HexCode='00020004000500010006000000020007'}
+After Type Erasure:
+
+```java
+public class HelloWorld {
+    private Object value;
+}
 ```
 
 ### 4.2. T extends Number
@@ -87,13 +93,17 @@ public class HelloWorld<T extends Number> {
 }
 ```
 
-```txt
-FieldInfo {Value='value:Ljava/lang/Number;', AccessFlags='[ACC_PRIVATE]', Attrs='[Signature]', HexCode='00020004000500010006000000020007'}
+After Type Erasure:
+
+```java
+public class HelloWorld {
+    private Number value;
+}
 ```
 
 ### 4.3. T super Number
 
-尽管我很愿意写这样一个示例，但实际上却不能通过编译。
+尽管我很愿意写这样一个示例，但实际上却不能通过编译。换句话说，设置type parameter的下限（low bound）是没有意义的。
 
 ```java
 public class HelloWorld <T super Number> {

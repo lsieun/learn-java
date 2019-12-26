@@ -1,4 +1,4 @@
-package lsieun.generic.test;
+package lsieun.generic.bean;
 
 public class Box<T> {
     protected T value;
