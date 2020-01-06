@@ -4,7 +4,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class B_Constructor {
+public class D_Constructor {
     public static void main(String[] args){
         try {
             final Constructor<String> constructor = String.class.getConstructor(String.class);

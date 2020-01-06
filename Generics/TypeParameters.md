@@ -13,6 +13,34 @@
 
 <!-- /TOC -->
 
+第一，分清parameter和argument这两个概念：
+
+- parameter： 是一个placeholder，是一个容器
+- argument：是真正的参数
+
+```java
+public void test(Integer value) { // value是parameter
+   // do nothing
+}
+
+test(10); // 而10是argument
+```
+
+第二，分清type、variable parameter、local variable和type parameter这四个概念
+
+- type: 具体的类型，可以是Class(`Integer`)，可以是Interface(`Runnable`)，可以是Array(`int[]`)，可以是Enum（`TimeUnit`）
+- variable parameter：是一个变量（variable），同时也是一个容器（parameter）
+- type parameter：是一个类型（type），同时也是一个容器（parameter）
+- local variable：是一个变量（variable），是一个局部（local）的变量
+
+```java
+public void test_normal_method(Integer value) {// Integer是type，value是variable parameter
+   int i; // i是local variable
+}
+```
+
+![type vs type parameter](images/type_variable_parameter_and_type_parameter.png)
+
 ## 1. What is a type parameter?
 
 **A place holder for a type argument**.

@@ -1,38 +1,11 @@
-# Class
+package lsieun.reflection.a_clazz;
 
-## Difference Class
-
-```java
-Class<Character> characterClass = char.class;
-Class<Short> shortClass = short.class;
-Class<Integer> intClass = int.class;
-Class<Long> longClass = long.class;
-Class<Float> floatClass = float.class;
-Class<Double> doubleClass = double.class;
-
-Class<Void> voidClass = void.class;
-```
-
-原始类型（`int`）与包装类型（`Integer`）的Class对象是不同的：
-
-```java
-Class<Integer> intClass = int.class;
-Class<Integer> integerClass = Integer.class;
-System.out.println(intClass == integerClass); // false
-System.out.println(intClass == Integer.TYPE); // true
-System.out.println(intClass); // int
-System.out.println(Integer.class); // class java.lang.Integer
-```
-
-## ConstantPool
-
-```java
 import sun.reflect.ConstantPool;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class HelloWorld {
+public class I_ConstantPool {
     private static final Method targetMethod;
 
     static {
@@ -45,7 +18,7 @@ public class HelloWorld {
     }
 
     public static void main(String[] args) {
-        Class<?> clazz = HelloWorld.class;
+        Class<?> clazz = I_ConstantPool.class;
         ConstantPool cp = getConstantPool(clazz);
         System.out.println(cp.getSize());
         Class<?> class_at_n = cp.getClassAt(12);
@@ -64,4 +37,3 @@ public class HelloWorld {
         throw new RuntimeException("Something Wrong");
     }
 }
-```

@@ -4,7 +4,7 @@
 
 **A warning** by which the compiler indicates that it cannot ensure **type safety**.
 
-The term "unchecked" warning is misleading.  It does not mean that the warning is unchecked in any way.  The term "unchecked" refers to the fact that **the compiler and the runtime system do not have enough type information to perform all type checks that would be necessary to ensure type safety**. In this sense, certain operations are "unchecked".
+The term "unchecked" warning is misleading. It does not mean that the warning is unchecked in any way. The term "unchecked" refers to the fact that **the compiler and the runtime system do not have enough type information to perform all type checks that would be necessary to ensure type safety**. In this sense, certain operations are "unchecked".
 
 The most common source of "unchecked" warnings is **the use of raw types**.  "unchecked" warnings are issued when an object is accessed through a raw type variable, because the raw type does not provide enough type information to perform all necessary type checks.
 

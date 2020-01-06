@@ -4,27 +4,53 @@
 
 - [1. type parameter](#1-type-parameter)
 - [2. concrete parameterized type](#2-concrete-parameterized-type)
-  - [2.1. Can I create an array whose component type is a concrete parameterized type?](#21-can-i-create-an-array-whose-component-type-is-a-concrete-parameterized-type)
-  - [2.2. Can I declare a reference variable of an array type whose component type is a concrete parameterized type?](#22-can-i-declare-a-reference-variable-of-an-array-type-whose-component-type-is-a-concrete-parameterized-type)
+  - [2.1. array object](#21-array-object)
+    - [2.1.1. About Array](#211-about-array)
+    - [2.1.2. Problems arise](#212-problems-arise)
+  - [2.2. array variable](#22-array-variable)
 - [3. bounded wildcard parameterized type](#3-bounded-wildcard-parameterized-type)
-  - [3.1. Can I create an array whose component type is a bounded wildcard parameterized type?](#31-can-i-create-an-array-whose-component-type-is-a-bounded-wildcard-parameterized-type)
-  - [3.2. Can I declare a reference variable of an array type whose component type is a bounded wildcard parameterized type?](#32-can-i-declare-a-reference-variable-of-an-array-type-whose-component-type-is-a-bounded-wildcard-parameterized-type)
+  - [3.1. array object](#31-array-object)
+  - [3.2. array variable](#32-array-variable)
 - [4. unbounded wildcard parameterized type](#4-unbounded-wildcard-parameterized-type)
-  - [4.1. Why is it allowed to create an array whose component type is an unbounded wildcard parameterized type?](#41-why-is-it-allowed-to-create-an-array-whose-component-type-is-an-unbounded-wildcard-parameterized-type)
-  - [4.2. Can I declare a reference variable of an array type whose component type is an unbounded wildcard parameterized type?](#42-can-i-declare-a-reference-variable-of-an-array-type-whose-component-type-is-an-unbounded-wildcard-parameterized-type)
-- [5. workaround](#5-workaround)
-  - [5.1. How can I work around the restriction that there are no arrays whose component type is a concrete parameterized type?](#51-how-can-i-work-around-the-restriction-that-there-are-no-arrays-whose-component-type-is-a-concrete-parameterized-type)
+  - [4.1. array object](#41-array-object)
+  - [4.2. array variable](#42-array-variable)
+- [5. Workaround](#5-workaround)
+  - [5.1. three workarounds](#51-three-workarounds)
   - [5.2. Raw types](#52-raw-types)
   - [5.3. unbounded wildcard parameterized type](#53-unbounded-wildcard-parameterized-type)
   - [5.4. collection](#54-collection)
+  - [5.5. Recap](#55-recap)
 
 <!-- /TOC -->
 
+In order to prevent programs that are not type-safe **all arrays holding elements whose type is a concrete parameterized type are illegal**. For the same reason, **arrays holding elements whose type is a bounded wildcard parameterized type are banned**, too. **Only arrays with an unbounded wildcard parameterized type as the component type are permitted**.
+
+More generally, **reifiable types are permitted as component type of arrays, while arrays with a non-reifiable component type are illegal**
+
+- reifiable types
+  - `List` (Raw Type)
+  - `List<?>` (Unbounded Wildcard Parameterized type)
+- non-reifiable type
+  - `T` (Type Parameter)
+  - `List<String>` (Concrete Parameterized Type)
+  - `List<? extends Number>` (Bounded Wildcard Parameterized Type)
+
+| Types                    | Array Variable | Array Object |
+| ------------------------ | -------------- | ------------ |
+| `List`                   | :worried:      | :worried:    |
+| `List<String>`           | :worried:      | :imp:        |
+| `List<? extends Number>` | :worried:      | :imp:        |
+| `List<?>`                | :smile:        | :smile:      |
+| `T`                      | :smile:        | :imp:        |
+
 ## 1. type parameter
+
+- array variables: OK
+- array object: No
 
 Can I create an array whose component type is a type parameter? **No, because the compiler does not know how to create an array of an unknown component type**.
 
-We can declare array variables whose component type is a type parameter, but we cannot create the corresponding array objects. The compiler does not know how to create an array of an unknown component type.
+We can declare **array variables** whose component type is a **type parameter**, but we cannot create the corresponding **array objects**. The compiler does not know how to create an array of an unknown component type.
 
 Example (before type erasure):
 
@@ -45,7 +71,7 @@ Example (after a conceivable translation by type erasure):
 class Sequence {
   ...
   public Object [] asArray() {
-    Object [] array = new Object [size];
+    Object [] array = new Object[size];
     ...
     return array;
   }
@@ -84,9 +110,12 @@ By the way, the unchecked warning is harmless and can be ignored. It stems from 
 
 ## 2. concrete parameterized type
 
-### 2.1. Can I create an array whose component type is a concrete parameterized type?
+### 2.1. array object
 
-**No, because it is not type-safe**.
+Can I create an array whose component type is a concrete parameterized type?
+ **No, because it is not type-safe**.
+
+#### 2.1.1. About Array
 
 **Arrays are covariant**, which means that **an array of supertype references is a supertype of an array of subtype references**. That is, `Object[]` is a supertype of `String[]` and a string array can be accessed through a reference variable of type `Object[]`.
 
@@ -97,7 +126,7 @@ Object[] objArr = new String[10];  // fine
 objArr[0] = new String();
 ```
 
-In addition, arrays carry runtime type information about their component type, that is, about the type of the elements contained. The runtime type information regarding the component type is used when elements are stored in an array in order to ensure that no "alien" elements can be inserted.
+In addition, **arrays carry runtime type information about their component type**, that is, about the type of the elements contained. The runtime type information regarding the component type is used when elements are stored in an array in order to ensure that no "alien" elements can be inserted.
 
 Example (of array store check):
 
@@ -106,9 +135,11 @@ Object[] objArr = new String[10];
 objArr[0] = new Long(0L); // compiles; fails at runtime with ArrayStoreException
 ```
 
-The reference variable of type `Object[]` refers to a `String[]`, which means that only strings are permitted as elements of the array. When an element is inserted into the array, the information about the array's component type is used to perform a type check - the so-called array store check. In our example the array store check will fail because we are trying to add a `Long` to an array of `String`s. Failure of the array store check is reported by means of a `ArrayStoreException`.
+The reference variable of type `Object[]` refers to a `String[]`, which means that only strings are permitted as elements of the array. When an element is inserted into the array, the information about the array's component type is used to perform a type check - the so-called **array store check**. In our example the array store check will fail because we are trying to add a `Long` to an array of `String`s. Failure of the array store check is reported by means of a `ArrayStoreException`.
 
-Problems arise when an array holds elements whose type is a concrete parameterized type. Because of type erasure, parameterized types do not have exact runtime type information. As a consequence, the array store check does not work because it uses the dynamic type information regarding the array's (non-exact) component type for the array store check.
+#### 2.1.2. Problems arise
+
+Problems arise when an array holds elements whose type is a concrete parameterized type. **Because of type erasure, parameterized types do not have exact runtime type information. As a consequence, the array store check does not work** because it uses the dynamic type information regarding the array's (non-exact) component type for the array store check.
 
 Example (of array store check in case of parameterized component type):
 
@@ -120,7 +151,7 @@ objArr[0] = new Pair<String,String>("",""); // should fail, but would succeed
 
 If arrays of concrete parameterized types were allowed, then a reference variable of type `Object[]` could refer to a `Pair<Integer,Integer>[]`, as shown in the example. At runtime an array store check must be performed when an array element is added to the array. Since we are trying to add a `Pair<String,String>` to a `Pair<Integer,Integer>[]` we would expect that the type check fails. However, the JVM cannot detect any type mismatch here: at runtime, after type erasure, `objArr` would have the dynamic type `Pair[]` and the element to be stored has the matching dynamic type `Pair`. Hence the store check succeeds, although it should not.
 
-If it were permitted to declare arrays that holds elements whose type is a concrete parameterized type we would end up in **an unacceptable situation**. The array in our example would contain different types of pairs instead of pairs of the same type. This is in contradiction to **the expectation** that arrays hold elements of the same type (or subtypes thereof).  This undesired situation would most likely  lead to program failure some time later, perhaps when a method is invoked on the array elements.
+If it were permitted to declare arrays that holds elements whose type is a concrete parameterized type we would end up in **an unacceptable situation**. The array in our example would contain different types of pairs instead of pairs of the same type. This is in contradiction to **the expectation** that arrays hold elements of the same type (or subtypes thereof). This undesired situation would most likely lead to program failure some time later, perhaps when a method is invoked on the array elements.<sub>我的理解就是，“人们心中总会对事物的有所期待”，当“这种期待”与现实的真实结果不一致的时候，就容易让人们（的思维逻辑）感到困惑。为了解决这个困惑，JVM的实现上选择了“不能让concrete parameterized type创建数组”</sub>
 
 Example (of subsequent failure):
 
@@ -133,11 +164,11 @@ Integer i = intPairArr[0].getFirst(); // fails at runtime with ClassCastExceptio
 
 The method `getFirst` is applied to the first element of the array and it returns a `String` instead of an `Integer` because the first element in the array `intPairArr` is a pair of strings, and not a pair of integers as one would expect. The innocent-looking assignment to the `Integer` variable `i` will fail with a `ClassCastException`, although no cast expression is present in the source code. Such an unexpected `ClassCastException` is considered a violation of type-safety.
 
-In order to prevent programs that are not type-safe **all arrays holding elements whose type is a concrete parameterized type are illegal**. For the same reason, **arrays holding elements whose type is a wildcard parameterized type are banned**, too. **Only arrays with an unbounded wildcard parameterized type as the component type are permitted**. More generally, **reifiable types are permitted as component type of arrays, while arrays with a non-reifiable component type are illegal**.
+In order to prevent programs that are not type-safe **all arrays holding elements whose type is a concrete parameterized type are illegal**. For the same reason, **arrays holding elements whose type is a bounded wildcard parameterized type are banned**, too. **Only arrays with an unbounded wildcard parameterized type as the component type are permitted**. More generally, **reifiable types are permitted as component type of arrays, while arrays with a non-reifiable component type are illegal**.
 
-### 2.2. Can I declare a reference variable of an array type whose component type is a concrete parameterized type?
+### 2.2. array variable
 
-**Yes, you can, but you should not, because it is neither helpful nor type-safe**.
+Can I declare a reference variable of an array type whose component type is a concrete parameterized type? **Yes, you can, but you should not, because it is neither helpful nor type-safe**.
 
 You can declare a reference variable of an array type whose component type is a concrete parameterized type. Arrays of such a type must not be created. Hence, this reference variable cannot refer to an array of its type. All that it can refer to is `null`, **an array whose component type is a non-parameterized subtype of the concrete parameterized type**, or **an array whose component type is the corresponding raw type**. Neither of these cases is overly useful, yet they are permitted.
 
@@ -162,28 +193,30 @@ Which raises the question: how useful is such an array variable if it never refe
 Example (of an array reference variable refering to array of subtypes; not recommended):
 
 ```java
-void printArrayOfStringPairs(Pair<String,String>[] pa) {
-  for (Pair<String,String> p : pa)
-    if (p != null)
-      System.out.println(p.getFirst()+" "+p.getSecond()); 
+void printArrayOfStringPairs(Pair<String, String>[] array) {
+    for (Pair<String, String> p : array) {
+        if (p != null) {
+            System.out.println(p.getFirst() + " " + p.getSecond());
+        }
+    }
 }
 
-Pair<String,String>[] createArrayOfStringPairs() {
-  Pair<String,String>[] arr = new Name[2];
-  arr[0] = new Name("Angelika","Langer");   // fine
-  arr[1] = new Pair<String,String>("a","b");  // fine (causes ArrayStoreException)
-  return arr;
+Pair<String, String>[] createArrayOfStringPairs() {
+    Pair<String, String>[] arr = new Name[2];
+    arr[0] = new Name("Hello", "World");         // fine
+    arr[1] = new Pair<String, String>("a", "b"); // fine (but runtime will causes ArrayStoreException)
+    return arr;
 }
 
-void extractStringPairsFromArray(Pair<String,String>[] arr) {
-  Name name = (Name) arr[0]; // fine
-  Pair<String,String> p1 = arr[1];    // fine
+void extractStringPairsFromArray(Pair<String, String>[] arr) {
+    Name name = (Name) arr[0];        // fine
+    Pair<String, String> p1 = arr[1]; // fine
 }
 
 void test() {
-  Pair<String,String>[] arr = createArrayOfStringPairs ();
-  printArrayOfStringPairs (arr);
-  extractStringPairsFromArray(arr);
+    Pair<String, String>[] arr = createArrayOfStringPairs();
+    printArrayOfStringPairs(arr);
+    extractStringPairsFromArray(arr);
 }
 ```
 
@@ -196,40 +229,42 @@ Also, remember that a variable of type `Pair<String,String>[]` can never refer t
 Example (improved):
 
 ```java
-void printArrayOfStringPairs(Pair<String,String>[] pa) {
-  for (Pair<String,String> p : pa)
-    if (p != null)
-      System.out.println(p.getFirst()+" "+p.getSecond()); 
+void printArrayOfStringPairs(Pair<String, String>[] array) {
+    for (Pair<String, String> p : array) {
+        if (p != null) {
+            System.out.println(p.getFirst() + " " + p.getSecond());
+        }
+    }
 }
 
 Name[] createArrayOfStringPairs() {
-  Name[] arr = new Name[2] ;
-  arr[0] = new Name("Angelika","Langer");   // fine
-  arr[1] = new Pair<String,String>("a","b");  // error
-  return arr;
+    Name[] arr = new Name[2];
+    arr[0] = new Name("Hello", "World");         // fine
+    arr[1] = new Pair<String, String>("a", "b"); // error
+    return arr;
 }
 
 void extractStringPairsFromArray(Name[] arr) {
-  Name name = arr[0];               // fine (needs no cast)
-  Pair<String,String> p1 = arr[1];    // fine
+    Name name = (Name) arr[0];        // fine
+    Pair<String, String> p1 = arr[1]; // fine
 }
 
 void test() {
-  Name[] arr = createArrayOfStringPairs ();
-  printArrayOfStringPairs (arr);
-  extractStringPairsFromArray(arr);
+    Name[] arr = createArrayOfStringPairs();
+    printArrayOfStringPairs(arr);
+    extractStringPairsFromArray(arr);
 }
 ```
 
 Since an array reference variable whose component type is a concrete parameterized type can never refer to an array of its type, such a reference variable does not really make sense.  Matters are even worse than in the example discussed above, when we try to have the variable refer to an array of the **raw type** instead of a subtype. First, it leads to **numerous "unchecked" warnings** because we are mixing use of raw and parameterized type. Secondly, and more importantly, **this approach is not type-safe** and suffers from all the deficiencies that lead to the ban of arrays of concrete instantiation in the first place.
 
-No matter how you put it, you should better refrain from using array reference variable whose component type is a concrete parameterized type. Note, that the same holds for array reference variable whose component type is a wildcard parameterized type. **Only array reference variable whose component type is an unbounded wildcard parameterized type make sense**. This is because an unbounded wildcard parameterized type is a reifiable type and arrays with a reifiable component type can be created; the array reference variable can refer to an array of its type and the deficiencies discussed above simply do not exist for unbounded wildcard arrays.
+No matter how you put it, you should better refrain from using array reference variable whose component type is a **concrete parameterized type**. Note, that the same holds for array reference variable whose component type is a **bounded wildcard parameterized type**. **Only array reference variable whose component type is an unbounded wildcard parameterized type make sense**. This is because an **unbounded wildcard parameterized type** is a reifiable type and arrays with a reifiable component type can be created; the array reference variable can refer to an array of its type and the deficiencies discussed above simply do not exist for unbounded wildcard arrays.
 
 ## 3. bounded wildcard parameterized type
 
-### 3.1. Can I create an array whose component type is a bounded wildcard parameterized type?
+### 3.1. array object
 
-**No, because it is not type-safe**.
+Can I create an array whose component type is a bounded wildcard parameterized type? **No, because it is not type-safe**.
 
 The rationale is the same as for concrete parameterized types: a wildcard parameterized type, unless it is an unbounded wildcard parameterized type, is a non-reifiable type and arrays of non-reifiable types are not type-safe.
 
@@ -245,9 +280,9 @@ numPairArr[0] = new Pair<String,String>("",""); // should fail, but would succee
 
 The array store check would have to check whether the pair added to the array is of type `Pair<? extends Number,? extends Number>` or of a subtype thereof. Obviously, a `Pair<String,String>` is not of a matching type and should be rejected with an `ArrayStoreException`. But the array store check does not detect any type mismatch, because the JVM can only check the array's runtime component type, which is `Pair[]` after type erasure, against the element's runtime type, which is `Pair` after type erasure.
 
-### 3.2. Can I declare a reference variable of an array type whose component type is a bounded wildcard parameterized type?
+### 3.2. array variable
 
-**Yes, you can, but you should not, because it is neither helpful nor type-safe**.
+Can I declare a reference variable of an array type whose component type is a bounded wildcard parameterized type? **Yes, you can, but you should not, because it is neither helpful nor type-safe**.
 
 The rationale is the same as for concrete parameterized types: a wildcard parameterized type, unless it is an unbounded wildcard parameterized type, is a non-reifiable type and arrays of non-reifiable types must not be created. Hence it does not make sense to have a reference variable of such an array type because it can never refer to array of its type. All that it can refer to is `null`, **an array whose component type is a non-parameterized subtype of the instantiations that belong to the type family denoted by the wildcard**, or **an array whose component type is the corresponding raw type**. Neither of these cases is overly useful, yet they are permitted.
 
@@ -284,9 +319,9 @@ In essence, you should better refrain from using array reference variable whose 
 
 ## 4. unbounded wildcard parameterized type
 
-### 4.1. Why is it allowed to create an array whose component type is an unbounded wildcard parameterized type?
+### 4.1. array object
 
-**Because it is type-safe**.
+Why is it allowed to create an array whose component type is an unbounded wildcard parameterized type? **Because it is type-safe**.
 
 The rationale is related to the rule for other instantiations of a generic type: **an unbounded wildcard parameterized type is a reifiable type** and **arrays of reifiable types are type-safe**, in contrast to arrays of non-reifiable types, which are not safe and therefore illegal. The problem with the unreliable array store check (the reason for banning arrays with a non-reifiable component type) does not occur if the component type is reifiable.
 Example (of array of unbounded wildcard parameterized type):
@@ -300,9 +335,9 @@ pairArr[0] = new ArrayList<String>();          // fails with ArrayStoreException
 
 The array store check must check whether the element added to the array is of type `Pair<?,?>` or of a subtype thereof. In the example the two pairs, although of different type, are perfectly acceptable array elements. And indeed, the array store check, based on the non-exact runtime type `Pair`, accepts the two pairs and correctly sorts out the "alien" `ArrayList` object as illegal by raising an `ArrayStoreException`. The behavior is exactly the same as for an array of the raw type, which is not at all surprising because the raw type is a reifiable type as well.
 
-### 4.2. Can I declare a reference variable of an array type whose component type is an unbounded wildcard parameterized type?
+### 4.2. array variable
 
-**Yes**.
+Can I declare a reference variable of an array type whose component type is an unbounded wildcard parameterized type? **Yes**.
 
 **An array reference variable whose component type is an unbounded wildcard parameterized type** (such as `Pair<?,?>[]`) **is permitted and useful**. This is in contrast to array reference variables with a component type that is a concrete or bounded wildcard parameterized type (such as `Pair<Long,Long>[]` or `Pair<? extends Number,? extends Number>[]`); the array reference variable is permitted, but not overly helpful.
 
@@ -321,9 +356,11 @@ Pair<Double,Double>[] arr
 
 The examples above demonstrate that unbounded wildcard parameterized types are permitted as component type of an array, while other instantiations are not permitted. In the case of a non-reifiable component type the array reference variable can be declared, but it cannot refer to an array of its type. At most it can refer to an array of a non-parameterized subtype (or an array of the corresponding raw type), which opens opportunities for mistakes, but does not offer any advantage.
 
-## 5. workaround
+## 5. Workaround
 
-### 5.1. How can I work around the restriction that there are no arrays whose component type is a concrete parameterized type?
+### 5.1. three workarounds
+
+How can I work around the restriction that there are no arrays whose component type is a concrete parameterized type?
 
 You can use **arrays of raw types**, **arrays of unbounded wildcard parameteriezd types**, or **collections of concrete parameteriezd types** as a workaround.
 
@@ -383,7 +420,7 @@ This has numerous side effects. When elements are fetched from the `Pair[]` only
 
 ### 5.3. unbounded wildcard parameterized type
 
-Let us see whether an array of an unbounded wildcard parameterized type would be a better choice.
+Let us see whether an array of an **unbounded wildcard parameterized type** would be a better choice.
 
 Example (of array of unbounded wildcard parameterized type):
 
@@ -412,9 +449,9 @@ required: Pair<java.lang.Integer,java.lang.Integer>
 
 A `Pair<?,?>[]` contains a mix of arbitrary pair types; it is not homogenous and semantically similar to the raw type array `Pair[]`.  When we retrieve elements from the array we receive references of type `Pair<?,?>`, instead of type `Pair` in the raw type case. **The key difference is that the compiler issues an error for the wildcard pair where it issues "unchecked" warnings for the raw type pair**. In our example, we cannot assign the the `Pair<?,?>` to the more specific `Pair<Integer,Integer>`, that we really wanted to use. Also, various operations on the `Pair<?,?>` would be rejected as errors.
 
-As we can see, arrays of raw types and unbounded wildcard parameterized types are very different from the illegal arrays of a concrete parameterized type. An array of a concrete parameterized type would be a homogenous sequence of elements of the exact same type. In constrast, arrays of raw types and unbounded wildcard parameterized type are heterogenous sequences of elements of different types. The compiler cannot prevent that they contain different instantiations of the generic type.
+As we can see, arrays of **raw types** and **unbounded wildcard parameterized types** are very different from the illegal arrays of a **concrete parameterized type**. An array of a concrete parameterized type would be a homogenous sequence of elements of the exact same type. In constrast, arrays of raw types and unbounded wildcard parameterized type are heterogenous sequences of elements of different types. The compiler cannot prevent that they contain different instantiations of the generic type.
 
-By using arrays of raw types or unbounded wildcard parameterized types we give away the static type checks that a homogenous sequence would come with. As a result we must use explicit casts or we risk unexpected `ClassCastException`s. In the case of the unbounded wildcard parameterized type we are additionally restricted in how we can use the array elements, because the compiler prevents certain operations on the unbounded wildcard parameterized type. In essence, arrays of raw types and unbounded wildcard parameterized types are semantically very different from what we would express with an array of a concrete parameterized type. For this reason they are not a good workaround and only acceptable when the superior efficiency of arrays (as compared to collections) is of paramount importance.
+By using arrays of raw types or unbounded wildcard parameterized types we give away the static type checks that a homogenous sequence would come with. As a result we must use explicit casts or we risk unexpected `ClassCastException`s. In the case of the **unbounded wildcard parameterized type** we are additionally **restricted in how we can use the array elements**, because the compiler prevents certain operations on the unbounded wildcard parameterized type. In essence, arrays of raw types and unbounded wildcard parameterized types are semantically very different from what we would express with an array of a concrete parameterized type. For this reason they are not a good workaround and only acceptable when the superior efficiency of arrays (as compared to collections) is of paramount importance.
 
 ### 5.4. collection
 
@@ -432,8 +469,8 @@ static void test() {
 }
 
 static void addElements(List<?> objArr) {
-  objArr. add (0,new Pair<Integer,Integer>(0,0)); // error
-  objArr. add (1,new Pair<String,String>("","")); // error
+  objArr.add (0,new Pair<Integer,Integer>(0,0)); // error
+  objArr.add (1,new Pair<String,String>("","")); // error
 }
 ```
 
@@ -456,4 +493,6 @@ The different type relationships, for instance, can be observed in the example a
 
 The most compelling argument against collections is **efficiency**; arrays are without doubt more efficient. The argument in favor of collections is **type safety**; the compiler performs all necessary type checks to ensure that the collection is a homogenous sequence.
 
+### 5.5. Recap
 
+Depending on the situation, an array of a **unbouned wildcard parameterized type** may be a viable alternative to the illegal array of a **concrete (or bounded wildcard) parameterized type**. If full access to the referenced element is needed, this approach does not work and a better solution would be use of a **collection** instead of an **array**.

@@ -1,5 +1,7 @@
 package lsieun.generic.bean;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 
 public class Pair<X, Y> {

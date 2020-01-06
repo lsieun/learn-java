@@ -106,3 +106,6 @@ Type Cast： Raw Type, Unbounded wildcard, Bounded, Concreted
 
 Type Erasure让我想起了《丑八怪 - 薛之谦》中的“如果剧本写好 谁比谁高贵”
 
+## Reference
+
+- [Java Generics FAQs - Frequently Asked Questions](http://www.angelikalanger.com/GenericsFAQ/JavaGenericsFAQ.html)
