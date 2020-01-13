@@ -20,7 +20,6 @@ Java提供了4个基本Annotation：
 
 上面4个基本Annotation中的`@SafeVarargs`是Java 7新增的。这4个基本的Annotation都定义在`java.lang`包下。
 
-
 ## 1. `@Override`
 
 `@Override`的作用是告诉编译器检查这个方法，保证**父类**要包含一个被该方法重写的方法；否则，就会编译出错。

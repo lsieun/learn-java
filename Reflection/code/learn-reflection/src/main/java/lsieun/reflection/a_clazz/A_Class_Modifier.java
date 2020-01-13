@@ -8,6 +8,9 @@ public class A_Class_Modifier {
     public static void main(String[] args) {
         Class<?> clazz = Example_A_Modifier.class;
         int modifiers = clazz.getModifiers();
+        System.out.println("modifiers = " + modifiers);
+        System.out.println("modifiers = " + Integer.toBinaryString(modifiers));
+        System.out.println("modifiers = " + Integer.toHexString(modifiers));
         System.out.println(Modifier.toString(modifiers));
     }
 }

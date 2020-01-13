@@ -49,7 +49,7 @@ public class SerializableExample implements Serializable {
         SerializableExample instance = new SerializableExample();
         instance.setName("Jerry");
         instance.setAge(1);
-        instance.write(filepath, instance);
+        write(filepath, instance);
     }
 
     public static void testRead(String filepath) {
