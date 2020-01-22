@@ -39,4 +39,5 @@ Note: The terms "Runtime" and "Unchecked" are often used interchangeably and ref
 
 ## 4. Reference
 
+- [Lesson: Exceptions](https://docs.oracle.com/javase/tutorial/essential/exceptions/index.html) 这是Oracle的关于Exception的教程，因此放在第一个
 - [Exception Handling in Java: A Complete Guide with Best and Worst Practices](https://stackabuse.com/exception-handling-in-java-a-complete-guide-with-best-and-worst-practices/)

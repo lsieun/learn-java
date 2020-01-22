@@ -1,25 +1,26 @@
 package lsieun.except;
 
-import java.io.FileNotFoundException;
+import java.io.*;
+import java.util.List;
 
 public class HelloWorld {
-    public static int get() {
-        int a = 10;
-        int b = 0;
+
+    public void writeList() {
         try {
+            int a = 10;
+            int b = 3;
             int c = a / b;
-            return c;
+            InputStream in = new FileInputStream("");
+            int ch = in.read();
+            in.close();
+        } catch (ArithmeticException | IOException e) {
+            e.printStackTrace();
         }
-        catch (ArithmeticException ex) {
-            return 400;
-        }
-        finally {
-            return 500;
-        }
+
+
     }
 
     public static void main(String[] args) {
-        int result = get();
-        System.out.println(result);
+        System.out.println("Hello");
     }
 }
