@@ -1,18 +1,8 @@
 package lsieun.generic;
 
-import java.io.IOException;
-import java.util.Date;
-
-public class HelloWorld {
-
-
-
-
-
-
-    public Number process (String str, Date date ) throws IOException {
-        return null;
+public class HelloWorld extends SuperClass {
+    @Override
+    public String getValue(String str) {
+        return super.getValue(str);
     }
-
-
 }

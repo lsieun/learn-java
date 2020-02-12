@@ -15,5 +15,3 @@ The runtime system searches the **call stack** for a method that contains a bloc
 ![](images/exceptions-errorOccurs.gif)
 
 If the runtime system exhaustively searches all the methods on the call stack without finding an appropriate exception handler, as shown in the next figure, the runtime system (and, consequently, the program) terminates.<sub>这段主要讲：如果找不到合适的exception handler，runtime system就会terminate</sub>
-
-

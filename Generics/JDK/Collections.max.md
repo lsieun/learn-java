@@ -27,7 +27,7 @@ Example (after type erasure):
 
 ```java
 class Collections {
-  public static Comparable max( Collection coll)  {...}
+  public static Comparable max(Collection coll)  {...}
   ...
 }
 ```
@@ -50,7 +50,7 @@ Example (after type erasure):
 
 ```java
 class Collections {
-  public static Object max( Collection coll)  {...}
+  public static Object max(Collection coll)  {...}
   ...
 }
 ```
