@@ -1,7 +1,5 @@
 # Define Annotation
 
-
-
 Let us take a look at the simplest annotation declaration possible:
 
 ```java

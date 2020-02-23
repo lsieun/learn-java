@@ -2,30 +2,48 @@
 
 <!-- TOC -->
 
-- [Type System](#type-system)
-- [3. Java Compiler](#3-java-compiler)
-  - [3.1. Types of Expressions](#31-types-of-expressions)
-  - [3.2. Type Checking](#32-type-checking)
-  - [3.3. Type Safety](#33-type-safety)
-  - [Consequence](#consequence)
-  - [3.4. Strong Typing](#34-strong-typing)
-  - [Dynamic typing vs. static typing](#dynamic-typing-vs-static-typing)
-  - [3.5. Difficulties in Static Type Checking](#35-difficulties-in-static-type-checking)
-  - [3.6. What belongs to type checking](#36-what-belongs-to-type-checking)
-- [4. Aggregates: arrays](#4-aggregates-arrays)
-- [5. Reference](#5-reference)
+- [1. Type System](#1-type-system)
+- [2. Java Compiler](#2-java-compiler)
+  - [2.1. Types of Expressions](#21-types-of-expressions)
+  - [2.2. Type Checking](#22-type-checking)
+  - [2.3. Type Safety](#23-type-safety)
+  - [2.4. Consequence](#24-consequence)
+  - [2.5. Strong Typing](#25-strong-typing)
+  - [2.6. Dynamic typing vs. static typing](#26-dynamic-typing-vs-static-typing)
+  - [2.7. Difficulties in Static Type Checking](#27-difficulties-in-static-type-checking)
+  - [2.8. What belongs to type checking](#28-what-belongs-to-type-checking)
+- [3. Aggregates: arrays](#3-aggregates-arrays)
+- [4. Reference](#4-reference)
 
 <!-- /TOC -->
 
-## Type System
+## 1. Type System
 
 The main purpose of a type system is to reduce possibilities for bugs in computer programs by defining interfaces between different parts of a computer program, and then checking that the parts have been connected in a consistent way. This checking can happen statically (at compile time), dynamically (at run time), or as a combination of both.
 
-## 3. Java Compiler
+> The types of the Java programming language are divided into **two categories**: primitive types and reference types. The **primitive types** are the `boolean` type and the numeric types. The numeric types are the integral types `byte`, `short`, `int`, `long`, and `char`, and the floating-point types `float` and `double`. **The reference** types are class types, interface types, and array types. There is also a special null type. An object is a dynamically created instance of a class type or a dynamically created array. The values of a reference type are references to objects. All objects, including arrays, support the methods of class `Object`. String literals are represented by `String` objects.
+
+- types of Java
+  - primitive types
+    - boolean type
+    - numeric types
+      - byte
+      - short
+      - int
+      - long
+      - char
+      - float
+      - double
+  - reference types
+    - class types
+    - interface types
+    - array types
+
+## 2. Java Compiler
 
 越早发现错误越好：越早发现错误，越早修改错误代码。
 
-### 3.1. Types of Expressions
+### 2.1. Types of Expressions
 
 - If `f` has type `S -> T` and `x` has type `S`, then `f(x)` has type `T`
   - type of `3 div 2` is `int`
@@ -35,7 +53,7 @@ The main purpose of a type system is to reduce possibilities for bugs in compute
   - 3.5 div 2
   - “abc”+ 3
 
-### 3.2. Type Checking
+### 2.2. Type Checking
 
 **Type checking** is all about ensuring that the program is **type-safe**, minimizing the possibility of **type errors**.
 
@@ -55,7 +73,7 @@ Modern PLs often designed to do type checking (as much as possible) during compi
 
 Type checking is the process of verifying and enforcing the constraints of types. Type Checking may occur either at compile-time (a static check) or at run-time (dynamic check).
 
-### 3.3. Type Safety
+### 2.3. Type Safety
 
 A **type safe** program executes on all inputs without type errors
 
@@ -77,11 +95,11 @@ if __name__ == '__main__':
 
 Note that assignment to `x` is never executed so program is **type safe** (but contains an error).
 
-### Consequence
+### 2.4. Consequence
 
 When a program is considered not to be type-safe, there is no single standard course of action that happens upon encountering a type error. Many Programming languages throw type errors which halts the run-time or compilation of the program, depending on the language type — static or dynamically typed.
 
-### 3.4. Strong Typing
+### 2.5. Strong Typing
 
 **Strongly typed PL**: By definition, PL requires all programs to be type checkable
 
@@ -90,7 +108,7 @@ When a program is considered not to be type-safe, there is no single standard co
 - **Dynamically strongly typed PL** - Operations include code to check runtime types of operands, if type cannot be determined at compile-time
   - Pascal, Java
 
-### Dynamic typing vs. static typing
+### 2.6. Dynamic typing vs. static typing
 
 这个问题，讨论的是一个variable，它的类型到底是不是固定的。
 
@@ -98,11 +116,11 @@ When a program is considered not to be type-safe, there is no single standard co
 
 Statically-typed languages require you to declare the data types of your variables before you use them, while dynamically-typed languages do not.
 
-### 3.5. Difficulties in Static Type Checking
+### 2.7. Difficulties in Static Type Checking
 
 If validity of expression depends not only on **the types of the operands** but on their **values**, **static type checking** cannot be accomplished
 
-### 3.6. What belongs to type checking
+### 2.8. What belongs to type checking
 
 对于一个Type来说，它由两部分组成：value和operator。以primitive type的int来说，它包含了2^32个值，同时也包含了`+`、`-`、`*`、`/`等类型的操作；以Class来说，它的value就是各个instance，而它的operator就是Class内定义的方法。因此说，Type由value和operator两部分组成。
 
@@ -123,9 +141,9 @@ Languages differ greatly in how strict their static semantics is: none of the th
 
 In general, the more there is static checking in the compiler, the less need there is for manual debugging.
 
-## 4. Aggregates: arrays
+## 3. Aggregates: arrays
 
-## 5. Reference
+## 4. Reference
 
 - [Wiki: Type system](https://en.wikipedia.org/wiki/Type_system)
 - [Types](https://www.cs.rutgers.edu/~lou/314-f04-slides/topic11-typesA.pdf) 这是一个PDF文档

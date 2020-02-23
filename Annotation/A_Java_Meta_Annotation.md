@@ -3,10 +3,10 @@
 <!-- TOC -->
 
 - [1. Intro](#1-intro)
-  - [1.2. Annotations and retention policy](#12-annotations-and-retention-policy)
-  - [1.3. Annotations and element types](#13-annotations-and-element-types)
-  - [1.4. Annotations and inheritance](#14-annotations-and-inheritance)
-  - [1.5. Repeatable annotations](#15-repeatable-annotations)
+  - [1.1. Annotations and retention policy](#11-annotations-and-retention-policy)
+  - [1.2. Annotations and element types](#12-annotations-and-element-types)
+  - [1.3. Annotations and inheritance](#13-annotations-and-inheritance)
+  - [1.4. Repeatable annotations](#14-repeatable-annotations)
 - [2. Source Code](#2-source-code)
   - [2.1. `@Retention`](#21-retention)
   - [2.2. `@Target`](#22-target)
@@ -18,9 +18,7 @@
 
 ## 1. Intro
 
-
-
-### 1.2. Annotations and retention policy
+### 1.1. Annotations and retention policy
 
 Each annotation has the very important characteristic called **retention policy** which is an enumeration (of type `RetentionPolicy`) with the set of policies on how to retain annotations. It could be set to one of the following values.
 
@@ -43,7 +41,7 @@ public @interface AnnotationWithRetention {
 
 Setting annotation retention policy to `RUNTIME` will guarantee its presence in the compilation process and in the running application.
 
-### 1.3. Annotations and element types
+### 1.2. Annotations and element types
 
 Another characteristic which each annotation must have is the element types it could be applied to. Similarly to the **retention policy**, it is defined as **enumeration** (`ElementType`) with the set of possible element types.
 
@@ -65,8 +63,6 @@ Additionally to the ones described above, Java 8 introduces two new element type
 | TYPE_PARAMETER | Type parameter declaration |
 | TYPE_USE       | Use of a type              |
 
-
-
 In contrast to the **retention policy**, an annotation may declare **multiple element types** it can be associated with, using the `@Target` annotation. For example:
 
 ```java
@@ -80,7 +76,7 @@ public @interface AnnotationWithTarget {
 
 Mostly all annotations you are going to create should have both **retention policy** and **element types** specified in order to be useful.
 
-### 1.4. Annotations and inheritance
+### 1.3. Annotations and inheritance
 
 The important relation exists between **declaring annotations** and **inheritance** in Java. By default, the subclasses do not inherit the annotation declared on the parent class. However, there is a way to propagate particular annotations throughout the class hierarchy using the `@Inherited` annotation. For example:
 
@@ -101,7 +97,7 @@ public class Child extends Parent {
 
 In this example, the `@InheritableAnnotation` annotation declared on the `Parent` class will be inherited by the `Child` class as well.
 
-### 1.5. Repeatable annotations
+### 1.4. Repeatable annotations
 
 In pre-Java 8 era there was another limitation related to the annotations which was not discussed yet: the same annotation could appear only once at the same place, it cannot be repeated multiple times. Java 8 eased this restriction by providing support for repeatable annotations. For example:
 
@@ -269,7 +265,6 @@ public enum ElementType {
     TYPE_USE
 }
 ```
-
 
 ### 2.3. `@Documented`
 

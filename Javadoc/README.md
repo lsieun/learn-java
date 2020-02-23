@@ -1,5 +1,21 @@
 # Get to know coding rule of Javadoc
 
+<!-- TOC -->
+
+- [1. Javadoc – Java document comment](#1-javadoc-%e2%80%93-java-document-comment)
+- [2. HTML TAG](#2-html-tag)
+- [3. TAG](#3-tag)
+- [4. Usage of major tag](#4-usage-of-major-tag)
+  - [4.1. `@param`](#41-param)
+  - [4.2. `@return`](#42-return)
+  - [4.3. `@link`](#43-link)
+  - [4.4. `@linkplain`](#44-linkplain)
+  - [4.5. `@see`](#45-see)
+  - [4.6. `{@inheritDoc}`](#46-inheritdoc)
+- [5. Generating javadoc](#5-generating-javadoc)
+
+<!-- /TOC -->
+
 URL: 
 - http://corochann.com/get-to-know-coding-rule-of-javadoc-in-10-mins-366.html
 - https://corochann.com/javadoc-coding-rule-of-link-linkplain-see-372.html
@@ -9,7 +25,7 @@ Documentation:
 - https://docs.oracle.com/javase/8/docs/technotes/tools/unix/javadoc.html
 
 
-## Javadoc – Java document comment
+## 1. Javadoc – Java document comment
 
 Javadoc is used in Java language to write comment with the format stats from “`/**`” (2 asterisk needed) and ends with “`*/`” 
 
@@ -27,11 +43,11 @@ Javadoc is used in Java language to write comment with the format stats from “
 
 It is used as **a explanation document** for **the program** which is embedded in **source code**. Usually, Brief explanation of `Class`, `method`, and `member` can be written as Javadoc format.
 
-## HTML TAG
+## 2. HTML TAG
 
 HTML tag can be used to write Javadoc, which makes it formatted document and easy to refer. When you use IDE like Eclipse or Android studio, explanation is automatically formatted.
 
-## TAG
+## 3. TAG
 
 Summary for Javadoc Tag [here](https://docs.oracle.com/javase/8/docs/technotes/tools/unix/javadoc.html).
 
@@ -51,9 +67,9 @@ Summary for Javadoc Tag [here](https://docs.oracle.com/javase/8/docs/technotes/t
 - Block tag: `@tag`. Usually the scope of this tag is until the end of line.
 - Inline tag: `{@tag}`. The scope of this tag is inside `{}`
 
-## Usage of major tag
+## 4. Usage of major tag
 
-### `@param`
+### 4.1. `@param`
 
 Show description of parameter, member.
 
@@ -61,7 +77,7 @@ Show description of parameter, member.
 @param parameter-name description
 ```
 
-### `@return`
+### 4.2. `@return`
 
 Show description of return value.
 
@@ -69,7 +85,7 @@ Show description of return value.
 @return description
 ```
 
-### `@link`
+### 4.3. `@link`
 
 It acts similar to `<a href=””>` tag of HTML, so that you can embed link to the string.
 
@@ -77,7 +93,7 @@ It acts similar to `<a href=””>` tag of HTML, so that you can embed link to 
 {@link package.class#member label}
 ```
 
-“`label`” will appear as text, and it has link to “`package.class#member`“. When the `label` is omitted, the class/member/method name will be shown. 
+“`label`” will appear as text, and it has link to “`package.class#member`“. When the `label` is omitted, the class/member/method name will be shown.
 
 Example:
 
@@ -105,11 +121,11 @@ public class SampleLink{
 }
 ```
 
-### `@linkplain`
+### 4.4. `@linkplain`
 
 Same with `{@link}`, except that the reference string will be shown plaintext instead of code text
 
-### `@see`
+### 4.5. `@see`
 
 Refers other field, method.
 
@@ -127,14 +143,14 @@ Example,
 
 ```java
 /**
- *  Javadoc 
+ *  Javadoc
  *  @see SampleClass#methodName(int, int) methodName
  */
 ```
 
 Here, **package name** is omitted. You can use omitted name to avoid writing long sentences.
 
-**Refer current class member**
+- Refer current class member
 
 ```txt
 @see  #field
@@ -146,7 +162,7 @@ Here, **package name** is omitted. You can use omitted name to avoid writing lon
 
 When you refer current class member, it is possible to omit writing `Package.class`.
 
-**Refer current class or imported package’s other class**
+- Refer current class or imported package’s other class
 
 ```txt
 @see  Class#field
@@ -160,7 +176,7 @@ When you refer current class member, it is possible to omit writing `Package.cla
 
 When you refer member which is in current class or imported package’s class, it is possible to omit writing `Package`.
 
-**Refer other package’s member**
+- Refer other package’s member
 
 ```txt
 @see  package.Class#field
@@ -175,13 +191,13 @@ When you refer member which is in current class or imported package’s class, i
 
 You must write explicitly (cannot omit) in this case.
 
-### `{@inheritDoc}`
+### 4.6. `{@inheritDoc}`
 
 Introduced in JDK 1.4
 
 Inherits (copies) documentation from the nearest inheritable class or implementable interface into the current documentation comment at this tag's location. This enables you to write more general comments higher up the inheritance tree and to write around the copied text.
 
-## Generating javadoc
+## 5. Generating javadoc
 
 `javadoc` command can be used. It is in the same folder with `javac` command (java compiler).
 
@@ -196,7 +212,6 @@ javadoc -d doc Sample.java
 ```
 
 You can also refer “`javadoc -help`”.
-
 
 ```java
 
