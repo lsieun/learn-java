@@ -1,20 +1,35 @@
-# JavaMail邮件开发：开发 #
+# JavaMail Programming
 
-## 1、引入maven依赖 ##
+<!-- TOC -->
 
-    <!-- https://mvnrepository.com/artifact/javax.mail/mail -->
-    <dependency>
-        <groupId>javax.mail</groupId>
-        <artifactId>mail</artifactId>
-        <version>1.4</version>
-    </dependency>
+- [1. maven dependency](#1-maven-dependency)
+- [2. Programming](#2-programming)
+  - [2.1. Plain Text](#21-plain-text)
+  - [2.2. Image](#22-image)
+  - [2.3. Image and Attachment](#23-image-and-attachment)
+- [3. Note](#3-note)
 
-## 2、发送普通邮件 ##
+<!-- /TOC -->
+
+## 1. maven dependency
+
+```xml
+<!-- https://mvnrepository.com/artifact/javax.mail/mail -->
+<dependency>
+    <groupId>javax.mail</groupId>
+    <artifactId>mail</artifactId>
+    <version>1.4</version>
+</dependency>
+```
+
+## 2. Programming
+
+### 2.1. Plain Text
 
 发送普通文本邮件和发送带有超链接的邮件的区别在于调用的方法不同：
 
-	（1）发送普通文本邮件，调用message.setText方法
-	（2）发送带有超链接的邮件，调用message.setContent方法
+- （1）发送普通文本邮件，调用message.setText方法
+- （2）发送带有超链接的邮件，调用message.setContent方法
 
 ```java
 package com.lsieun.javamail;
@@ -74,7 +89,7 @@ public class App_A_SendNormalMail {
 
 ![](images/javamail_send_normal_mail.png)
 
-## 3、发送带图片的邮件 ##
+### 2.2. Image
 
 ```java
 package com.lsieun.javamail;
@@ -160,15 +175,15 @@ public class App_B_SendImgMail {
         trans.close();
     }
 }
-
 ```
+
 ![](images/javamail_mime.png)
 
 ![](images/javamail_mime_related.png)
 
 ![](images/javamail_mime_related_api.png)
 
-## 4、发送带图片和附件的邮件 ##
+### 2.3. Image and Attachment
 
 ```java
 package com.lsieun.javamail;
@@ -282,13 +297,13 @@ public class App_C_SendImgAttachMail {
 }
 ```
 
-## 5、注意 ##
+## 3. Note
 
 对于Java Project，不存在什么问题；
 
 但如果是Web项目，因为在javaee自带的jar包中有邮件功能，可能存在问题，这种情况的处理方法是：
 
-	（1）删除javaee的jar包中mail包
-	（2）使用我们自己的jar包
+- （1）删除javaee的jar包中mail包
+- （2）使用我们自己的jar包
 
 > 至此结束

@@ -1,0 +1,8 @@
+Feb 26, 2020 2:20:30 PM lsieun.utils.logging.F_Use_Custom_Handler doSomeThingAndLog
+SEVERE: Severe Log 1
+Feb 26, 2020 2:20:30 PM lsieun.utils.logging.F_Use_Custom_Handler doSomeThingAndLog
+SEVERE: Severe Log 2
+Feb 26, 2020 2:20:30 PM lsieun.utils.logging.F_Use_Custom_Handler doSomeThingAndLog
+WARNING: Warning Log 2
+Feb 26, 2020 2:20:30 PM lsieun.utils.logging.F_Use_Custom_Handler doSomeThingAndLog
+INFO: Info Log 2

@@ -68,7 +68,7 @@ CookieHandler.setDefault(manager);
 
 If all you want is to receive cookies from sites and send them back to those sites, you’re done. That’s all there is to it. After installing a `CookieManager` with those two lines of code, Java will store any cookies sent by HTTP servers you connect to with the `URL` class, and will send the stored cookies back to those same servers in subsequent requests.
 
-> 这说明CookieManager和URL这两个类密切相关
+> 笔记：这说明CookieManager和URL这两个类密切相关
 
 ### 2.2. CookiePolicy
 
@@ -122,6 +122,8 @@ public class NoGovernmentCookies implements CookiePolicy {
 ```java
 CookieStore store = manager.getCookieStore();
 ```
+
+> 笔记：如果此时调用`store.getClass()`方法，就会知道它是使用了`java.net.InMemoryCookieStore`类。
 
 The `CookieStore` class allows you to **add, remove, and list cookies** so you can control the cookies that are sent outside the normal flow of HTTP requests and responses:
 
@@ -177,28 +179,32 @@ package java.net;
 public class HttpCookie implements Cloneable {
     public HttpCookie(String name, String value)
 
-    public boolean hasExpired()
+    // obsolete
     public void setComment(String comment)
     public String getComment()
     public void setCommentURL(String url)
     public String getCommentURL()
     public void setDiscard(boolean discard)
     public boolean getDiscard()
-    public void setPortlist(String ports)
-    public String getPortlist()
-    public void setDomain(String domain)
-    public String getDomain()
-    public void setMaxAge(long expiry)
-    public long getMaxAge()
-    public void setPath(String path)
-    public String getPath()
-    public void setSecure(boolean flag)
-    public boolean getSecure()
+    public int getVersion()
+    public void setVersion(int v)
+
     public String getName()
     public void setValue(String value)
     public String getValue()
-    public int getVersion()
-    public void setVersion(int v)
+    public void setDomain(String domain)
+    public String getDomain()
+    public void setPortlist(String ports)
+    public String getPortlist()
+    public void setPath(String path)
+    public String getPath()
+
+    public boolean hasExpired()
+    public void setMaxAge(long expiry)
+    public long getMaxAge()
+    public void setSecure(boolean flag)
+    public boolean getSecure()
+
 
     public static boolean domainMatches(String domain, String host)
     public static List<HttpCookie> parse(String header)

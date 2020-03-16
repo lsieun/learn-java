@@ -43,7 +43,7 @@ public class PersistentCookieStore implements CookieStore, Runnable {
 
     @Override
     public boolean remove(URI uri, HttpCookie cookie) {
-        return store.remove(uri,cookie);
+        return store.remove(uri, cookie);
     }
 
     @Override

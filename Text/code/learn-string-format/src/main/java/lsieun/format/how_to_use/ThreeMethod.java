@@ -16,7 +16,8 @@ public class ThreeMethod {
         // 第三种方式：使用Formatter和StringBuilder相结合
         StringBuilder sb = new StringBuilder();
         Formatter fmt = new Formatter(sb);
-        fmt.format("PI = %f%n", Math.PI);
+        fmt.format("PI = %f%n", Math.PI); // 注意%n的使用
+        fmt.format("E = %f%n", Math.E);
         System.out.print(sb.toString());
     }
 }
