@@ -1,8 +1,19 @@
 # Java Bitwise and Bit Shift Operators
 
-URL: https://www.programiz.com/java-programming/bitwise-operators
+<!-- TOC -->
 
-**Bitwise** is a level of operations that involves working with **individual bits**, which are the smallest units of data in a computer. Each `bit` has **a single binary value**: `0` or `1`. 
+- [1. Bitwise OR](#1-bitwise-or)
+- [2. Bitwise AND](#2-bitwise-and)
+- [3. Bitwise Complement](#3-bitwise-complement)
+- [4. Bitwise XOR](#4-bitwise-xor)
+- [5. Signed Left Shift](#5-signed-left-shift)
+- [6. Signed Right Shift](#6-signed-right-shift)
+- [7. Unsigned Right Shift](#7-unsigned-right-shift)
+- [Reference](#reference)
+
+<!-- /TOC -->
+
+**Bitwise** is a level of operations that involves working with **individual bits**, which are the smallest units of data in a computer. Each `bit` has **a single binary value**: `0` or `1`.
 
 Java provides `4` **bitwise** and `3` **bit shift operators** to perform **bit operations**.
 
@@ -43,11 +54,11 @@ Bitwise OR Operation of 12 and 25
 ```java
 class BitwiseOR {
     public static void main(String[] args) {
-    	
-    	int number1 = 12, number2 = 25, result;
-    	
-    	result = number1 | number2;
-    	System.out.println(result);
+
+        int number1 = 12, number2 = 25, result;
+
+        result = number1 | number2;
+        System.out.println(result);
     }
 }
 ```
@@ -72,11 +83,11 @@ Bit Operation of 12 and 25
 ```java
 class BitwiseAND {
     public static void main(String[] args) {
-    	
-    	int number1 = 12, number2 = 25, result;
-    	
-    	result = number1 & number2;
-    	System.out.println(result);
+
+        int number1 = 12, number2 = 25, result;
+
+        result = number1 & number2;
+        System.out.println(result);
     }
 }
 ```
@@ -91,7 +102,7 @@ The `~` operator inverts the bit pattern. It makes every `0` to `1`, and every `
 35 = 00100011 (In Binary)
 
 Bitwise complement Operation of 35
-~ 00100011 
+~ 00100011
   ________
   11011100  = 220 (In decimal)
 ```
@@ -99,11 +110,11 @@ Bitwise complement Operation of 35
 ```java
 class Complement {
     public static void main(String[] args) {
-    	
-    	int number = 35, result;
-    	
-    	result = ~number;
-    	System.out.println(result);
+
+        int number = 35, result;
+
+        result = ~number;
+        System.out.println(result);
     }
 }
 ```
@@ -143,11 +154,11 @@ Bitwise XOR Operation of 12 and 25
 ```java
 class Xor {
     public static void main(String[] args) {
-    	
-    	int number1 = 12, number2 = 25, result;
-    	
-    	result = number1 ^ number2;
-    	System.out.println(result);
+
+        int number1 = 12, number2 = 25, result;
+
+        result = number1 ^ number2;
+        System.out.println(result);
     }
 }
 ```
@@ -167,12 +178,12 @@ The left shift operator `<<` shifts a bit pattern to the left by certain number 
 ```java
 class LeftShift {
     public static void main(String[] args) {
-    	
-    	int number = 212, result;
-    	
-    	System.out.println(number << 1);
-    	System.out.println(number << 0);
-    	System.out.println(number << 4);
+
+        int number = 212, result;
+
+        System.out.println(number << 1);
+        System.out.println(number << 0);
+        System.out.println(number << 4);
     }
 }
 ```
@@ -192,12 +203,12 @@ The right shift operator `>>` shifts a bit pattern to the right by certain numbe
 ```java
 class RightShift {
     public static void main(String[] args) {
-    	
-    	int number = 212, result;
-    	
-    	System.out.println(number >> 1);
-    	System.out.println(number >> 0);
-    	System.out.println(number >> 8);
+
+        int number = 212, result;
+
+        System.out.println(number >> 1);
+        System.out.println(number >> 0);
+        System.out.println(number >> 8);
     }
 }
 ```
@@ -209,20 +220,20 @@ The unsigned right shift operator `>>>` shifts zero into the leftmost position.
 ```java
 class RightShift {
     public static void main(String[] args) {
-    	
-    	int number1 = 5, number2 = -5;
-    	
-    	// Signed right shift 
-    	System.out.println(number1 >> 1);
-    	
-    	// Unsigned right shift
-    	System.out.println(number1 >>> 1);
-    	
-    	// Signed right shift 
-    	System.out.println(number2 >> 1);
-    	
-    	// Unsigned right shift
-    	System.out.println(number2 >>> 1);
+
+        int number1 = 5, number2 = -5;
+
+        // Signed right shift 
+        System.out.println(number1 >> 1);
+
+        // Unsigned right shift
+        System.out.println(number1 >>> 1);
+
+        // Signed right shift 
+        System.out.println(number2 >> 1);
+
+        // Unsigned right shift
+        System.out.println(number2 >>> 1);
     }
 }
 ```
@@ -235,3 +246,7 @@ Output:
 -3
 2147483645
 ```
+
+## Reference
+
+- [Java Bitwise and Bit Shift Operators](https://www.programiz.com/java-programming/bitwise-operators)

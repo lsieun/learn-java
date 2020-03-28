@@ -21,14 +21,14 @@ The algorithm provides virtually no cryptographic security, and is often cited a
 
 For example, in the following joke, the punchline has been obscured by ROT13:
 
-```
+```text
 Why did the chicken cross the road?
 Gb trg gb gur bgure fvqr!
 ```
 
 Transforming the entire text via ROT13 form, the answer to the joke is revealed:
 
-```
+```text
 Jul qvq gur puvpxra pebff gur ebnq?
 To get to the other side!
 ```
