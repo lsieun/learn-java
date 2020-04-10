@@ -7,22 +7,22 @@ public class MD5Utils {
         return (x << n) | (x >>> (32 - n));
     }
 
-    private static int uadd(int a, int b) {
-//        long aa = a & 0xFFFFFFFFL;
-//        long bb = b & 0xFFFFFFFFL;
-//        long sum = aa + bb;
-//
-//        return (int) (sum & 0xFFFFFFFFL);
+    public static int uadd(int a, int b) {
+        long aa = a & 0xFFFFFFFFL;
+        long bb = b & 0xFFFFFFFFL;
+        long sum = aa + bb;
+
+        return (int) (sum & 0xFFFFFFFFL);
 
         // 在这里，经过测试之后，我认为，直接使用a+b并不影响最后结果
-        return a + b;
+//        return a + b;
     }
 
     private static int uadd(int a, int b, int c) {
         return uadd(uadd(a, b), c);
     }
 
-    private static int uadd(int a, int b, int c, int d) {
+    public static int uadd(int a, int b, int c, int d) {
         return uadd(uadd(a, b, c), d);
     }
 
@@ -61,6 +61,7 @@ public class MD5Utils {
 
         int[] x = new int[16];
         for (int i = 0; i < 16; i++) {
+            // NOTE: 这里是容易出错的地方，如果省略了"& 0xFF"操作，计算结果就会不正确
             x[i] = (input[(i * 4 + 3)] & 0xFF) << 24 |
                     (input[(i * 4 + 2)] & 0xFF) << 16 |
                     (input[(i * 4 + 1)] & 0xFF) << 8 |

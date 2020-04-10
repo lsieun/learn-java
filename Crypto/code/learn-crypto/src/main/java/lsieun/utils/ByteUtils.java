@@ -3,6 +3,7 @@ package lsieun.utils;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Formatter;
 import java.util.List;
 
 public class ByteUtils {
@@ -106,5 +107,21 @@ public class ByteUtils {
             bytes[i] = (byte) value;
         }
         return bytes;
+    }
+
+    public static String toProgramCode(String hex_str) {
+        byte[] bytes = fromHex(hex_str);
+        StringBuilder sb = new StringBuilder();
+        Formatter fm = new Formatter(sb);
+        for (int i = 0; i < bytes.length; ++i) {
+            fm.format("0x%s, ", Integer.toString((bytes[i] & 0xFF) + 0x100, 16).substring(1));
+        }
+        return sb.toString();
+    }
+
+    public static void main(String[] args) {
+        String hex_str = "2B57C023 5FB74897 68D058FF 4911C20F DBE71E36 99D91339 AFBB903E E17255DC";
+        String result = toProgramCode(hex_str.replaceAll(" ", ""));
+        System.out.println(result.toUpperCase());
     }
 }
