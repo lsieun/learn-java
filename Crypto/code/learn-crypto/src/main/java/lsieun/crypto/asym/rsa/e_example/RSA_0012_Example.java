@@ -2,7 +2,7 @@ package lsieun.crypto.asym.rsa.e_example;
 
 import java.math.BigInteger;
 
-public class AES_0012_Example {
+public class RSA_0012_Example {
     public static final byte[] TestModulus = {
             (byte) 0xC4, (byte) 0xF8, (byte) 0xE9, (byte) 0xE1, (byte) 0x5D, (byte) 0xCA, (byte) 0xDF, (byte) 0x2B,
             (byte) 0x96, (byte) 0xC7, (byte) 0x63, (byte) 0xD9, (byte) 0x81, (byte) 0x00, (byte) 0x6A, (byte) 0x64,

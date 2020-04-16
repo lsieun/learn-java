@@ -32,8 +32,9 @@ public class HexCoder {
      */
     public static byte[] hexToBytes(final String hex_str) {
         final byte[] bytes = new byte[hex_str.length() / 2];
-        for (int i = 0; i < bytes.length; ++i)
+        for (int i = 0; i < bytes.length; ++i) {
             bytes[i] = (byte) Integer.parseInt(hex_str.substring(2 * i, (2 * i) + 2), 16);
+        }
         return bytes;
     }
 }

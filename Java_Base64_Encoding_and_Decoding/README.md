@@ -1,8 +1,8 @@
-# Java Base64 Encoding and Decoding #
+# Java Base64 Encoding and Decoding
 
 URL:[http://www.baeldung.com/java-base64-encode-and-decode](http://www.baeldung.com/java-base64-encode-and-decode)
 
-## 1. Overview ##
+## 1. Overview
 
 In this tutorial, we’re going to explore the various utilities that provide Base64 encoding and decoding functionality in Java.
 
@@ -13,13 +13,13 @@ We’re mainly going to illustrate **the new Java 8 APIs** as well as **the util
 > 从两个角度讲：the new Java 8 APIs 和 the utility APIs coming out of Apache Commons
 
 
-## 2. Java 8 for Base 64 ##
+## 2. Java 8 for Base 64
 
 **Java 8** has finally added **Base64 capabilities** to **the standard API**, via the `java.util.Base64` utility class.
 
 Let’s start by looking a basic encoder process.
 
-### 2.1. Java 8 Basic Base64 ###
+### 2.1. Java 8 Basic Base64
 
 The basic encoder keeps things simple and encodes the input as is –– without any line separation.
 
@@ -46,7 +46,7 @@ Let’s now decode that String back to the original form:
 > 通过Base64.getDecoder()方法来获取Decoder API
 
 
-### 2.2. Java 8 Base64 Encoding without Padding ###
+### 2.2. Java 8 Base64 Encoding without Padding
 
 In Base64 encoding, the length of output encoded String must be a multiple of 3. If it’s not, the output will be padded with additional pad characters (`=`).
 
@@ -56,7 +56,7 @@ If you need to skip **the padding of the output** – perhaps, because the resul
 
 	String encodedString = Base64.getEncoder().withoutPadding().encodeToString(originalInput.getBytes());
 
-### 2.3. Java 8 URL Encoding ###
+### 2.3. Java 8 URL Encoding
 
 URL encoding is very similar to the basic encoder we looked at above. It uses the URL and Filename safe Base64 alphabet and does not add any line separation:
 
@@ -72,7 +72,7 @@ Decoding happens in much the same way – the `getUrlDecoder()` utility method r
 
 > 注意上面用到的是Base64.getUrlDecoder()方法，而不是之前的Base64.getDecoder()方法
 
-### 2.4. Java 8 MIME Encoding ###
+### 2.4. Java 8 MIME Encoding
 
 Let’s start with by generating some basic MIME input to encode:
 
@@ -101,7 +101,7 @@ The `getMimeDecoder()` utility method returns a `java.util.Base64.Decoder` that 
 
 > 注意上面用到的是Base64.getMimeDecoder()方法，可与上面的示例进行对比
 
-## 3. Encoding/Decoding Using Apache Commons Code ##
+## 3. Encoding/Decoding Using Apache Commons Code
 
 First, we need to define the commons-codec dependency in the `pom.xml`:
 
@@ -131,11 +131,13 @@ The `decode()` method of Base64 class returns the decoded string:
 
 Another simple option is **using the static API of Base64** instead of creating an instance:
 
-	String originalInput = "test input";
-	String encodedString = new String(Base64.encodeBase64(originalInput.getBytes()));
-	String decodedString = new String(Base64.decodeBase64(encodedString.getBytes()));
+```java
+String originalInput = "test input";
+String encodedString = new String(Base64.encodeBase64(originalInput.getBytes()));
+String decodedString = new String(Base64.decodeBase64(encodedString.getBytes()));
+```
 
-## 4. Conclusion ##
+## 4. Conclusion
 
 This article explains the basics of how to do Base64 encoding and decoding in Java, using the new APIs introduced in Java 8 as well as Apache Commons.
 
