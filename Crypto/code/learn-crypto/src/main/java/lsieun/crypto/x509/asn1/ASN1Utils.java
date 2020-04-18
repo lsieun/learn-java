@@ -81,16 +81,17 @@ public class ASN1Utils {
 
             if (tag_class == ASN1Const.ASN1_CLASS_UNIVERSAL) {
                 switch (tag) {
+                    case ASN1_BOOLEAN:
                     case ASN1_INTEGER:
                     case ASN1_BIT_STRING:
                     case ASN1_OCTET_STRING:
                     case ASN1_NULL:
                     case ASN1_OBJECT_IDENTIFIER: {
                         for (byte b: header) {
-                            System.out.print(String.format("%02x ", (b & 0xFF)));
+                            System.out.print(String.format("%02X ", (b & 0xFF)));
                         }
                         for (int i = 0; i < length; i++) {
-                            System.out.print(String.format("%02x ", (data[i] & 0xFF)));
+                            System.out.print(String.format("%02X ", (data[i] & 0xFF)));
                         }
                     }
                     break;
@@ -98,7 +99,7 @@ public class ASN1Utils {
                     case ASN1_SET:
                     {
                         for (byte b: header) {
-                            System.out.print(String.format("%02x ", (b & 0xFF)));
+                            System.out.print(String.format("%02X ", (b & 0xFF)));
                         }
                     }
                     break;
@@ -117,7 +118,7 @@ public class ASN1Utils {
                     case ASN1_BMP_STRING:
                     case ASN1_UTF8_STRING: {
                         for (byte b: header) {
-                            System.out.print(String.format("%02x ", (b & 0xFF)));
+                            System.out.print(String.format("%02X ", (b & 0xFF)));
                         }
                         for (int i = 0; i < length; i++) {
                             System.out.print(String.format("%c", data[i]));
@@ -130,7 +131,7 @@ public class ASN1Utils {
             }
             else if (tag_class == ASN1Const.ASN1_CONTEXT_SPECIFIC) {
                 for (byte b: header) {
-                    System.out.print(String.format("%02x ", (b & 0xFF)));
+                    System.out.print(String.format("%02X ", (b & 0xFF)));
                 }
             }
 

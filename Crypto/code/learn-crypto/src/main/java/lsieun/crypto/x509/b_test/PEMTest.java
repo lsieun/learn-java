@@ -9,7 +9,7 @@ import java.util.List;
 
 public class PEMTest {
     public static void main(String[] args) {
-        String filepath = "/home/liusen/Workspace/tmp/key.der";
+        String filepath = "/home/liusen/Workspace/tmp/GlobalSignDomainValidationCA-SHA256-G2.crt";
         List<String> lines = FileUtils.readLines(filepath);
 
         StringBuilder sb = new StringBuilder();

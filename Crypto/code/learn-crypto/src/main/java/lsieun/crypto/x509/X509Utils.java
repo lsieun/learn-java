@@ -1,10 +1,17 @@
 package lsieun.crypto.x509;
 
 import lsieun.crypto.asym.rsa.RSAKey;
+import lsieun.crypto.asym.rsa.RSAUtils;
+import lsieun.crypto.x509.asn1.ASN1Const;
 import lsieun.crypto.x509.asn1.ASN1Struct;
 import lsieun.crypto.x509.asn1.ASN1Utils;
+import lsieun.hash.md5.MD5Utils;
+import lsieun.hash.sha1.SHA1Utils;
 import lsieun.hash.sha256.SHA256Utils;
+import lsieun.utils.ByteUtils;
 import lsieun.utils.DateUtils;
+import lsieun.utils.HexFormat;
+import lsieun.utils.HexUtils;
 
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -24,12 +31,6 @@ public class X509Utils {
         X509Certificate tbsCertificate = parse_tbs_certificate(item0);
         SignatureAlgorithmIdentifier algorithm = parse_algorithm_identifier(item1);
         BigInteger signature_value = parse_signature_value(item2);
-
-        byte[] input = item0.data;
-        byte[] hash_bytes = SHA256Utils.sha256_hash(input, input.length);
-        BigInteger num1 = new BigInteger(1, hash_bytes);
-        BigInteger num2 = new BigInteger(1, item2.data);
-        BigInteger exponent = new BigInteger("65537");
 
         SignedX509Certificate signed_cert = new SignedX509Certificate(tbsCertificate, algorithm, signature_value);
         return signed_cert;
@@ -57,6 +58,14 @@ public class X509Utils {
         ASN1Struct extensions_struct = children.get(7);
         parse_extensions(extensions_struct);
 
+//        return new X509Certificate(version,
+//                serialNumber,
+//                signature,
+//                issuer,
+//                validity,
+//                subject,
+//                public_key,
+//                null, null, 0);
         return null;
     }
 
@@ -71,7 +80,7 @@ public class X509Utils {
         if (Arrays.equals(X509Const.OID_SHA256WithRSA, data)) {
             return SignatureAlgorithmIdentifier.SHA256_WITH_RSA_ENCRYPTION;
         }
-        return null;
+        throw new RuntimeException("Unknown OID " + HexUtils.format(data, HexFormat.FORMAT_FF_FF));
     }
 
     public static BigInteger parse_signature_value(ASN1Struct struct) {
@@ -250,6 +259,10 @@ public class X509Utils {
     }
 
     public static void parse_extensions(ASN1Struct struct) {
+        if (struct.children.size() != 1) {
+            throw new RuntimeException("extensions children size = " + struct.children.size());
+        }
+
         List<ASN1Struct> children = struct.children.get(0).children;
         for (ASN1Struct child : children) {
             parse_one_extension(child);
@@ -262,23 +275,116 @@ public class X509Utils {
 
         if (Arrays.equals(item0.data, X509Const.OID_subjectKeyIdentifier)) {
             System.out.println("OID_subjectKeyIdentifier");
-        }
-        else if(Arrays.equals(item0.data, X509Const.OID_keyUsage)) {
+        } else if (Arrays.equals(item0.data, X509Const.OID_keyUsage)) {
             System.out.println("OID_keyUsage");
-        }
-        else if(Arrays.equals(item0.data, X509Const.OID_basicConstraints)) {
+            parse_key_usage_extension(struct);
+        } else if (Arrays.equals(item0.data, X509Const.OID_basicConstraints)) {
             System.out.println("OID_basicConstraints");
-        }
-        else if(Arrays.equals(item0.data, X509Const.OID_authorityKeyIdentifier)) {
+        } else if (Arrays.equals(item0.data, X509Const.OID_authorityKeyIdentifier)) {
             System.out.println("OID_authorityKeyIdentifier");
-        }
-        else {
+        } else {
             System.out.print("Unknown extension OID:");
             for (byte b : item0.data) {
                 System.out.printf(" %02X", (b & 0xFF));
             }
             System.out.println();
         }
+    }
+
+    public static void parse_key_usage_extension(ASN1Struct struct) {
+        List<ASN1Struct> children = struct.children;
+        ASN1Struct oid_struct = children.get(0);
+        ASN1Struct critical_struct = children.get(1);
+        ASN1Struct data_struct = children.get(2);
+
+        if (!Arrays.equals(oid_struct.data, X509Const.OID_keyUsage)) {
+            String msg = getMessage("Key Usage", X509Const.OID_keyUsage, oid_struct.data);
+            throw new RuntimeException(msg);
+        }
+
+        if ((critical_struct.data[0] & 0xFF) != 0xFF) {
+            throw new RuntimeException("critical field is not 0xFF");
+        }
+
+        ASN1Struct key_usage_struct = ASN1Utils.asn1parse(data_struct.data).get(0);
+        if (key_usage_struct.tag != 3) {
+            throw new RuntimeException("tag is Not ASN1_BIT_STRING");
+        }
+        int padding = key_usage_struct.data[0] & 0xFF;
+        System.out.println("padding: " + padding);
+
+        int total = 1;
+        for (int i = 1; i < key_usage_struct.length; i++) {
+            total = (total << 8) | (key_usage_struct.data[i] & 0xFF);
+        }
+        String binary_str = Integer.toString(total, 2);
+        String final_str = binary_str.substring(1, binary_str.length() - padding);
+        System.out.println(final_str);
+    }
+
+    public static String getMessage(String name, byte[] expected_value, byte[] actual_value) {
+        StringBuilder sb = new StringBuilder();
+        Formatter fm = new Formatter(sb);
+        fm.format("%s OID Unexpected%n", name);
+        fm.format("Expected Value: %s%n", HexUtils.format(expected_value, HexFormat.FORMAT_FF_FF));
+        fm.format("  Actual Value: %s", HexUtils.format(actual_value, HexFormat.FORMAT_FF_FF));
+        return sb.toString();
+    }
+
+    /**
+     * An RSA signature is an ASN.1 DER-encoded PKCS-7 structure including
+     * the OID of the signature algorithm (again), and the signature value.
+     */
+    public static boolean validate_certificate_rsa(byte[] bytes, RSAKey rsaKey) {
+        // 第一步，解析bytes成证书，将证书拆分成tbsCertificate、signatureAlgorithm和signatureValue三部分
+        ASN1Struct certificate = ASN1Utils.asn1parse(bytes).get(0);
+        ASN1Struct tbs_certificate = certificate.children.get(0);
+        ASN1Struct signature_algorithm = certificate.children.get(1);
+        ASN1Struct signature_value = certificate.children.get(2);
+
+        // 第二步，获取tbsCertificate的byte表示形式
+        byte[] tbs_certificate_bytes = ByteUtils.concatenate(tbs_certificate.header, tbs_certificate.data);
+
+        // 第三步，获取证书的签名算法，并计算hash值
+        SignatureAlgorithmIdentifier algorithm = parse_algorithm_identifier(signature_algorithm);
+
+        byte[] tbs_certificate_hash_bytes = null;
+        switch (algorithm) {
+            case MD5_WITH_RSA_ENCRYPTION:
+                tbs_certificate_hash_bytes = MD5Utils.md5_hash(tbs_certificate_bytes, tbs_certificate_bytes.length);
+                break;
+            case SHA1_WITH_RSA_ENCRYPTION:
+                tbs_certificate_hash_bytes = SHA1Utils.sha1_hash(tbs_certificate_bytes, tbs_certificate_bytes.length);
+                break;
+            case SHA256_WITH_RSA_ENCRYPTION:
+                tbs_certificate_hash_bytes = SHA256Utils.sha256_hash(tbs_certificate_bytes, tbs_certificate_bytes.length);
+                break;
+            default:
+                throw new RuntimeException("Unknown Algorithm " + algorithm);
+        }
+
+        // 第四步，使用RSA公钥解析signatureValue，获取由RSA私钥加密的hash值
+        int length = signature_value.data.length;
+        byte[] input = new byte[length - 1];
+        for (int i = 1; i < length; i++) {
+            input[i - 1] = signature_value.data[i];
+        }
+
+        byte[] decoded_bytes = RSAUtils.rsa_decrypt(input, rsaKey);
+        ASN1Struct pkcs7_signature = ASN1Utils.asn1parse(decoded_bytes).get(0);
+        byte[] original_hash_bytes = pkcs7_signature.children.get(1).data;
+
+        // 第五步，验证两个hash是否相等
+        return Arrays.equals(tbs_certificate_hash_bytes, original_hash_bytes);
+    }
+
+    public static ASN1Struct get_signature_value(ASN1Struct signature_value, RSAKey rsaKey) {
+        int tag = signature_value.tag;
+        if (tag != ASN1Const.ASN1_BIT_STRING) {
+            throw new RuntimeException("Signature Value tag is not ASN1_BIT_STRING(3)");
+        }
+
+        return null;
     }
 
 }

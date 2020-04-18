@@ -119,6 +119,22 @@ public class ByteUtils {
         return sb.toString();
     }
 
+    public static byte[] concatenate(byte[] bytes1, byte[] bytes2) {
+        int len1 = bytes1.length;
+        int len2 = bytes2.length;
+
+        byte[] result_bytes = new byte[len1 + len2];
+
+        for (int i = 0; i < len1; i++) {
+            result_bytes[i] = bytes1[i];
+        }
+        for (int i = 0; i < len2; i++) {
+            result_bytes[len1 + i] = bytes2[i];
+        }
+
+        return result_bytes;
+    }
+
     public static void main(String[] args) {
         String hex_str = "2B57C023 5FB74897 68D058FF 4911C20F DBE71E36 99D91339 AFBB903E E17255DC";
         String result = toProgramCode(hex_str.replaceAll(" ", ""));
