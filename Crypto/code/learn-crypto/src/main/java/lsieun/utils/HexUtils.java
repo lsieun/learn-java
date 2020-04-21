@@ -33,12 +33,12 @@ public class HexUtils {
     public static byte[] parse(String hex_str, HexFormat format) {
         List<String> list = new ArrayList<>();
         switch (format) {
-            case FORMAT_FF_FF: {
+            case FORMAT_FF_SPACE_FF: {
                 String[] array = hex_str.split(" ");
                 list.addAll(Arrays.asList(array));
             }
             break;
-            case FORMAT_FFFF: {
+            case FORMAT_FF_FF: {
                 int length = hex_str.length();
                 for (int i = 0; i < length; i += 2) {
                     String item = hex_str.substring(i, i + 2);
@@ -59,17 +59,33 @@ public class HexUtils {
     }
 
     public static String format(byte[] bytes, HexFormat format) {
+        switch (format) {
+            case FORMAT_FF_SPACE_FF:
+                return format(bytes, " ", 0);
+            case FORMAT_FF_SPACE_FF_16:
+                return format(bytes, " ", 16);
+            default:
+                throw new RuntimeException("Unsupported format " + format);
+        }
+    }
+
+    public static String format(byte[] bytes, String separator, int bytes_column) {
+        if (bytes == null || bytes.length < 1) return "";
+
         StringBuilder sb = new StringBuilder();
         Formatter fm = new Formatter(sb);
-        switch (format) {
-            case FORMAT_FF_FF: {
-                for (byte b : bytes) {
-                    fm.format("%02X ", (b & 0xFF));
-                }
+
+        int length = bytes.length;
+        for (int i = 0; i < length - 1; i++) {
+            byte b = bytes[i];
+            fm.format("%02X%s", (b & 0xFF), separator);
+            if (bytes_column > 0 && (i + 1) % bytes_column == 0) {
+                fm.format("%n");
             }
-            break;
-            default:
-                break;
+        }
+        {
+            byte b = bytes[length - 1];
+            fm.format("%02X", (b & 0xFF));
         }
 
         return sb.toString();
