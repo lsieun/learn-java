@@ -8,7 +8,7 @@ import java.nio.charset.StandardCharsets;
 
 public class A_Self_SHA256 {
     public static void main(String[] args) {
-        byte[] bytes = SHA256Example.example_2.getBytes(StandardCharsets.UTF_8);
+        byte[] bytes = SHA256Example.example_1.getBytes(StandardCharsets.UTF_8);
 
         byte[] digest = SHA256Utils.sha256_hash(bytes, bytes.length);
         System.out.println(ByteUtils.toHex(digest));

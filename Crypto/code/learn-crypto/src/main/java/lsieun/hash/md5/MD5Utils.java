@@ -7,25 +7,6 @@ public class MD5Utils {
         return (x << n) | (x >>> (32 - n));
     }
 
-    public static int uadd(int a, int b) {
-        long aa = a & 0xFFFFFFFFL;
-        long bb = b & 0xFFFFFFFFL;
-        long sum = aa + bb;
-
-        return (int) (sum & 0xFFFFFFFFL);
-
-        // 在这里，经过测试之后，我认为，直接使用a+b并不影响最后结果
-//        return a + b;
-    }
-
-    private static int uadd(int a, int b, int c) {
-        return uadd(uadd(a, b), c);
-    }
-
-    public static int uadd(int a, int b, int c, int d) {
-        return uadd(uadd(a, b, c), d);
-    }
-
     public static int F(int x, int y, int z) {
         return (x & y) | (~x & z);
     }
@@ -47,9 +28,9 @@ public class MD5Utils {
                             int x, int s, int ac) {
 
         int result1 = f.apply(b, c, d);
-        int result2 = uadd(a, result1, x, ac);
+        int result2 = result1 + a + x + ac;
         int result3 = rotate_left(result2, s);
-        int result4 = uadd(result3, b);
+        int result4 = result3 + b;
         return result4;
     }
 
@@ -62,10 +43,10 @@ public class MD5Utils {
         int[] x = new int[16];
         for (int i = 0; i < 16; i++) {
             // NOTE: 这里是容易出错的地方，如果省略了"& 0xFF"操作，计算结果就会不正确
-            x[i] = (input[(i * 4 + 3)] & 0xFF) << 24 |
+            x[i] =  (input[(i * 4 + 3)] & 0xFF) << 24 |
                     (input[(i * 4 + 2)] & 0xFF) << 16 |
                     (input[(i * 4 + 1)] & 0xFF) << 8 |
-                    (input[(i * 4)] & 0xFF);
+                    (input[(i * 4 + 0)] & 0xFF);
         }
 
         /* Round 1 */
@@ -79,7 +60,7 @@ public class MD5Utils {
         b = round(MD5Utils::F, b, c, d, a, x[7], 22, 0xfd469501); /* 8 */
         a = round(MD5Utils::F, a, b, c, d, x[8], 7, 0x698098d8); /* 9 */
         d = round(MD5Utils::F, d, a, b, c, x[9], 12, 0x8b44f7af); /* 10 */
-        c = round(MD5Utils::F, c, d, a, b, x[10], 17, 0xffff5bb1); /* 11 */
+        c = round(MD5Utils::F, c, d, a, b, x[10], 17, 0xFFff5bb1); /* 11 */
         b = round(MD5Utils::F, b, c, d, a, x[11], 22, 0x895cd7be); /* 12 */
         a = round(MD5Utils::F, a, b, c, d, x[12], 7, 0x6b901122); /* 13 */
         d = round(MD5Utils::F, d, a, b, c, x[13], 12, 0xfd987193); /* 14 */
@@ -105,7 +86,7 @@ public class MD5Utils {
         b = round(MD5Utils::G, b, c, d, a, x[12], 20, 0x8d2a4c8a); /* 32 */
 
         /* Round 3 */
-        a = round(MD5Utils::H, a, b, c, d, x[5], 4, 0xfffa3942); /* 33 */
+        a = round(MD5Utils::H, a, b, c, d, x[5], 4, 0xFFfa3942); /* 33 */
         d = round(MD5Utils::H, d, a, b, c, x[8], 11, 0x8771f681); /* 34 */
         c = round(MD5Utils::H, c, d, a, b, x[11], 16, 0x6d9d6122); /* 35 */
         b = round(MD5Utils::H, b, c, d, a, x[14], 23, 0xfde5380c); /* 36 */
@@ -129,7 +110,7 @@ public class MD5Utils {
         b = round(MD5Utils::I, b, c, d, a, x[5], 21, 0xfc93a039); /* 52 */
         a = round(MD5Utils::I, a, b, c, d, x[12], 6, 0x655b59c3); /* 53 */
         d = round(MD5Utils::I, d, a, b, c, x[3], 10, 0x8f0ccc92); /* 54 */
-        c = round(MD5Utils::I, c, d, a, b, x[10], 15, 0xffeff47d); /* 55 */
+        c = round(MD5Utils::I, c, d, a, b, x[10], 15, 0xFFeff47d); /* 55 */
         b = round(MD5Utils::I, b, c, d, a, x[1], 21, 0x85845dd1); /* 56 */
         a = round(MD5Utils::I, a, b, c, d, x[8], 6, 0x6fa87e4f); /* 57 */
         d = round(MD5Utils::I, d, a, b, c, x[15], 10, 0xfe2ce6e0); /* 58 */
@@ -150,16 +131,10 @@ public class MD5Utils {
         byte[] input_block = new byte[MD5Const.MD5_BLOCK_SIZE];
         int quotient = len / MD5Const.MD5_BLOCK_SIZE;
         int remainder = len % MD5Const.MD5_BLOCK_SIZE;
-
-
+        
         // XXX should verify that len < 2^64, but since len is only 32 bits, this won’t
         // be a problem.
-        int[] hash = new int[4];
-        hash[0] = MD5Const.INIT_A;
-        hash[1] = MD5Const.INIT_B;
-        hash[2] = MD5Const.INIT_C;
-        hash[3] = MD5Const.INIT_D;
-
+        int[] hash = Arrays.copyOf(MD5Const.MD5_INITIAL_HASH, MD5Const.MD5_RESULT_SIZE);
 
         for (int i = 0; i < quotient; i++) {
             System.arraycopy(input, i * MD5Const.MD5_BLOCK_SIZE, input_block, 0, MD5Const.MD5_BLOCK_SIZE);
@@ -167,7 +142,7 @@ public class MD5Utils {
         }
 
         int length_in_bits = len * 8;
-        if (remainder >= MD5Const.MD5_INPUT_BLOCK_SIZE) {
+        if (remainder >= MD5Const.MD5_PADDING_THRESHOLD) {
             // Special handling for blocks between 56 and 64 bytes
             // (not enough room for the 8 bytes of length, but also
             // not enough to fill up a block)
@@ -198,27 +173,27 @@ public class MD5Utils {
     }
 
     public static byte[] encode(int[] hash) {
-        byte[] bytes = new byte[16];
+        byte[] bytes = new byte[MD5Const.MD5_OUTPUT_SIZE];
 
-        bytes[0] = (byte) (hash[0] & 0xff);
-        bytes[1] = (byte) ((hash[0] >>> 8) & 0xff);
-        bytes[2] = (byte) ((hash[0] >>> 16) & 0xff);
-        bytes[3] = (byte) ((hash[0] >>> 24) & 0xff);
+        bytes[0] = (byte) (hash[0] & 0xFF);
+        bytes[1] = (byte) ((hash[0] >>> 8) & 0xFF);
+        bytes[2] = (byte) ((hash[0] >>> 16) & 0xFF);
+        bytes[3] = (byte) ((hash[0] >>> 24) & 0xFF);
 
-        bytes[4] = (byte) (hash[1] & 0xff);
-        bytes[5] = (byte) ((hash[1] >>> 8) & 0xff);
-        bytes[6] = (byte) ((hash[1] >>> 16) & 0xff);
-        bytes[7] = (byte) ((hash[1] >>> 24) & 0xff);
+        bytes[4] = (byte) (hash[1] & 0xFF);
+        bytes[5] = (byte) ((hash[1] >>> 8) & 0xFF);
+        bytes[6] = (byte) ((hash[1] >>> 16) & 0xFF);
+        bytes[7] = (byte) ((hash[1] >>> 24) & 0xFF);
 
-        bytes[8] = (byte) (hash[2] & 0xff);
-        bytes[9] = (byte) ((hash[2] >>> 8) & 0xff);
-        bytes[10] = (byte) ((hash[2] >>> 16) & 0xff);
-        bytes[11] = (byte) ((hash[2] >>> 24) & 0xff);
+        bytes[8] = (byte) (hash[2] & 0xFF);
+        bytes[9] = (byte) ((hash[2] >>> 8) & 0xFF);
+        bytes[10] = (byte) ((hash[2] >>> 16) & 0xFF);
+        bytes[11] = (byte) ((hash[2] >>> 24) & 0xFF);
 
-        bytes[12] = (byte) (hash[3] & 0xff);
-        bytes[13] = (byte) ((hash[3] >>> 8) & 0xff);
-        bytes[14] = (byte) ((hash[3] >>> 16) & 0xff);
-        bytes[15] = (byte) ((hash[3] >>> 24) & 0xff);
+        bytes[12] = (byte) (hash[3] & 0xFF);
+        bytes[13] = (byte) ((hash[3] >>> 8) & 0xFF);
+        bytes[14] = (byte) ((hash[3] >>> 16) & 0xFF);
+        bytes[15] = (byte) ((hash[3] >>> 24) & 0xFF);
 
         return bytes;
     }

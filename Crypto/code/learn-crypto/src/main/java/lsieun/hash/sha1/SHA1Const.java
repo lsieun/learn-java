@@ -1,9 +1,10 @@
 package lsieun.hash.sha1;
 
 public class SHA1Const {
-    public static final int SHA1_RESULT_SIZE = 5;
-    public static final int SHA1_INPUT_BLOCK_SIZE = 56;
+    public static final int SHA1_PADDING_THRESHOLD = 56;
     public static final int SHA1_BLOCK_SIZE = 64;
+    public static final int SHA1_OUTPUT_SIZE = 20;
+    public static final int SHA1_RESULT_SIZE = 5;
 
     public static final int k[] = {
             0x5a827999, // 0 <= t <= 19
@@ -12,7 +13,7 @@ public class SHA1Const {
             0xca62c1d6 // 60 <= t <= 79
     };
 
-    public static int sha1_initial_hash[] = {
+    public static int SHA1_INITIAL_HASH[] = {
             0x67452301,
             0xefcdab89,
             0x98badcfe,

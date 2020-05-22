@@ -1,21 +1,12 @@
 package lsieun.hash.sha256;
 
 public class SHA256Const {
-    public static final int SHA256_RESULT_SIZE = 8;
-    public static final int SHA256_INPUT_BLOCK_SIZE = 56;
     public static final int SHA256_BLOCK_SIZE = 64;
+    public static final int SHA256_OUTPUT_SIZE = 32;
+    public static final int SHA256_RESULT_SIZE = 8;
+    public static final int SHA256_PADDING_THRESHOLD = 56;
 
-    //    public static final int sha256_initial_hash[] = {
-//            0x67e6096a,
-//            0x85ae67bb,
-//            0x72f36e3c,
-//            0x3af54fa5,
-//            0x7f520e51,
-//            0x8c68059b,
-//            0xabd9831f,
-//            0x19cde05b
-//    };
-    public static final int sha256_initial_hash[] = {
+    public static final int SHA256_INITIAL_HASH[] = {
             0x6a09e667,
             0xbb67ae85,
             0x3c6ef372,
@@ -30,7 +21,7 @@ public class SHA256Const {
      * The first 32 bits of the fractional parts of the cube roots
      * of the first sixty-four prime numbers.
      */
-    public static final int k[] = {
+    public static final int[] k = {
             0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1,
             0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3,
             0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174, 0xe49b69c1, 0xefbe4786,

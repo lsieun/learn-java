@@ -1,25 +1,27 @@
 package lsieun.utils;
 
+import javax.management.relation.RoleUnresolved;
+
 /**
  * <p>
- *     ByteDashboard的本质就是将一个<code>byte[]</code>放到一个类里面，那么，这么做的目的是什么呢？
+ * ByteDashboard的本质就是将一个<code>byte[]</code>放到一个类里面，那么，这么做的目的是什么呢？
  * </p>
  * <p>
- *     是为了方便读取某一段数据。我们可以将byte[]想像成一本珍贵的“历史图书”，它里面记载了很多有用的信息，同时
- *     可以将ByteDashboard想像成一个“图书錧”，我们把这本“历史图书”放到了这个“图书錧”里。
+ * 是为了方便读取某一段数据。我们可以将byte[]想像成一本珍贵的“历史图书”，它里面记载了很多有用的信息，同时
+ * 可以将ByteDashboard想像成一个“图书錧”，我们把这本“历史图书”放到了这个“图书錧”里。
  * </p>
  * <br/>
  * <p>
- *     从内部实现上来说，可以从以下三方面来理解：
+ * 从内部实现上来说，可以从以下三方面来理解：
  * </p>
  * <p>
- *     （1）bytes字段，表示这本“历史图书”的内容，是个最基础的信息。
+ * （1）bytes字段，表示这本“历史图书”的内容，是个最基础的信息。
  * </p>
  * <p>
- *     （2）start/stop/index三个字段。是为了记录这本“历史图书”的开始页码、结束页码和当前的阅读位置，这是辅助的信息了。
+ * （2）start/stop/index三个字段。是为了记录这本“历史图书”的开始页码、结束页码和当前的阅读位置，这是辅助的信息了。
  * </p>
  * <p>
- *     （3）ByteDashboard类里的方法，都是围绕这4个字段来展开的。
+ * （3）ByteDashboard类里的方法，都是围绕这4个字段来展开的。
  * </p>
  */
 public class ByteDashboard {
@@ -66,6 +68,13 @@ public class ByteDashboard {
     public void setIndex(int index) {
         this.index = index;
     }
+
+    public int remaining() {
+        if (index >= start && index <= stop) {
+            return stop - index;
+        }
+        throw new RuntimeException("Invalid Index");
+    }
     // endregion
 
     public boolean hasNext() {
@@ -90,6 +99,19 @@ public class ByteDashboard {
     public byte[] nextN(int offset, int n) {
         index = index + offset;
         return nextN(n);
+    }
+
+    public int nextInt(int n) {
+        if (n < 1 || n > 4) {
+            throw new RuntimeException("Int Length should be 1~4");
+        }
+
+        int total = 0;
+        for (int i = 0; i < n; i++) {
+            byte b = next();
+            total = (total << 8) | (b & 0xFF);
+        }
+        return total;
     }
 
     public byte peek() {

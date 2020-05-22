@@ -1,14 +1,18 @@
 package lsieun.hash.md5;
 
 public class MD5Const {
-    public static final int MD5_BLOCK_SIZE = 64;
-    public static final int MD5_INPUT_BLOCK_SIZE = 56;
-    public static final int MD5_RESULT_SIZE = 4;
 
-    public static final int INIT_A = 0x67452301;
-    public static final int INIT_B = (int) 0xEFCDAB89L;
-    public static final int INIT_C = (int) 0x98BADCFEL;
-    public static final int INIT_D = 0x10325476;
+    public static final int MD5_BLOCK_SIZE = 64;
+    public static final int MD5_OUTPUT_SIZE = 16;
+    public static final int MD5_RESULT_SIZE = 4;
+    public static final int MD5_PADDING_THRESHOLD = 56;
+
+    public static final int[] MD5_INITIAL_HASH = {
+            0x67452301,
+            0xefcdab89,
+            0x98badcfe,
+            0x10325476
+    };
 
     public static final long BASE_T = 4294967296L;
 

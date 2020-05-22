@@ -151,14 +151,14 @@ public class SHA256Details {
         int[] hash = new int[SHA256Const.SHA256_RESULT_SIZE];
         int length_in_bits = len * 8;
 
-        hash[0] = SHA256Const.sha256_initial_hash[0];
-        hash[1] = SHA256Const.sha256_initial_hash[1];
-        hash[2] = SHA256Const.sha256_initial_hash[2];
-        hash[3] = SHA256Const.sha256_initial_hash[3];
-        hash[4] = SHA256Const.sha256_initial_hash[4];
-        hash[5] = SHA256Const.sha256_initial_hash[5];
-        hash[6] = SHA256Const.sha256_initial_hash[6];
-        hash[7] = SHA256Const.sha256_initial_hash[7];
+        hash[0] = SHA256Const.SHA256_INITIAL_HASH[0];
+        hash[1] = SHA256Const.SHA256_INITIAL_HASH[1];
+        hash[2] = SHA256Const.SHA256_INITIAL_HASH[2];
+        hash[3] = SHA256Const.SHA256_INITIAL_HASH[3];
+        hash[4] = SHA256Const.SHA256_INITIAL_HASH[4];
+        hash[5] = SHA256Const.SHA256_INITIAL_HASH[5];
+        hash[6] = SHA256Const.SHA256_INITIAL_HASH[6];
+        hash[7] = SHA256Const.SHA256_INITIAL_HASH[7];
 
         if (SHA256Const.DEBUG) {
             StringBuilder sb = new StringBuilder();
@@ -180,7 +180,7 @@ public class SHA256Details {
             sha256_block_operate(input_block, hash);
         }
 
-        if (remainder >= SHA256Const.SHA256_INPUT_BLOCK_SIZE) {
+        if (remainder >= SHA256Const.SHA256_PADDING_THRESHOLD) {
             Arrays.fill(input_block, (byte) 0);
             System.arraycopy(input, quotient * SHA256Const.SHA256_BLOCK_SIZE, input_block, 0, remainder);
             input_block[remainder] = (byte) 0x80;

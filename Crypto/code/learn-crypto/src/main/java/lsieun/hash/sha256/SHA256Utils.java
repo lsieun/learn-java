@@ -82,14 +82,14 @@ public class SHA256Utils {
         int[] hash = new int[SHA256Const.SHA256_RESULT_SIZE];
         int length_in_bits = len * 8;
 
-        hash[0] = SHA256Const.sha256_initial_hash[0];
-        hash[1] = SHA256Const.sha256_initial_hash[1];
-        hash[2] = SHA256Const.sha256_initial_hash[2];
-        hash[3] = SHA256Const.sha256_initial_hash[3];
-        hash[4] = SHA256Const.sha256_initial_hash[4];
-        hash[5] = SHA256Const.sha256_initial_hash[5];
-        hash[6] = SHA256Const.sha256_initial_hash[6];
-        hash[7] = SHA256Const.sha256_initial_hash[7];
+        hash[0] = SHA256Const.SHA256_INITIAL_HASH[0];
+        hash[1] = SHA256Const.SHA256_INITIAL_HASH[1];
+        hash[2] = SHA256Const.SHA256_INITIAL_HASH[2];
+        hash[3] = SHA256Const.SHA256_INITIAL_HASH[3];
+        hash[4] = SHA256Const.SHA256_INITIAL_HASH[4];
+        hash[5] = SHA256Const.SHA256_INITIAL_HASH[5];
+        hash[6] = SHA256Const.SHA256_INITIAL_HASH[6];
+        hash[7] = SHA256Const.SHA256_INITIAL_HASH[7];
 
         int quotient = len / SHA256Const.SHA256_BLOCK_SIZE;
         int remainder = len % SHA256Const.SHA256_BLOCK_SIZE;
@@ -100,7 +100,7 @@ public class SHA256Utils {
             sha256_block_operate(input_block, hash);
         }
 
-        if (remainder >= SHA256Const.SHA256_INPUT_BLOCK_SIZE) {
+        if (remainder >= SHA256Const.SHA256_PADDING_THRESHOLD) {
             Arrays.fill(input_block, (byte) 0);
             System.arraycopy(input, quotient * SHA256Const.SHA256_BLOCK_SIZE, input_block, 0, remainder);
             input_block[remainder] = (byte) 0x80;
@@ -120,11 +120,15 @@ public class SHA256Utils {
         return encode(hash);
     }
 
-    public static void fill_length_in_bits(byte[] input_block, int length_in_bits) {
-        input_block[SHA256Const.SHA256_BLOCK_SIZE - 4] = (byte) ((length_in_bits & 0xFF000000) >> 24);
-        input_block[SHA256Const.SHA256_BLOCK_SIZE - 3] = (byte) ((length_in_bits & 0x00FF0000) >> 16);
-        input_block[SHA256Const.SHA256_BLOCK_SIZE - 2] = (byte) ((length_in_bits & 0x0000FF00) >> 8);
-        input_block[SHA256Const.SHA256_BLOCK_SIZE - 1] = (byte) (length_in_bits & 0x000000FF);
+    public static void fill_length_in_bits(byte[] input_block, long length_in_bits) {
+        input_block[SHA256Const.SHA256_BLOCK_SIZE - 8] = (byte) ((length_in_bits >>> 56) & 0xFF);
+        input_block[SHA256Const.SHA256_BLOCK_SIZE - 7] = (byte) ((length_in_bits >>> 48) & 0xFF);
+        input_block[SHA256Const.SHA256_BLOCK_SIZE - 6] = (byte) ((length_in_bits >>> 40) & 0xFF);
+        input_block[SHA256Const.SHA256_BLOCK_SIZE - 5] = (byte) ((length_in_bits >>> 32) & 0xFF);
+        input_block[SHA256Const.SHA256_BLOCK_SIZE - 4] = (byte) ((length_in_bits >>> 24) & 0xFF);
+        input_block[SHA256Const.SHA256_BLOCK_SIZE - 3] = (byte) ((length_in_bits >>> 16) & 0xFF);
+        input_block[SHA256Const.SHA256_BLOCK_SIZE - 2] = (byte) ((length_in_bits >>> 8) & 0xFF);
+        input_block[SHA256Const.SHA256_BLOCK_SIZE - 1] = (byte) (length_in_bits & 0xFF);
     }
 
     public static byte[] encode(int[] hash) {
@@ -133,10 +137,10 @@ public class SHA256Utils {
 
         for (int i = 0; i < size; i += 4) {
             int quotient = i / 4;
-            bytes[i + 0] = (byte) ((hash[quotient] >>> 24) & 0xff);
-            bytes[i + 1] = (byte) ((hash[quotient] >>> 16) & 0xff);
-            bytes[i + 2] = (byte) ((hash[quotient] >>> 8) & 0xff);
-            bytes[i + 3] = (byte) (hash[quotient] & 0xff);
+            bytes[i + 0] = (byte) ((hash[quotient] >>> 24) & 0xFF);
+            bytes[i + 1] = (byte) ((hash[quotient] >>> 16) & 0xFF);
+            bytes[i + 2] = (byte) ((hash[quotient] >>> 8) & 0xFF);
+            bytes[i + 3] = (byte) (hash[quotient] & 0xFF);
         }
 
         return bytes;
