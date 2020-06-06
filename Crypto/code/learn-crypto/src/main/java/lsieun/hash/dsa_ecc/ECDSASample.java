@@ -1,4 +1,4 @@
-package lsieun.crypto.asym.ecc;
+package lsieun.hash.dsa_ecc;
 
 /**
  * <p>ECC parameters</p>

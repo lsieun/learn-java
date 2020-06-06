@@ -2,19 +2,21 @@ package lsieun.tls;
 
 import lsieun.utils.ByteUtils;
 
-public class Random {
+import java.util.Random;
+
+public class TLSRandom {
     public final int gmt_unix_time;
     public final byte[] random_bytes;
 
-    public Random(int gmt_unix_time) {
+    public TLSRandom(int gmt_unix_time) {
         this.gmt_unix_time = gmt_unix_time;
         this.random_bytes = new byte[28];
         long timestamp = System.currentTimeMillis();
-        java.util.Random rand = new java.util.Random(timestamp);
+        Random rand = new Random(timestamp);
         rand.nextBytes(random_bytes);
     }
 
-    public Random(int gmt_unix_time, byte[] random_bytes) {
+    public TLSRandom(int gmt_unix_time, byte[] random_bytes) {
         this.gmt_unix_time = gmt_unix_time;
         this.random_bytes = random_bytes;
     }

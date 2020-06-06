@@ -11,4 +11,5 @@ public class TLSConst {
     public static final int MD5_BYTE_SIZE = 16;
     public static final int SHA1_BYTE_SIZE = 20;
 
+    public static final int VERIFY_DATA_LEN = 12;
 }

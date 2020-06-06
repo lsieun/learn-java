@@ -316,8 +316,8 @@ public class AESUtils {
         aes_encrypt(plain_text_bytes, plain_text_len, cipher_text_bytes, iv_128_bit_bytes, key_bytes, 16);
     }
 
-    public static void aes_128_decrypt(byte[] cipher_text_bytes, int ciper_text_len, byte[] plain_text_bytes, byte[] iv_128_bit_bytes, byte[] key_bytes) {
-        aes_decrypt(cipher_text_bytes, ciper_text_len, plain_text_bytes, iv_128_bit_bytes, key_bytes, 16);
+    public static void aes_128_decrypt(byte[] cipher_text_bytes, int cipher_text_len, byte[] plain_text_bytes, byte[] iv_128_bit_bytes, byte[] key_bytes) {
+        aes_decrypt(cipher_text_bytes, cipher_text_len, plain_text_bytes, iv_128_bit_bytes, key_bytes, 16);
     }
 
     public static void aes_256_encrypt(byte[] plain_text_bytes, int plain_text_len, byte[] cipher_text_bytes, byte[] iv_128_bit_bytes, byte[] key_bytes) {

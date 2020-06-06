@@ -1,9 +1,8 @@
-package lsieun.crypto.asym.ecc;
+package lsieun.hash.dsa_ecc;
 
-import lsieun.crypto.asym.dsa.DsaSignature;
-import lsieun.crypto.asym.ecc.bean.ECCKey;
-import lsieun.crypto.asym.ecc.bean.EllipticCurve;
-import lsieun.crypto.asym.ecc.bean.Point;
+import lsieun.crypto.asym.ecc.ECCUtils;
+import lsieun.hash.dsa.DsaSignature;
+import lsieun.crypto.asym.ecc.Point;
 import lsieun.hash.sha256.SHA256Utils;
 import lsieun.utils.BigUtils;
 
@@ -31,11 +30,11 @@ public class ECDSATest {
         byte[] input = msg.getBytes(StandardCharsets.UTF_8);
         byte[] hash_bytes = SHA256Utils.sha256_hash(input, input.length);
 
-        DsaSignature signature = ECDSADetails.ecdsa_sign(curve, A.d, hash_bytes);
+        DsaSignature signature = ECDSAUtils.ecdsa_sign(curve, A.d, hash_bytes);
         System.out.println("R: " + signature.r.toString(16));
         System.out.println("S: " + signature.s.toString(16));
 
-        boolean flag = ECDSADetails.ecdsa_verify(curve, A.Q, hash_bytes, signature);
+        boolean flag = ECDSAUtils.ecdsa_verify(curve, A.Q, hash_bytes, signature);
         System.out.println(flag);
     }
 }

@@ -1,7 +1,5 @@
 package lsieun.crypto.asym.ecc;
 
-import lsieun.crypto.asym.ecc.bean.Point;
-
 import java.math.BigInteger;
 
 public class ECCUtils {
@@ -28,8 +26,8 @@ public class ECCUtils {
         BigInteger cst_2 = BigInteger.valueOf(2);
         BigInteger cst_3 = BigInteger.valueOf(3);
 
-        BigInteger numerator = x1.multiply(x1).multiply(cst_3).add(a);
-        BigInteger denominator = y1.multiply(cst_2);
+        BigInteger numerator = x1.multiply(x1).multiply(cst_3).add(a); // 分子
+        BigInteger denominator = y1.multiply(cst_2); // 分母
         BigInteger lambda = denominator.modInverse(p).multiply(numerator).mod(p);
 
         BigInteger x3 = lambda.multiply(lambda).subtract(x1).subtract(x1).mod(p);

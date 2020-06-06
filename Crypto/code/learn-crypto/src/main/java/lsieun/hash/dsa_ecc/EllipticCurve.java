@@ -1,4 +1,6 @@
-package lsieun.crypto.asym.ecc.bean;
+package lsieun.hash.dsa_ecc;
+
+import lsieun.crypto.asym.ecc.Point;
 
 import java.math.BigInteger;
 

@@ -1,7 +1,7 @@
-package lsieun.crypto.asym.ecc;
+package lsieun.crypto.asym.dh_ecc;
 
-import lsieun.crypto.asym.ecc.bean.KeyPair;
-import lsieun.crypto.asym.ecc.bean.Point;
+import lsieun.crypto.asym.ecc.ECCUtils;
+import lsieun.crypto.asym.ecc.Point;
 
 import java.math.BigInteger;
 

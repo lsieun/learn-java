@@ -28,20 +28,24 @@ public class Digest {
      * the length in bits, and update the hash one last time.
      */
     public static byte[] finalize_digest(DigestCtx context) {
-        if (context.block_len >= 56) {
-            context.input_block[context.block_len] = (byte) 0x80;
-            context.block_algorithm.block_operate(context.input_block, context.hash);
+        int block_len = context.block_len;
+        byte[] input_block = Arrays.copyOf(context.input_block, context.input_block.length);
+        int[] hash = Arrays.copyOf(context.hash, context.hash.length);
 
-            Arrays.fill(context.input_block, (byte) 0);
-            context.finalize_algorithm.block_finalize(context.input_block, context.input_len * 8);
-            context.block_algorithm.block_operate(context.input_block, context.hash);
+        if (block_len >= 56) {
+            input_block[block_len] = (byte) 0x80;
+            context.block_algorithm.block_operate(input_block, hash);
+
+            Arrays.fill(input_block, (byte) 0);
+            context.finalize_algorithm.block_finalize(input_block, context.input_len * 8);
+            context.block_algorithm.block_operate(input_block, hash);
         } else {
-            context.input_block[context.block_len] = (byte) 0x80;
-            context.finalize_algorithm.block_finalize(context.input_block, context.input_len * 8);
-            context.block_algorithm.block_operate(context.input_block, context.hash);
+            input_block[block_len] = (byte) 0x80;
+            context.finalize_algorithm.block_finalize(input_block, context.input_len * 8);
+            context.block_algorithm.block_operate(input_block, hash);
         }
 
-        return context.encode_algorithm.encode(context.hash);
+        return context.encode_algorithm.encode(hash);
     }
 
     public static byte[] hmac(byte[] key_bytes, byte[] input, HashContextAlgorithm context_algorithm) {

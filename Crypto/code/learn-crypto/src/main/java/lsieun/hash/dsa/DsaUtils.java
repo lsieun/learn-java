@@ -1,4 +1,4 @@
-package lsieun.crypto.asym.dsa;
+package lsieun.hash.dsa;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
@@ -10,7 +10,7 @@ public class DsaUtils {
         BigInteger p = params.p;
         BigInteger q = params.q;
 
-        BigInteger k = generate_message_secrete(params);
+        BigInteger k = generate_message_secret(params);
 
         // r = ( g ^ k % p ) % q
         BigInteger r = g.modPow(k, p).remainder(q);
@@ -30,7 +30,7 @@ public class DsaUtils {
         return signature;
     }
 
-    public static BigInteger generate_message_secrete(DsaParams params) {
+    public static BigInteger generate_message_secret(DsaParams params) {
         BigInteger q = params.q;
         int bitLength = q.bitLength();
         BigInteger q_minus_1 = q.subtract(BigInteger.ONE);

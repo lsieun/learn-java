@@ -1,8 +1,8 @@
-package lsieun.crypto.asym.ecc;
+package lsieun.hash.dsa_ecc;
 
-import lsieun.crypto.asym.dsa.DsaSignature;
-import lsieun.crypto.asym.ecc.bean.EllipticCurve;
-import lsieun.crypto.asym.ecc.bean.Point;
+import lsieun.crypto.asym.ecc.ECCUtils;
+import lsieun.hash.dsa.DsaSignature;
+import lsieun.crypto.asym.ecc.Point;
 import lsieun.utils.BigUtils;
 
 import java.math.BigInteger;

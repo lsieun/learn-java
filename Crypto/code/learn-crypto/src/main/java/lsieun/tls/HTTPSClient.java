@@ -5,7 +5,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 
-public class HTTPS {
+public class HTTPSClient {
     public static void main(String[] args) {
         String host = "127.0.0.1";
         String path = "/index.html";
@@ -26,7 +26,7 @@ public class HTTPS {
             HTTPSUtils.http_get(conn, tls_context, host, path);
             HTTPSUtils.display_result(conn, tls_context);
 
-            TLSUtils.tls_shutdown();
+            TLSUtils.tls_shutdown(conn);
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,4 +1,4 @@
-package lsieun.crypto.asym.dsa;
+package lsieun.hash.dsa;
 
 import lsieun.utils.BigUtils;
 

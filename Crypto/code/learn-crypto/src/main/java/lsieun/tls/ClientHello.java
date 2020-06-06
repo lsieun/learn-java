@@ -5,13 +5,13 @@ import java.io.IOException;
 
 public class ClientHello {
     public final ProtocolVersion client_version;
-    public final Random random;
+    public final TLSRandom random;
     public final byte[] session_id;
     public final byte[] cipher_suites;
     public final byte[] compression_methods;
 
     public ClientHello(ProtocolVersion client_version,
-                       Random random,
+                       TLSRandom random,
                        byte[] session_id,
                        byte[] cipher_suites,
                        byte[] compression_methods) {
@@ -32,7 +32,6 @@ public class ClientHello {
             bao.write(session_id);
 
             int cipher_suites_length = cipher_suites.length;
-            bao.write(cipher_suites_length >> 8);
             bao.write(cipher_suites_length);
             bao.write(cipher_suites);
 

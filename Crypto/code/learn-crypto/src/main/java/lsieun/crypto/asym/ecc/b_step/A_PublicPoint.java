@@ -1,8 +1,8 @@
 package lsieun.crypto.asym.ecc.b_step;
 
 import lsieun.crypto.asym.ecc.ECCUtils;
-import lsieun.crypto.asym.ecc.ECDSASample;
-import lsieun.crypto.asym.ecc.bean.Point;
+import lsieun.hash.dsa_ecc.ECDSASample;
+import lsieun.crypto.asym.ecc.Point;
 import lsieun.utils.BigUtils;
 
 import java.math.BigInteger;

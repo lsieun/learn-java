@@ -1,4 +1,4 @@
-package lsieun.crypto.asym.ecc.bean;
+package lsieun.crypto.asym.ecc;
 
 import java.math.BigInteger;
 

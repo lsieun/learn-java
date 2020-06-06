@@ -1,6 +1,6 @@
-package lsieun.crypto.asym.dsa.b_rule;
+package lsieun.hash.dsa.b_rule;
 
-import lsieun.crypto.asym.dsa.DsaSample;
+import lsieun.hash.dsa.DsaSample;
 import lsieun.utils.BigUtils;
 
 import java.math.BigInteger;

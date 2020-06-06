@@ -21,7 +21,7 @@ public class RSAUtils {
 
         List<Byte> list = new ArrayList<>();
         while (length > 0) {
-            int block_size = (length < modulus_length - 11) ? length : (modulus_length - 11);
+            int block_size = Math.min(length, modulus_length - 11);
             Arrays.fill(padded_block, (byte) 0);
             System.arraycopy(input, index, padded_block, modulus_length - block_size, block_size);
             // set block type
@@ -101,7 +101,6 @@ public class RSAUtils {
             index += modulus_length;
             length -= modulus_length;
         }
-        ;
 
         int size = list.size();
         byte[] result_bytes = new byte[size];

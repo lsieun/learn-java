@@ -1,21 +1,20 @@
 package lsieun.tls;
 
-import com.sun.corba.se.impl.resolver.SplitLocalResolverImpl;
 import lsieun.crypto.asym.dh.DHKey;
 import lsieun.crypto.asym.rsa.RSAKey;
 import lsieun.crypto.asym.rsa.RSAUtils;
 import lsieun.crypto.cert.x509.SignedX509Certificate;
 import lsieun.crypto.cert.x509.X509Utils;
+import lsieun.hash.Digest;
 import lsieun.utils.BigUtils;
 import lsieun.utils.ByteDashboard;
 import lsieun.utils.ByteUtils;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Formatter;
+import java.util.Arrays;
 import java.util.List;
 
 public class TLSUtils {
@@ -23,26 +22,57 @@ public class TLSUtils {
     /**
      * Negotiate an TLS channel on an already-established socket.
      */
-    public static void tls_connect(Connection conn, TLSParameters parameters) throws IOException {
+    public static void tls_connect(Connection conn, TLSParameters tls_context) throws IOException {
         // Step 1. Send the TLS handshake “client hello” message
-        send_client_hello(conn);
+        send_client_hello(conn, tls_context);
 
         // Step 2. Receive the server hello response
-        parameters.server_hello_done = false;
-        while (!parameters.server_hello_done) {
-            receive_tls_msg(conn, parameters);
+        tls_context.server_hello_done = false;
+        while (!tls_context.server_hello_done) {
+            receive_tls_msg(conn, tls_context);
         }
 
-        // Step 3. Send client key exchange, change cipher spec (7.1) and encrypted
-        // handshake message
-        send_client_key_exchange(conn, parameters);
+        // Step 3. Send client key exchange, change cipher spec (7.1) and encrypted handshake message
+        send_client_key_exchange(conn, tls_context);
+
+        send_change_cipher_spec(conn, tls_context);
+
+        // This message will be encrypted using the newly negotiated keys
+        send_finished(conn, tls_context);
+
+        while (!tls_context.server_finished) {
+            receive_tls_msg(conn, tls_context);
+        }
     }
 
-    public static void send_client_key_exchange(Connection conn, TLSParameters parameters) throws IOException {
+    public static void send_finished(Connection conn, TLSParameters tls_context) throws IOException {
+        byte[] finished_label = "client finished".getBytes(StandardCharsets.UTF_8);
+        byte[] verify_data = compute_verify_data(finished_label, tls_context);
+        send_handshake_message(conn, tls_context, HandshakeType.FINISHED, verify_data);
+    }
+
+    /**
+     * 7.4.9:
+     * verify_data = PRF( master_secret, “client finished”, MD5(handshake_messages)
+     * + SHA-1(handshake_messages)) [0..11]
+     * <p>
+     * master_secret = PRF( pre_master_secret, “master secret”, ClientHello.random +
+     * ServerHello.random );
+     * always 48 bytes in length.
+     */
+    public static byte[] compute_verify_data(byte[] finished_label, TLSParameters tls_context) {
+        byte[] md5_digest = Digest.finalize_digest(tls_context.md5_handshake_digest);
+        byte[] sha1_digest = Digest.finalize_digest(tls_context.sha1_handshake_digest);
+        byte[] handshake_hash = ByteUtils.concatenate(md5_digest, sha1_digest);
+        byte[] verify_data = PRF.PRF(tls_context.master_secret, finished_label, handshake_hash, TLSConst.VERIFY_DATA_LEN);
+        return verify_data;
+    }
+
+    public static void send_client_key_exchange(Connection conn, TLSParameters tls_context) throws IOException {
         byte[] pre_master_key = null;
         byte[] key_exchange_message = null;
 
-        CipherSuiteIdentifier cipher_suite = parameters.pending_send_parameters.suite;
+        CipherSuiteIdentifier cipher_suite = tls_context.send_parameters.suite;
         switch (cipher_suite) {
             case TLS_NULL_WITH_NULL_NULL:
                 // TODO: 有没有server支持这个呢？
@@ -59,7 +89,7 @@ public class TLSUtils {
             case TLS_RSA_WITH_DES_CBC_SHA:
             case TLS_RSA_WITH_3DES_EDE_CBC_SHA:
                 pre_master_key = new byte[TLSConst.MASTER_SECRET_LENGTH];
-                key_exchange_message = rsa_key_exchange(parameters.server_public_key.rsa_public_key, pre_master_key);
+                key_exchange_message = rsa_key_exchange(tls_context.server_public_key.rsa_public_key, pre_master_key);
                 break;
             case TLS_DH_DSS_EXPORT_WITH_DES40_CBC_SHA:
             case TLS_DH_DSS_WITH_DES_CBC_SHA:
@@ -67,32 +97,30 @@ public class TLSUtils {
             case TLS_DH_RSA_EXPORT_WITH_DES40_CBC_SHA:
             case TLS_DH_RSA_WITH_DES_CBC_SHA:
             case TLS_DH_RSA_WITH_3DES_EDE_CBC_SHA:
-                int pre_master_secret_len = BigUtils.toByteSize(parameters.server_dh_key.p);
+                int pre_master_secret_len = BigUtils.toByteSize(tls_context.server_dh_key.p);
                 pre_master_key = new byte[pre_master_secret_len];
-                key_exchange_message = dh_key_exchange(parameters.server_dh_key, pre_master_key);
+                key_exchange_message = dh_key_exchange(tls_context.server_dh_key, pre_master_key);
                 break;
             default:
                 throw new RuntimeException("Unsupported Cipher Suite " + cipher_suite);
         }
 
-        send_handshake_message(conn, HandshakeType.CLIENT_KEY_EXCHANGE, key_exchange_message);
+        send_handshake_message(conn, tls_context, HandshakeType.CLIENT_KEY_EXCHANGE, key_exchange_message);
 
         // Now, turn the premaster secret into an actual master secret (the
         // server side will do this concurrently).
-        compute_master_secret(pre_master_key, parameters);
+        compute_master_secret(pre_master_key, tls_context);
 
-        // TODO: - for security, should also “purge” the premaster secret from
-        // memory.
-        calculate_keys(parameters);
+        // TODO: - for security, should also “purge” the pre-master secret from memory.
+        calculate_keys(tls_context);
     }
 
-    public static void send_change_cipher_spec(Connection conn, TLSParameters parameters) throws IOException {
+    public static void send_change_cipher_spec(Connection conn, TLSParameters tls_context) throws IOException {
         byte[] send_buffer = new byte[1];
         send_buffer[0] = 1;
-        send_message(conn, ContentType.CONTENT_CHANGE_CIPHER_SPEC, send_buffer);
+        send_message(conn, tls_context, ContentType.CONTENT_CHANGE_CIPHER_SPEC, send_buffer);
 
-        parameters.active_send_parameters = parameters.pending_send_parameters;
-        parameters.pending_send_parameters = null;
+        tls_context.send_parameters.seq_num = 0L;
     }
 
     public static byte[] dh_key_exchange(DHKey server_dh_key, byte[] pre_master_secret) {
@@ -142,7 +170,7 @@ public class TLSUtils {
      * connection. It is up to the caller of this function to wait
      * for the server reply.
      */
-    private static void send_client_hello(Connection conn) throws IOException {
+    private static void send_client_hello(Connection conn, TLSParameters tls_context) throws IOException {
         int major = TLSConst.TLS_VERSION_MAJOR;
         int minor = TLSConst.TLS_VERSION_MINOR;
         int local_time = (int) (System.currentTimeMillis() / 1000);
@@ -151,27 +179,40 @@ public class TLSUtils {
         byte[] compression_methods = new byte[]{0};
 
         ProtocolVersion client_version = new ProtocolVersion(major, minor);
-        Random random = new Random(local_time);
+        TLSRandom random = new TLSRandom(local_time);
+
+        byte[] client_random = random.toBytes();
+        System.arraycopy(client_random, 0, tls_context.client_random, 0, TLSConst.RANDOM_LENGTH);
+
         ClientHello instance = new ClientHello(client_version, random, session_id, cipher_suites, compression_methods);
         byte[] data = instance.toBytes();
-        send_handshake_message(conn, HandshakeType.CLIENT_HELLO, data);
-
+        send_handshake_message(conn, tls_context, HandshakeType.CLIENT_HELLO, data);
     }
 
-    public static void send_handshake_message(Connection conn, HandshakeType msg_type, byte[] content) throws IOException {
+    public static void send_handshake_message(Connection conn, TLSParameters tls_context, HandshakeType msg_type, byte[] content) throws IOException {
         Handshake instance = new Handshake(msg_type, content);
         byte[] data = instance.toBytes();
-        send_message(conn, ContentType.CONTENT_HANDSHAKE, data);
+        Digest.update_digest(tls_context.md5_handshake_digest, data);
+        Digest.update_digest(tls_context.sha1_handshake_digest, data);
+        send_message(conn, tls_context, ContentType.CONTENT_HANDSHAKE, data);
     }
 
-    public static void send_alert_message(Connection conn, AlertDescription alert_code) throws IOException {
+    public static void send_alert_message(Connection conn, TLSParameters tls_context, AlertDescription alert_code) throws IOException {
         byte[] data = new byte[2];
         data[0] = (byte) AlertLevel.FATAL.val;
         data[1] = (byte) alert_code.val;
-        send_message(conn, ContentType.CONTENT_ALERT, data);
+        send_message(conn, tls_context, ContentType.CONTENT_ALERT, data);
     }
 
-    public static void send_message(Connection conn, ContentType content_type, byte[] content) throws IOException {
+    /**
+     * send TLS Recode
+     *
+     * @param conn
+     * @param content_type
+     * @param content
+     * @throws IOException
+     */
+    public static void send_message(Connection conn, TLSParameters tls_context, ContentType content_type, byte[] content) throws IOException {
         ProtocolVersion version = new ProtocolVersion(TLSConst.TLS_VERSION_MAJOR, TLSConst.TLS_VERSION_MINOR);
         TLSPlaintext instance = new TLSPlaintext(content_type, version, content);
         byte[] bytes = instance.toBytes();
@@ -183,7 +224,7 @@ public class TLSUtils {
         conn.out.flush();
     }
 
-    public static void receive_tls_msg(Connection conn, TLSParameters parameters) throws IOException {
+    public static void receive_tls_msg(Connection conn, TLSParameters tls_context) throws IOException {
         byte[] header = new byte[5];
         // STEP 1 - read off the TLS Record layer
         receive(conn, header, 0, 5);
@@ -204,6 +245,9 @@ public class TLSUtils {
 
         ContentType content_type = ContentType.valueOf(type);
         if (content_type == ContentType.CONTENT_HANDSHAKE) {
+            Digest.update_digest(tls_context.md5_handshake_digest, data);
+            Digest.update_digest(tls_context.sha1_handshake_digest, data);
+
             while (bd.hasNext()) {
                 byte b0 = bd.next();
                 byte b1 = bd.next();
@@ -216,13 +260,16 @@ public class TLSUtils {
 
                 switch (msg_type) {
                     case SERVER_HELLO:
-                        parse_server_hello(bytes, parameters);
+                        parse_server_hello(bytes, tls_context);
                         break;
                     case CERTIFICATE:
-                        parse_x509_chain(bytes, parameters);
+                        parse_x509_chain(bytes, tls_context);
                         break;
                     case SERVER_HELLO_DONE:
-                        parameters.server_hello_done = true;
+                        tls_context.server_hello_done = true;
+                        break;
+                    case FINISHED:
+                        parse_finished(bytes, tls_context);
                         break;
                     default:
                         System.out.println("Ignoring unrecognized handshake message" + msg_type);
@@ -243,24 +290,31 @@ public class TLSUtils {
             if (level == AlertLevel.FATAL) {
                 throw new RuntimeException("Fatal Alert");
             }
-        }
-        else if (content_type == ContentType.CONTENT_CHANGE_CIPHER_SPEC) {
+        } else if (content_type == ContentType.CONTENT_CHANGE_CIPHER_SPEC) {
             // TODO: 其实，我觉得这里不应该用while
             // 忽然，我想到，会不会packet重发的时候，会把active_recv_parameter给覆盖了
             while (bd.hasNext()) {
                 byte change_cipher_spec_type = bd.next();
                 if (change_cipher_spec_type != 1) {
                     throw new RuntimeException("Error - received message ChangeCipherSpec, but type != 1");
-                }
-                else {
-                    parameters.active_recv_parameters = parameters.pending_recv_parameters;
-                    parameters.pending_recv_parameters = null;
+                } else {
+                    tls_context.recv_parameters.seq_num = 0;
                 }
             }
         }
+
         else {
             // Ignore content types not understood
             System.out.println("Ignoring non-recognized content type " + content_type);
+        }
+    }
+
+    public static void parse_finished(byte[] bytes, TLSParameters tls_context) {
+        tls_context.server_finished = true;
+        byte[] finished_label = "server finished".getBytes(StandardCharsets.UTF_8);
+        byte[] verify_data = compute_verify_data(finished_label, tls_context);
+        if (!Arrays.equals(bytes, verify_data)) {
+            throw new RuntimeException("Not Equal");
         }
     }
 
@@ -269,7 +323,7 @@ public class TLSUtils {
         System.out.println(line);
     }
 
-    public static ServerHello parse_server_hello(byte[] bytes, TLSParameters parameters) {
+    public static ServerHello parse_server_hello(byte[] bytes, TLSParameters tls_context) {
         ByteDashboard bd = new ByteDashboard(bytes);
 
         int major = bd.next();
@@ -282,7 +336,7 @@ public class TLSUtils {
         byte b3 = bd.next();
         int gmt_unix_time = (b0 & 0xFF) << 24 | (b1 & 0xFF) << 16 | (b2 & 0xFF) | (b3 & 0xFF);
         byte[] random_bytes = bd.nextN(28);
-        Random random = new Random(gmt_unix_time, random_bytes);
+        TLSRandom random = new TLSRandom(gmt_unix_time, random_bytes);
 
         int session_id_length = bd.next();
         byte[] session_id = bd.nextN(session_id_length);
@@ -290,16 +344,16 @@ public class TLSUtils {
         int cipher_suite = (cipher_suite_bytes[0] & 0xFF) << 8 | ((cipher_suite_bytes[1] & 0xFF));
         int compression_method = bd.next();
 
-        parameters.pending_recv_parameters.suite = CipherSuiteIdentifier.valueOf(cipher_suite);
-        parameters.pending_send_parameters.suite = CipherSuiteIdentifier.valueOf(cipher_suite);
+        tls_context.recv_parameters.suite = CipherSuiteIdentifier.valueOf(cipher_suite);
+        tls_context.send_parameters.suite = CipherSuiteIdentifier.valueOf(cipher_suite);
         byte[] server_random = random.toBytes();
-        System.arraycopy(server_random, 0, parameters.server_random, 0, TLSConst.RANDOM_LENGTH);
+        System.arraycopy(server_random, 0, tls_context.server_random, 0, TLSConst.RANDOM_LENGTH);
 
         ServerHello server_hello = new ServerHello(server_version, random, session_id, cipher_suite, compression_method);
         return server_hello;
     }
 
-    public static List<SignedX509Certificate> parse_x509_chain(byte[] bytes, TLSParameters parameters) {
+    public static List<SignedX509Certificate> parse_x509_chain(byte[] bytes, TLSParameters tls_context) {
         ByteDashboard bd = new ByteDashboard(bytes);
         byte b0 = bd.next();
 
@@ -310,7 +364,16 @@ public class TLSUtils {
         int length = bd.nextInt(3);
         int total_certificate_length = bd.nextInt(3);
 
+        if ((length - 3) != total_certificate_length) {
+            throw new RuntimeException("The chain length is Not Right!");
+        }
+
         List<SignedX509Certificate> list = new ArrayList<>();
+        // TODO: each certificate after the first should be checked to ensure that it includes the “is a certificate authority” extension
+        // Certificate chain parsing, then, consists of reading the length of the certificate
+        // chain from the message, and then reading each certificate in turn, using
+        // each to verify the last. Of course, the first must also be verified for freshness
+        // and domain name validity.
         while (bd.hasNext()) {
             int cert_length = bd.nextInt(3);
             byte[] cert_bytes = bd.nextN(cert_length);
@@ -318,7 +381,7 @@ public class TLSUtils {
             list.add(cert);
         }
 
-        parameters.server_public_key = list.get(0).tbsCertificate.subjectPublicKeyInfo;
+        tls_context.server_public_key = list.get(0).tbsCertificate.subjectPublicKeyInfo;
 
         return list;
     }
@@ -346,32 +409,32 @@ public class TLSUtils {
      * Orderly shutdown of the TLS channel (note that the socket itself will
      * still be open after this is called).
      */
-    public static void tls_shutdown() {
+    public static void tls_shutdown(Connection conn) {
         //
     }
 
-    public static void compute_master_secret(byte[] pre_master_secret, TLSParameters parameters) {
+    public static void compute_master_secret(byte[] pre_master_secret, TLSParameters tls_context) {
         byte[] label = "master secret".getBytes(StandardCharsets.UTF_8);
-        byte[] seed = ByteUtils.concatenate(parameters.client_random, parameters.server_random);
+        byte[] seed = ByteUtils.concatenate(tls_context.client_random, tls_context.server_random);
         byte[] bytes = PRF.PRF(pre_master_secret, label, seed, TLSConst.MASTER_SECRET_LENGTH);
-        System.arraycopy(bytes, 0, parameters.master_secret, 0, TLSConst.MASTER_SECRET_LENGTH);
+        System.arraycopy(bytes, 0, tls_context.master_secret, 0, TLSConst.MASTER_SECRET_LENGTH);
     }
 
-    public static void calculate_keys(TLSParameters parameters) {
+    public static void calculate_keys(TLSParameters tls_context) {
         // NOTE: assuming send suite & recv suite will always be the same
-        CipherSuite suite = CipherSuite.valueOf(parameters.pending_send_parameters.suite);
+        CipherSuite suite = CipherSuite.valueOf(tls_context.send_parameters.suite);
         int key_block_length = suite.hash_size * 2 + suite.key_size * 2 + suite.IV_size * 2;
 
         byte[] label = "key expansion".getBytes(StandardCharsets.UTF_8);
-        byte[] seed = ByteUtils.concatenate(parameters.server_random, parameters.client_random);
+        byte[] seed = ByteUtils.concatenate(tls_context.server_random, tls_context.client_random);
 
 
-        byte[] key_block = PRF.PRF(parameters.master_secret, label, seed, key_block_length);
+        byte[] key_block = PRF.PRF(tls_context.master_secret, label, seed, key_block_length);
 
         ByteDashboard bd = new ByteDashboard(key_block);
 
-        ProtectionParameters send_parameters = parameters.pending_send_parameters;
-        ProtectionParameters recv_parameters = parameters.pending_recv_parameters;
+        ProtectionParameters send_parameters = tls_context.send_parameters;
+        ProtectionParameters recv_parameters = tls_context.recv_parameters;
         send_parameters.mac_secret = bd.nextN(suite.hash_size);
         recv_parameters.mac_secret = bd.nextN(suite.hash_size);
         send_parameters.key = bd.nextN(suite.key_size);

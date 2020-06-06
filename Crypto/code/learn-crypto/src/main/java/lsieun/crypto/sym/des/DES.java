@@ -1,13 +1,13 @@
 package lsieun.crypto.sym.des;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 public class DES {
-    private static final int DES_BLOCK_SIZE = 8;
 
     public static byte[] des_encrypt(byte[] plain_text_bytes, byte[] key_64_bit_bytes) {
         int plain_text_len = plain_text_bytes.length;
-        int padding_len = DES_BLOCK_SIZE - (plain_text_len % DES_BLOCK_SIZE);
+        int padding_len = DESConst.DES_BLOCK_SIZE - (plain_text_len % DESConst.DES_BLOCK_SIZE);
         byte[] padded_plain_text_bytes = new byte[plain_text_len + padding_len];
 
         // This implements NIST 800-3A padding
@@ -21,7 +21,7 @@ public class DES {
 
     public static byte[] des_encrypt_pkcs5(byte[] plain_text_bytes, byte[] key_64_bit_bytes) {
         int plain_text_len = plain_text_bytes.length;
-        int padding_len = DES_BLOCK_SIZE - (plain_text_len % DES_BLOCK_SIZE);
+        int padding_len = DESConst.DES_BLOCK_SIZE - (plain_text_len % DESConst.DES_BLOCK_SIZE);
         byte[] padded_plain_text_bytes = new byte[plain_text_len + padding_len];
 
         // This implements PKCS #5 padding.
@@ -49,7 +49,7 @@ public class DES {
         byte[] input_block = new byte[8];
         int times = input_length / 8;
         for (int i = 0; i < times; i++) {
-            System.arraycopy(input_block, 0, input, i * 8, 8);
+            System.arraycopy(input, i * 8, input_block, 0, 8);
             byte[] encrypted_bytes = des_block_operate(input_block, key_64_bit_bytes, type);
             System.arraycopy(encrypted_bytes, 0, output, i * 8, 8);
         }
@@ -88,10 +88,10 @@ public class DES {
             }
 
             // msg
-            byte[] left_32_bit_bytes = new byte[4];
-            byte[] right_32_bit_bytes = new byte[4];
-            System.arraycopy(content_64_bit_bytes, 0, left_32_bit_bytes, 0, 4);
-            System.arraycopy(content_64_bit_bytes, 4, right_32_bit_bytes, 0, 4);
+            byte[] left_32_bit_bytes = Arrays.copyOfRange(content_64_bit_bytes, 0, 4);
+            byte[] right_32_bit_bytes = Arrays.copyOfRange(content_64_bit_bytes, 4, 8);
+//            System.arraycopy(content_64_bit_bytes, 0, left_32_bit_bytes, 0, 4);
+//            System.arraycopy(content_64_bit_bytes, 4, right_32_bit_bytes, 0, 4);
 
 
             byte[] expansion_48_bit_bytes = DESUtils.permute(right_32_bit_bytes, DESConst.expansion_table);
