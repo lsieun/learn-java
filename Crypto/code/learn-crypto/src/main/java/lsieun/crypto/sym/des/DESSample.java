@@ -1,21 +1,30 @@
 package lsieun.crypto.sym.des;
 
-import lsieun.utils.ByteUtils;
-
 public class DESSample {
-    public static final byte[] plain_text_bytes = {
+    public static final byte[] input = {
             (byte) 0x87, (byte) 0x87, (byte) 0x87, (byte) 0x87,
             (byte) 0x87, (byte) 0x87, (byte) 0x87, (byte) 0x87
     };
 
-    public static final byte[] key_bytes = {
+    public static final byte[] key = {
             (byte) 0x0E, (byte) 0x32, (byte) 0x92, (byte) 0x32,
             (byte) 0xEA, (byte) 0x6D, (byte) 0x0D, (byte) 0x73
     };
 
-    public static void main(String[] args) {
-//        byte[] encrypted_msg = DES.des_block_operate(plain_text_bytes, key_bytes, CipherType.ENCRYPT);
-        byte[] encrypted_msg = DES.des_encrypt_pkcs5(plain_text_bytes, key_bytes);
-        System.out.println(ByteUtils.toHex(encrypted_msg));
-    }
+    public static final byte[] output = {
+            0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00
+    };
+
+    public static final byte[] iv = {
+            0x01, 0x12, 0x23, 0x34,
+            0x45, 0x56, 0x67, 0x78
+    };
+
+    public static final byte[] output_cbc = {
+            (byte)0x78, (byte)0x7a, (byte)0xe3, (byte)0x8f,
+            (byte)0x6d, (byte)0x07, (byte)0xb1, (byte)0x69,
+            (byte)0xac, (byte)0x99, (byte)0x13, (byte)0x9c,
+            (byte)0xd1, (byte)0x03, (byte)0xe7, (byte)0x9a
+    };
 }

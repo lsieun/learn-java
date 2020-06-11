@@ -15,7 +15,7 @@ public class Test_03_CBC_128 {
     public static void main(String[] args) throws Exception {
 
         byte[] plain_text_bytes = "anything you can think of你在做什么呢?同学".getBytes(StandardCharsets.UTF_8);
-        byte[] padded_plain_text_bytes = PaddingUtils.add_PKCS5Padding(plain_text_bytes, AESConst.AES_BLOCK_SIZE);
+        byte[] padded_plain_text_bytes = PaddingUtils.add_pkcs5_padding(plain_text_bytes, AESConst.AES_BLOCK_SIZE);
         int padded_plain_text_len = padded_plain_text_bytes.length;
 
         byte[] encrypted_bytes = new byte[padded_plain_text_len];
@@ -24,7 +24,7 @@ public class Test_03_CBC_128 {
         byte[] decrypted_bytes = new byte[padded_plain_text_len];
         AESUtils.aes_128_decrypt(encrypted_bytes, encrypted_bytes.length, decrypted_bytes, AESExample.iv_128_bit_bytes, AESExample.key_128_bit_bytes);
 
-        byte[] removed_decrypted_bytes = PaddingUtils.remove_PKCS5Padding(decrypted_bytes);
+        byte[] removed_decrypted_bytes = PaddingUtils.remove_pkcs5_padding(decrypted_bytes);
         System.out.println(new String(removed_decrypted_bytes, StandardCharsets.UTF_8));
 
         byte[] encrypted_bytes2 = encrypt(plain_text_bytes, AESExample.key_128_bit_bytes, AESExample.iv_128_bit_bytes);

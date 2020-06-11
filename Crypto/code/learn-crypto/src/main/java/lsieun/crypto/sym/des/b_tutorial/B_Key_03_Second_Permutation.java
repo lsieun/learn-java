@@ -1,6 +1,6 @@
 package lsieun.crypto.sym.des.b_tutorial;
 
-import lsieun.crypto.sym.des.CipherType;
+import lsieun.crypto.sym.CipherType;
 import lsieun.crypto.sym.des.DESConst;
 import lsieun.crypto.sym.des.DESUtils;
 import lsieun.utils.ByteUtils;

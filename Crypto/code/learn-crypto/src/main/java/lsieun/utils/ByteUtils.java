@@ -31,7 +31,7 @@ public class ByteUtils {
     }
 
     public static String toHex(byte[] bytes) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < bytes.length; ++i) {
             sb.append(Integer.toString((bytes[i] & 0xFF) + 0x100, 16).substring(1));
         }
@@ -125,12 +125,8 @@ public class ByteUtils {
 
         byte[] result_bytes = new byte[len1 + len2];
 
-        for (int i = 0; i < len1; i++) {
-            result_bytes[i] = bytes1[i];
-        }
-        for (int i = 0; i < len2; i++) {
-            result_bytes[len1 + i] = bytes2[i];
-        }
+        System.arraycopy(bytes1, 0, result_bytes, 0, len1);
+        System.arraycopy(bytes2, 0, result_bytes, len1, len2);
 
         return result_bytes;
     }
