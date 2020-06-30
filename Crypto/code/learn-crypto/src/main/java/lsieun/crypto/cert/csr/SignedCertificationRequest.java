@@ -1,6 +1,6 @@
 package lsieun.crypto.cert.csr;
 
-import lsieun.crypto.cert.x509.SignatureAlgorithmIdentifier;
+import lsieun.crypto.cert.cst.SignatureAlgorithmIdentifier;
 import lsieun.crypto.cert.x509.SignatureValue;
 
 public class SignedCertificationRequest {

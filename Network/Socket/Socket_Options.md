@@ -1,5 +1,18 @@
 # Setting Socket Options
 
+<!-- TOC -->
+
+- [1. TCP_NODELAY](#1-tcp_nodelay)
+- [2. SO_LINGER](#2-so_linger)
+- [3. SO_TIMEOUT](#3-so_timeout)
+- [4. SO_RCVBUF and SO_SNDBUF](#4-so_rcvbuf-and-so_sndbuf)
+- [5. SO_KEEPALIVE](#5-so_keepalive)
+- [6. OOBINLINE](#6-oobinline)
+- [7. SO_REUSEADDR](#7-so_reuseaddr)
+- [8. IP_TOS Class of Service](#8-ip_tos-class-of-service)
+
+<!-- /TOC -->
+
 Socket options specify **how the native sockets** on which the Java Socket class relies **send and receive data**. Java supports nine options for client-side sockets:
 
 - TCP_NODELAY
@@ -14,7 +27,7 @@ Socket options specify **how the native sockets** on which the Java Socket class
 
 The funny-looking names for these options are taken from the named constants in the C header files used in Berkeley Unix where sockets were invented. Thus, they follow classic Unix C naming conventions rather than the more legible Java naming conventions. For instance, `SO_SNDBUF` really means “Socket Option Send Buffer Size.”
 
-## TCP_NODELAY
+## 1. TCP_NODELAY
 
 ```java
 public void setTcpNoDelay(boolean on) throws SocketException
@@ -31,7 +44,7 @@ if (!s.getTcpNoDelay()) s.setTcpNoDelay(true);
 
 These two methods are each declared to throw a `SocketException`, which will happen if the underlying socket implementation doesn’t support the `TCP_NODELAY` option.
 
-## SO_LINGER
+## 2. SO_LINGER
 
 ```java
 public void setSoLinger(boolean on, int seconds) throws SocketException
@@ -48,7 +61,7 @@ if (s.getTcpSoLinger() == -1) s.setSoLinger(true, 240);
 
 The maximum linger time is `65,535` seconds, and may be smaller on some platforms. Times larger than that will be reduced to the maximum linger time. Frankly, `65,535` seconds (more than 18 hours) is much longer than you actually want to wait. Generally, the platform default value is more appropriate.
 
-## SO_TIMEOUT
+## 3. SO_TIMEOUT
 
 ```java
 public void setSoTimeout(int milliseconds) throws SocketException
@@ -65,7 +78,7 @@ if (s.getSoTimeout() == 0) s.setSoTimeout(180000);
 
 These two methods each throw a `SocketException` if the underlying socket implementation does not support the `SO_TIMEOUT` option. The `setSoTimeout()` method also throws an `IllegalArgumentException` if the specified timeout value is **negative**.
 
-## SO_RCVBUF and SO_SNDBUF
+## 4. SO_RCVBUF and SO_SNDBUF
 
 **TCP uses buffers to improve network performance**. Larger buffers tend to improve performance for reasonably fast (say, 10Mbps and up) connections whereas slower, dialup connections do better with smaller buffers. Generally, transfers of large, continuous blocks of data, which are common in file transfer protocols such as FTP and HTTP, benefit from large buffers, whereas the smaller transfers of interactive sessions, such as Telnet and many games, do not. Relatively old operating systems designed in the age of small files and slow networks, such as BSD 4.2, use two-kilobyte buffers. Windows XP used 17,520 byte buffers. These days, 128 kilobytes is a common default.
 
@@ -92,7 +105,7 @@ These methods throw an `IllegalArgumentException` if the argument is less than o
 
 In general, if you find your application is not able to fully utilize the available bandwidth (e.g., you have a 25 Mbps Internet connection, but your data is transferring at a piddling 1.5 Mbps) try increasing the buffer sizes. **By contrast, if you’re dropping packets and experiencing congestion, try decreasing the buffer size**. However, most of the time, unless you’re really taxing the network in one direction or the other, the defaults are fine. In particular, modern operating systems use TCP window scaling (not controllable from Java) to dynamically adjust buffer sizes to fit the network. As with almost any performance tuning advice, the rule of thumb is not to do it until you’ve measured a problem. And even then you may well get more speed by increasing the maximum allowed buffer size at the operating system level than by adjusting the buffer sizes of individual sockets.
 
-## SO_KEEPALIVE
+## 5. SO_KEEPALIVE
 
 If `SO_KEEPALIVE` is turned on, the client occasionally sends a data packet over an idle connection (most commonly once every two hours), just to make sure the server hasn’t crashed. If the server fails to respond to this packet, the client keeps trying for a little more than 11 minutes until it receives a response. If it doesn’t receive a response within 12 minutes, the client closes the socket. Without `SO_KEEPALIVE`, an inactive client could live more or less forever without noticing that the server had crashed. These methods turn `SO_KEEPALIVE` on and off and determine its current state:
 
@@ -107,7 +120,7 @@ The default for `SO_KEEPALIVE` is `false`. This code fragment turns `SO_KEEPALIV
 if (s.getKeepAlive()) s.setKeepAlive(false);
 ```
 
-## OOBINLINE
+## 6. OOBINLINE
 
 TCP includes a feature that sends a single byte of “urgent” data out of band. This data is sent immediately. Furthermore, the receiver is notified when the urgent data is received and may elect to process the urgent data before it processes any other data that has already been received. Java supports both sending and receiving such urgent data. The sending method is named, obviously enough, `sendUrgentData()`:
 
@@ -134,7 +147,7 @@ if (!s.getOOBInline()) s.setOOBInline(true);
 
 Once `OOBINLINE` is turned on, any urgent data that arrives will be placed on the socket’s input stream to be read in the usual way. Java does not distinguish it from nonurgent data. That makes it less than ideally useful, but if you have a particular byte (e.g., a `Ctrl-C`) that has special meaning to your program and never shows up in the regular data stream, then this would enable you to send it more quickly.
 
-## SO_REUSEADDR
+## 7. SO_REUSEADDR
 
 When a socket is closed, it may not immediately release the local port, especially if a connection was open when the socket was closed. It can sometimes wait for a small amount of time to make sure it receives any lingering packets that were addressed to the port that were still crossing the network when the socket was closed. The system won’t do anything with any of the late packets it receives. It just wants to make sure they don’t accidentally get fed into a new process that has bound to the same port.
 
@@ -149,7 +162,7 @@ public boolean getReuseAddress() throws SocketException
 
 For this to work, `setReuseAddress()` must be called before the new socket binds to the port. This means the socket must be created in an unconnected state using the noargs constructor; then `setReuseAddress(true)` is called, and the socket is connected using the `connect()` method. Both the socket that was previously connected and the new socket reusing the old address must set `SO_REUSEADDR` to `true` for it to take effect.
 
-## IP_TOS Class of Service
+## 8. IP_TOS Class of Service
 
 **Different types of Internet service have different performance needs**. For instance, video chat needs relatively high bandwidth and low latency for good performance, whereas email can be passed over low-bandwidth connections and even held up for several hours without major harm. VOIP needs less bandwidth than video but minimum jitter. It might be wise to price the different classes of service differentially so that people won’t ask for the highest class of service automatically. After all, if sending an overnight letter cost the same as sending a package via media mail, we’d all just use FedEx overnight, which would quickly become congested and overwhelmed. The Internet is no different.
 

@@ -1,11 +1,8 @@
 
-`UDP` and `TCP` are used by many applications. IP supports both of these protocols. The IP
-protocol transfers packets of information between nodes on a network. Java supports both
-the IPv4 and IPv6 protocol versions.
+`UDP` and `TCP` are used by many applications. IP supports both of these protocols. The IP protocol transfers packets of information between nodes on a network. Java supports both the IPv4 and IPv6 protocol versions.
 
 
-Both `UDP` and `TCP` are layered on top of `IP`. Several other protocols are layered on top of
-TCP, such as HTTP. These relationships are shown in this following figure:
+Both `UDP` and `TCP` are layered on top of `IP`. Several other protocols are layered on top of TCP, such as HTTP. These relationships are shown in this following figure:
 
 ![](images/20181022195312.png)
 

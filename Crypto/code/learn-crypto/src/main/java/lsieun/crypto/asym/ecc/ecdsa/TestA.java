@@ -1,6 +1,6 @@
 package lsieun.crypto.asym.ecc.ecdsa;
 
-import lsieun.hash.dsa_ecc.ECDSASample;
+import lsieun.crypto.hash.dsa_ecc.ECDSASample;
 import lsieun.utils.BigUtils;
 
 import java.math.BigInteger;

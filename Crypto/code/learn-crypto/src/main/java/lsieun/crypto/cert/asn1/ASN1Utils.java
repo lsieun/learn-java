@@ -1,11 +1,12 @@
 package lsieun.crypto.cert.asn1;
 
-import lsieun.crypto.cert.oid.OIDConst;
+import lsieun.crypto.cert.cst.ObjectIdentifier;
 import lsieun.utils.ByteDashboard;
-import lsieun.utils.HexFormat;
-import lsieun.utils.HexUtils;
+import lsieun.utils.FileUtils;
 
+import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Formatter;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,7 +14,38 @@ import java.util.List;
 import static lsieun.crypto.cert.asn1.ASN1Const.*;
 
 public class ASN1Utils {
-    public static List<ASN1Struct> asn1parse(byte[] bytes) {
+    public static List<ASN1Struct> parse_pem(String filepath) {
+        List<String> lines = FileUtils.readLines(filepath);
+
+        StringBuilder sb = new StringBuilder();
+        boolean start = false;
+        for (String line : lines) {
+            if (line == null || "".equals(line)) continue;
+            if ("".equalsIgnoreCase(line.trim())) continue;
+            if (line.contains(":")) continue;
+            if (line.startsWith("-----BEGIN")) {
+                start = true;
+                continue;
+            }
+            if (line.startsWith("-----END")) {
+                break;
+            }
+            if (start) {
+                sb.append(line);
+            }
+        }
+
+        String base64_str = sb.toString();
+        byte[] bytes = Base64.getDecoder().decode(base64_str);
+        return parse_der(bytes);
+    }
+
+    public static List<ASN1Struct> parse_der(String filepath) {
+        byte[] bytes = FileUtils.readBytes(filepath);
+        return parse_der(bytes);
+    }
+
+    public static List<ASN1Struct> parse_der(byte[] bytes) {
         List<ASN1Struct> list = new LinkedList<>();
 
         ByteDashboard bd = new ByteDashboard(bytes);
@@ -46,7 +78,7 @@ public class ASN1Utils {
             list.add(item);
 
             if (constructed) {
-                List<ASN1Struct> sub_list = asn1parse(item.data);
+                List<ASN1Struct> sub_list = parse_der(item.data);
                 item.children.addAll(sub_list);
             }
         }
@@ -54,9 +86,18 @@ public class ASN1Utils {
         return list;
     }
 
-    public static void asn1show(byte[] bytes) {
-        List<ASN1Struct> list = ASN1Utils.asn1parse(bytes);
+    public static byte[] get_bit_string_data(ASN1Struct struct) {
+        if (struct.tag != 3) {
+            throw new RuntimeException("tag is not 3, but is " + struct.tag);
+        }
 
+        int length = struct.data.length;
+        byte[] bytes = new byte[length - 1];
+        System.arraycopy(struct.data, 1, bytes, 0, length -1);
+        return bytes;
+    }
+
+    public static void show_raw(List<ASN1Struct> list) {
         StringBuilder sb = new StringBuilder();
         Formatter fm = new Formatter(sb);
         format(fm, list, 0);
@@ -109,9 +150,7 @@ public class ASN1Utils {
         }
     }
 
-    public static void show_human_readable(byte[] bytes) {
-        List<ASN1Struct> list = ASN1Utils.asn1parse(bytes);
-
+    public static void show_human_readable(List<ASN1Struct> list) {
         StringBuilder sb = new StringBuilder();
         Formatter fm = new Formatter(sb);
         format_human_readable(fm, list, 0);
@@ -167,9 +206,7 @@ public class ASN1Utils {
                         for (byte b : header) {
                             fm.format("%02X ", (b & 0xFF));
                         }
-                        String oid_hex = HexUtils.format(data, HexFormat.FORMAT_FF_SPACE_FF);
-                        String value = OIDConst.get(oid_hex);
-                        fm.format("%s ", value);
+                        fm.format("%s ", ObjectIdentifier.valueOf(data));
                     }
                     break;
                     case ASN1_SEQUENCE:

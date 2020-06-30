@@ -22,7 +22,8 @@ public class AESUtils {
         }
     }
 
-    public static List<byte[]> compute_key_schedule(byte[] key_bytes, int key_length) {
+    public static List<byte[]> compute_key_schedule(byte[] key_bytes) {
+        int key_length = key_bytes.length;
         int key_words = key_length >> 2;
         int rcon = 0x01;
 
@@ -212,7 +213,7 @@ public class AESUtils {
         // rounds = key size in 4-byte words + 6
         int nr = (key_size >> 2) + 6;
 
-        List<byte[]> key_list_bytes = compute_key_schedule(key_bytes, key_size);
+        List<byte[]> key_list_bytes = compute_key_schedule(key_bytes);
         byte[][] word_bytes = new byte[4][4];
         fill_word_bytes(key_list_bytes, 0, word_bytes);
 
@@ -252,7 +253,7 @@ public class AESUtils {
         // rounds = key size in 4-byte words + 6
         int nr = (key_size >> 2) + 6;
 
-        List<byte[]> key_list_bytes = compute_key_schedule(key_bytes, key_size);
+        List<byte[]> key_list_bytes = compute_key_schedule(key_bytes);
 
         byte[][] word_bytes = new byte[4][4];
         fill_word_bytes(key_list_bytes, nr * 4, word_bytes);

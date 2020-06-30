@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileUtils {
+    public static String getFilePath(String relativePath) {
+        return FileUtils.class.getClassLoader().getResource(relativePath).getPath();
+    }
+
     public static byte[] readBytes(String filename) {
         File file = new File(filename);
         if (!file.exists()) {

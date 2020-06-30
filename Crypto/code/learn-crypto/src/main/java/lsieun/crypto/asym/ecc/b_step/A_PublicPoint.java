@@ -1,7 +1,7 @@
 package lsieun.crypto.asym.ecc.b_step;
 
 import lsieun.crypto.asym.ecc.ECCUtils;
-import lsieun.hash.dsa_ecc.ECDSASample;
+import lsieun.crypto.hash.dsa_ecc.ECDSASample;
 import lsieun.crypto.asym.ecc.Point;
 import lsieun.utils.BigUtils;
 

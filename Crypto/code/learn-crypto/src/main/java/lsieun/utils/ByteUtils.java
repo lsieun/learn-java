@@ -8,6 +8,35 @@ import java.util.List;
 
 public class ByteUtils {
 
+    public static byte[] fromInt(int x) {
+        ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES);
+        buffer.putInt(x);
+        return buffer.array();
+    }
+
+    public static byte[] fromLong(long num) {
+        int size = Long.BYTES;
+        byte[] bytes = new byte[size];
+
+        for (int i = 0; i < size; i++) {
+            bytes[i] = (byte) ((num >> ((size - 1 - i) * 8)) & 0xFF);
+        }
+
+        return bytes;
+    }
+
+    public static int toInt(byte[] bytes) {
+        int length = bytes.length;
+
+        int sum = 0;
+        for (int i = 0; i < length; i++) {
+            int index = length - 1 - i;
+            int val = bytes[index] & 0xFF;
+            sum += (val << (i * 8));
+        }
+        return sum;
+    }
+
     public static boolean is_loop(List<byte[]> list) {
         int size = list.size();
         if (size % 2 != 0) return false;

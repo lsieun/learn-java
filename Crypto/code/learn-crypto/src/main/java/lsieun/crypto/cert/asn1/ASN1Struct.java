@@ -1,5 +1,7 @@
 package lsieun.crypto.cert.asn1;
 
+import lsieun.utils.ByteUtils;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,5 +22,9 @@ public class ASN1Struct {
         this.length = length;
         this.header = header;
         this.data = data;
+    }
+
+    public byte[] toByteArray() {
+        return ByteUtils.concatenate(header, data);
     }
 }

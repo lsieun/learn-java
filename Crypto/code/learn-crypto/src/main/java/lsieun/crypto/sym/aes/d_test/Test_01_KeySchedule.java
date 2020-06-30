@@ -19,7 +19,7 @@ public class Test_01_KeySchedule {
         int[] word_key_expansion = alg.createKeyExpansion(key_bytes);
 
         // second method
-        List<byte[]> bytes_list = AESUtils.compute_key_schedule(key_bytes, key_byte_size);
+        List<byte[]> bytes_list = AESUtils.compute_key_schedule(key_bytes);
 
         // display
         System.out.println(word_key_expansion.length);
