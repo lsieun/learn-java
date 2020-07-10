@@ -9,7 +9,7 @@ import lsieun.utils.HexUtils;
 
 import java.math.BigInteger;
 
-public class ASN1DSAUtils {
+public class DSAKeyUtils {
     public static DSAPublicKey parse_public_key(byte[] bytes) {
         ASN1Struct asn1_seq = ASN1Utils.parse_der(bytes).get(0);
 

@@ -1,6 +1,6 @@
 # 时间
 
-Use `java.util.Calendar` class if you need to **extract year, month, day, hour, minute, and second**, or **manipulating these field **(e.g., 7 days later, 3 weeks earlier).
+Use `java.util.Calendar` class if you need to **extract year, month, day, hour, minute, and second**, or **manipulating these field** (e.g., 7 days later, 3 weeks earlier).
 
 Use `java.text.DateFormat` to format a Date (form Date to text) and parse a date string (from text to Date). SimpleDateForamt is a subclass of DateFormat.
 

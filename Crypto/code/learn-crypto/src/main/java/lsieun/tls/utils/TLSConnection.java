@@ -19,6 +19,12 @@ public class TLSConnection implements Closeable {
         }
     }
 
+    public void send(byte[] data) throws IOException {
+        DisplayUtils.display_record(data);
+        this.out.write(data);
+        this.out.flush();
+    }
+
     @Override
     public void close() throws IOException {
         if (socket != null) {

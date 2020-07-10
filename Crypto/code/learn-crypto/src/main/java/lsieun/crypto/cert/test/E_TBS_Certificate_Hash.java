@@ -1,4 +1,4 @@
-package lsieun.crypto.cert.b_test;
+package lsieun.crypto.cert.test;
 
 import lsieun.crypto.cert.asn1.ASN1Struct;
 import lsieun.crypto.cert.asn1.ASN1Utils;

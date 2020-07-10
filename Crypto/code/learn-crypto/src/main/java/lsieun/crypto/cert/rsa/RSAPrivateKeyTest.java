@@ -6,6 +6,6 @@ public class RSAPrivateKeyTest {
     public static void main(String[] args) {
         String filepath = "/home/liusen/Workspace/tmp/abc/rsa.key";
         byte[] bytes = PEMUtils.read(filepath);
-        ASN1RSAKeyUtils.parse_private_key(bytes);
+        RSAKeyUtils.parse_private_key(bytes);
     }
 }

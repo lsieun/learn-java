@@ -2,8 +2,8 @@ package lsieun.tls.cst;
 
 public class TLSConst {
     public static final int TLS_VERSION_MAJOR = 3;
-    public static final int TLS_VERSION_MINOR = 1;
-    public static final int HTTPS_PORT = 8443;
+    public static final int TLS_VERSION_MINOR = 3;
+    public static final int HTTPS_PORT = 443;
 
     public static final int MASTER_SECRET_LENGTH = 48;
     public static final int RANDOM_LENGTH = 32;

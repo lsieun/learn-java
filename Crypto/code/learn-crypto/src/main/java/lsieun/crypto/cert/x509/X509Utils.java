@@ -13,6 +13,8 @@ import lsieun.crypto.cert.x509.extensions.*;
 import lsieun.crypto.hash.dsa.DsaParams;
 import lsieun.crypto.hash.dsa.DsaSignature;
 import lsieun.crypto.hash.dsa.DsaUtils;
+import lsieun.crypto.hash.dsa_ecc.ECDSAUtils;
+import lsieun.crypto.hash.dsa_ecc.EllipticCurve;
 import lsieun.crypto.hash.md5.MD5Utils;
 import lsieun.crypto.hash.sha1.SHA1Utils;
 import lsieun.crypto.hash.sha256.SHA256Utils;
@@ -32,7 +34,7 @@ public class X509Utils {
 
         TBSCertificate tbs_certificate = parse_tbs_certificate(asn1_tbs_certificate);
         SignatureAlgorithmIdentifier signature_algorithm = parse_signature_algorithm_identifier(asn1_signature_algorithm);
-        SignatureValue signature_value = parse_signature_value(asn1_signature_value);
+        SignatureValue signature_value = SignatureValue.parse(asn1_signature_value);
 
         return new SignedCertificate(tbs_certificate, signature_algorithm, signature_value);
     }
@@ -100,11 +102,6 @@ public class X509Utils {
         byte[] data = struct.children.get(0).data;
         ObjectIdentifier oid = ObjectIdentifier.valueOf(data);
         return SignatureAlgorithmIdentifier.valueOf(oid);
-    }
-
-    public static SignatureValue parse_signature_value(ASN1Struct asn1_signature_value) {
-        byte[] bytes = ASN1Utils.get_bit_string_data(asn1_signature_value);
-        return new SignatureValue(bytes);
     }
 
 
@@ -208,7 +205,7 @@ public class X509Utils {
 
                 // 第五步，验证两个hash是否相等
                 return Arrays.equals(hash_bytes, original_hash_bytes);
-            case DSA:
+            case DSA: {
                 ASN1Struct asn1_dsa_signature = ASN1Utils.parse_der(bit_string_data).get(0);
                 ASN1Struct asn1_r = asn1_dsa_signature.children.get(0);
                 ASN1Struct asn1_s = asn1_dsa_signature.children.get(1);
@@ -221,6 +218,27 @@ public class X509Utils {
                 BigInteger public_key = public_key_info.dsa_public_key.public_key;
 
                 return DsaUtils.dsa_verify(dsa_params, public_key, hash_bytes, dsa_signature);
+            }
+            case ECDSA: {
+                ASN1Struct asn1_dsa_signature = ASN1Utils.parse_der(bit_string_data).get(0);
+                ASN1Struct asn1_r = asn1_dsa_signature.children.get(0);
+                ASN1Struct asn1_s = asn1_dsa_signature.children.get(1);
+
+                BigInteger r = ASN1Converter.toBigInteger(asn1_r);
+                BigInteger s = ASN1Converter.toBigInteger(asn1_s);
+                DsaSignature dsa_signature = new DsaSignature(r, s);
+
+                EllipticCurve curve;
+                switch (public_key_info.ecdsa_public_key.oid) {
+                    case prime256v1:
+                        curve = EllipticCurve.P256;
+                        break;
+                    default:
+                        throw new RuntimeException("Unknown curve: " + public_key_info.ecdsa_public_key.oid);
+                }
+
+                return ECDSAUtils.ecdsa_verify(curve, public_key_info.ecdsa_public_key.public_key, hash_bytes, dsa_signature);
+            }
             default:
                 throw new RuntimeException("Unsupported Algorithm: " + signature_algorithm.aid);
         }
@@ -253,6 +271,12 @@ public class X509Utils {
                 fm.format("    Q: %s%n", public_key_info.dsa_public_key.Q.toString(16));
                 fm.format("    G: %s%n", public_key_info.dsa_public_key.G.toString(16));
                 fm.format("    pub: %s%n", public_key_info.dsa_public_key.public_key.toString(16));
+                break;
+            case ECDSA:
+                fm.format("ECDSA%n");
+                fm.format("    curve: %s%n", public_key_info.ecdsa_public_key.oid);
+                fm.format("    x: %s%n", public_key_info.ecdsa_public_key.public_key.x.toString(16));
+                fm.format("    y: %s%n", public_key_info.ecdsa_public_key.public_key.y.toString(16));
                 break;
             default:
                 fm.format("???%n");
@@ -341,6 +365,6 @@ public class X509Utils {
     public static String output_x500_name(Name name) {
         return String.format("/C=%s/ST=%s/L=%s/O=%s/OU=%s/CN=%s/Email=%s",
                 name.CountryName, name.StateOrProvinceName, name.LocalityName,
-                name.OrganizationName, name.OrganizationUnitName, name.CommonName, name.emailAddress);
+                name.OrganizationName, name.OrganizationUnitName, name.CommonName, name.EmailAddress);
     }
 }

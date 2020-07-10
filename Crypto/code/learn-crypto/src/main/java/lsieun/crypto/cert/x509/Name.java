@@ -13,7 +13,7 @@ public class Name {
     public final String OrganizationName;
     public final String OrganizationUnitName;
     public final String CommonName;
-    public final String emailAddress;
+    public final String EmailAddress;
 
     public Name(String countryName,
                 String stateOrProvinceName,
@@ -28,7 +28,7 @@ public class Name {
         this.OrganizationName = organizationName;
         this.OrganizationUnitName = organizationUnitName;
         this.CommonName = commonName;
-        this.emailAddress = emailAddress;
+        this.EmailAddress = emailAddress;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class Name {
                 ", OrganizationName='" + OrganizationName + "'" +
                 ", OrganizationUnitName='" + OrganizationUnitName + "'" +
                 ", CommonName='" + CommonName + "'" +
-                ", emailAddress='" + emailAddress + "'" +
+                ", emailAddress='" + EmailAddress + "'" +
                 '}';
     }
 

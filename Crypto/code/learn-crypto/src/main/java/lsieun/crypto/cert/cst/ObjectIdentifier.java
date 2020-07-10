@@ -1,5 +1,6 @@
 package lsieun.crypto.cert.cst;
 
+import lsieun.crypto.cert.oid.OIDUtils;
 import lsieun.utils.HexFormat;
 import lsieun.utils.HexUtils;
 
@@ -47,6 +48,7 @@ public enum ObjectIdentifier {
     ExtKeyUsage("55 1D 25"),
 
 
+    SHA256("60 86 48 01 65 03 04 02 01"),
     DSA_With_SHA256("60 86 48 01 65 03 04 03 02"),
     ;
 
@@ -59,6 +61,11 @@ public enum ObjectIdentifier {
 
     public boolean equals(byte[] bytes) {
         return Arrays.equals(this.bytes, bytes);
+    }
+
+    @Override
+    public String toString() {
+        return OIDUtils.format(bytes);
     }
 
     public static ObjectIdentifier valueOf(byte[] data) {

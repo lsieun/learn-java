@@ -1,5 +1,6 @@
 package lsieun.z_test;
 
+import javax.net.ssl.SSLSocket;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,7 +11,7 @@ import java.nio.charset.StandardCharsets;
 // TLSv1.2: https://www.example.org
 public class HTTPSTest {
     public static void main(String[] args) throws IOException {
-        URL url = new URL("https://www.douyu.com");
+        URL url = new URL("https://www.baidu.com");
         URLConnection conn = url.openConnection();
         try (InputStream in = conn.getInputStream()) {
             byte[] buffer = new byte[1024];

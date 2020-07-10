@@ -21,6 +21,7 @@ import lsieun.utils.BigUtils;
 import lsieun.utils.ByteDashboard;
 import lsieun.utils.ByteUtils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -129,7 +130,14 @@ public class TLSUtils {
         byte[] data = handshake.toBytes();
         Digest.update_digest(tls_context.md5_handshake_digest, data);
         Digest.update_digest(tls_context.sha1_handshake_digest, data);
-        send_message(conn, tls_context.active_send_parameters, ContentType.CONTENT_HANDSHAKE, data);
+        send_plain_record(conn, ContentType.CONTENT_HANDSHAKE, data);
+    }
+
+    public static void send_plain_record(TLSConnection conn, ContentType content_type, byte[] content) throws IOException {
+        ProtocolVersion version = new ProtocolVersion(TLSConst.TLS_VERSION_MAJOR, TLSConst.TLS_VERSION_MINOR);
+        TLSRecord instance = new TLSRecord(content_type, version, content);
+        byte[] bytes = instance.toBytes();
+        conn.send(bytes);
     }
 
     public static void send_alert_message(TLSConnection conn, TLSParameters tls_context, AlertDescription alert_code) throws IOException {
@@ -233,13 +241,10 @@ public class TLSUtils {
 
         TLSRecord instance = new TLSRecord(content_type, version, send_buffer);
         byte[] bytes = instance.toBytes();
-        send(conn, bytes);
+        conn.send(bytes);
     }
 
-    public static void send(TLSConnection conn, byte[] data) throws IOException {
-        conn.out.write(data);
-        conn.out.flush();
-    }
+
 
 
     public static int receive(TLSConnection conn, byte[] buff, int off, int len) throws IOException {
@@ -322,6 +327,25 @@ public class TLSUtils {
         ProtocolVersion version = new ProtocolVersion(major, minor);
 
         return new TLSRecord(content_type, version, content);
+    }
+
+    public static byte[] receive_plain_message(TLSConnection conn) throws IOException {
+        ByteArrayOutputStream bao = new ByteArrayOutputStream();
+        byte[] header = new byte[5];
+        // STEP 1 - read off the TLS Record layer
+        receive(conn, header, 0, 5);
+        int length = (header[3] & 0xFF) << 8 | (header[4] & 0xFF);
+
+        int accum_bytes = 0;
+        byte[] data = new byte[length];
+        while (accum_bytes < length) {
+            int byte_read = receive(conn, data, accum_bytes, length - accum_bytes);
+            accum_bytes += byte_read;
+        }
+
+        bao.write(header);
+        bao.write(data);
+        return bao.toByteArray();
     }
 
     public static byte[] tls_decrypt(byte[] header, byte[] data, ProtectionParameters parameters) {
@@ -469,5 +493,7 @@ public class TLSUtils {
             return input;
         }
     }
+
+
 
 }

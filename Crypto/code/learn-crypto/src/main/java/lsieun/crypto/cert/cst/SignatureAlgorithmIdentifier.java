@@ -14,6 +14,7 @@ public enum SignatureAlgorithmIdentifier {
     SHA1_WITH_RSA_ENCRYPTION(ObjectIdentifier.SHA1_With_RSA, HashIdentifier.SHA1, AlgorithmIdentifier.RSA), // 5
     SHA256_WITH_RSA_ENCRYPTION(ObjectIdentifier.SHA256_With_RSA, HashIdentifier.SHA256, AlgorithmIdentifier.RSA), // 11
     DSA_With_SHA256(ObjectIdentifier.DSA_With_SHA256, HashIdentifier.SHA256, AlgorithmIdentifier.DSA),
+    ECDSA_With_SHA256(ObjectIdentifier.ECDSA_With_SHA256, HashIdentifier.SHA256, AlgorithmIdentifier.ECDSA),
     ;
 
     public final ObjectIdentifier oid;

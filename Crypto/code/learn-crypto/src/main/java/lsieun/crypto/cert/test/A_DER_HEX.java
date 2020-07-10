@@ -1,4 +1,4 @@
-package lsieun.crypto.cert.b_test;
+package lsieun.crypto.cert.test;
 
 import lsieun.utils.FileUtils;
 import lsieun.utils.HexFormat;

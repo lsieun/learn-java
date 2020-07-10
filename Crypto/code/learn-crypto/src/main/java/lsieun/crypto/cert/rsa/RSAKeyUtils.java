@@ -9,20 +9,20 @@ import lsieun.utils.HexUtils;
 
 import java.math.BigInteger;
 
-public class ASN1RSAKeyUtils {
+public class RSAKeyUtils {
     public static RSAPublicKey parse_public_key(byte[] bytes) {
         ASN1Struct asn1_seq = ASN1Utils.parse_der(bytes).get(0);
 
-        ASN1Struct first_child = asn1_seq.children.get(0);
-        ASN1Struct second_child = asn1_seq.children.get(1);
+        ASN1Struct asn1_algorithm = asn1_seq.children.get(0);
+        ASN1Struct asn1_subject_public_key = asn1_seq.children.get(1);
 
-        ASN1Struct asn1_oid = first_child.children.get(0);
+        ASN1Struct asn1_oid = asn1_algorithm.children.get(0);
 
         if (!ObjectIdentifier.RSAEncryption.equals(asn1_oid.data)) {
             throw new RuntimeException("oid is not correct");
         }
 
-        byte[] bit_string_data = ASN1Utils.get_bit_string_data(second_child);
+        byte[] bit_string_data = ASN1Utils.get_bit_string_data(asn1_subject_public_key);
         ASN1Struct asn1_public_key = ASN1Utils.parse_der(bit_string_data).get(0);
         ASN1Struct asn1_modulus = asn1_public_key.children.get(0);
         ASN1Struct asn1_pub_exponent = asn1_public_key.children.get(1);

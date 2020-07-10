@@ -7,7 +7,7 @@ public class DSAPublicKeyTest {
     public static void main(String[] args) {
         String filepath = FileUtils.getFilePath("cert/dsa/dsa-public.key");
         byte[] bytes = PEMUtils.read(filepath);
-        DSAPublicKey dsa_public_key = ASN1DSAUtils.parse_public_key(bytes);
+        DSAPublicKey dsa_public_key = DSAKeyUtils.parse_public_key(bytes);
         System.out.println(dsa_public_key);
     }
 }

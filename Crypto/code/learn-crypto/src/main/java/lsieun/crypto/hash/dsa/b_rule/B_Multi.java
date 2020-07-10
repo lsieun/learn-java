@@ -14,7 +14,9 @@ public class B_Multi {
         BigInteger q = BigUtils.toBigInteger(DsaSample.Q);
 
         System.out.println("p: " + p);
+        System.out.println(p.bitLength());
         System.out.println("q: " + q);
+        System.out.println(q.bitLength());
 
         BigInteger quotient = p_minus_1.divide(q);
         BigInteger remainder = p_minus_1.remainder(q);

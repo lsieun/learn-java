@@ -24,6 +24,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+import static lsieun.tls.cipher.CipherSuiteIdentifier.*;
+
 public class TLSClientUtils {
     /**
      * Negotiate an TLS channel on an already-established socket.
@@ -59,12 +61,16 @@ public class TLSClientUtils {
      * connection. It is up to the caller of this function to wait
      * for the server reply.
      */
-    private static void send_client_hello(TLSConnection conn, TLSParameters tls_context) throws IOException {
+    public static void send_client_hello(TLSConnection conn, TLSParameters tls_context) throws IOException {
         int major = TLSConst.TLS_VERSION_MAJOR;
         int minor = TLSConst.TLS_VERSION_MINOR;
         int local_time = (int) (System.currentTimeMillis() / 1000);
         byte[] session_id = new byte[0];
-        byte[] cipher_suites = new byte[]{0x00, 0x0a};
+//        byte[] cipher_suites = new byte[]{0x00, 0x0a, (byte)0xc0, 0x2f};
+        CipherSuiteIdentifier[] cipher_suites = {
+                TLS_RSA_WITH_AES_128_CBC_SHA
+//                TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        };
         byte[] compression_methods = new byte[]{0};
 
         ProtocolVersion client_version = new ProtocolVersion(major, minor);

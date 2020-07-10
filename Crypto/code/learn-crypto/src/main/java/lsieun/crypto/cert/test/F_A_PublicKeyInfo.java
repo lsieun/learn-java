@@ -1,4 +1,4 @@
-package lsieun.crypto.cert.b_test;
+package lsieun.crypto.cert.test;
 
 import lsieun.crypto.cert.asn1.PEMUtils;
 import lsieun.crypto.cert.x509.SignedCertificate;

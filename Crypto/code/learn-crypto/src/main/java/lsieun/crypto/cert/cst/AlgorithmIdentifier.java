@@ -7,7 +7,7 @@ public enum AlgorithmIdentifier {
     RSA(ObjectIdentifier.RSAEncryption),
     DH(ObjectIdentifier.DH),
     DSA(ObjectIdentifier.DSA),
-//    ECDSA;
+    ECDSA(ObjectIdentifier.EC_Public_Key);
     ;
 
     public final ObjectIdentifier oid;

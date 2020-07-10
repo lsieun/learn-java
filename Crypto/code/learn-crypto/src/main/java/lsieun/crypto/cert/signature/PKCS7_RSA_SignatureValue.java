@@ -1,4 +1,4 @@
-package lsieun.crypto.cert.b_test;
+package lsieun.crypto.cert.signature;
 
 import lsieun.crypto.asym.rsa.RSAUtils;
 import lsieun.crypto.cert.asn1.PEMUtils;
@@ -8,19 +8,21 @@ import lsieun.crypto.cert.rsa.RSAPublicKey;
 import lsieun.crypto.cert.x509.SignedCertificate;
 import lsieun.crypto.cert.x509.X509Utils;
 import lsieun.utils.FileUtils;
+import lsieun.utils.HexFormat;
+import lsieun.utils.HexUtils;
 
 import java.util.List;
 
 @SuppressWarnings("Duplicates")
-public class F_B_PKCS7 {
+public class PKCS7_RSA_SignatureValue {
     public static void main(String[] args) {
-        String filepath = "/home/liusen/Workspace/tmp/DigiCertSHA2SecureServerCA.pem";
+        String filepath = FileUtils.getFilePath("cert/rsa/signed_certificate.pem");
         byte[] bytes = PEMUtils.read(filepath);
         SignedCertificate certificate = X509Utils.parse_x509_certificate(bytes);
         RSAPublicKey rsaKey = certificate.tbs_certificate.subjectPublicKeyInfo.rsa_public_key;
 
-        String cert_filepath = "/home/liusen/Workspace/tmp/www_example_org.der";
-        byte[] cert_bytes = FileUtils.readBytes(cert_filepath);
+        String cert_filepath = FileUtils.getFilePath("cert/rsa/signed_certificate.pem");
+        byte[] cert_bytes = PEMUtils.read(cert_filepath);
 
         parse_signature_value(cert_bytes, rsaKey);
     }

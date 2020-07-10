@@ -27,6 +27,7 @@ public class ECDSASample {
     };
 
     /**
+     * bit length = 256
      * FFFFFFFF 00000000 FFFFFFFF FFFFFFFF BCE6FAAD A7179E84 F3B9CAC2 FC632551
      */
     public static final char[] q = {
