@@ -2,7 +2,7 @@ package lsieun.crypto.sym.des.b_tutorial;
 
 import lsieun.crypto.sym.des.DESConst;
 import lsieun.crypto.sym.des.DESUtils;
-import lsieun.crypto.sym.CipherType;
+import lsieun.crypto.sym.OperationType;
 import lsieun.utils.ByteUtils;
 
 import java.util.ArrayList;
@@ -17,14 +17,14 @@ public class DESKey {
         return DESUtils.permute(key_56_bit_bytes, DESConst.pc2_table);
     }
 
-    public static List<byte[]> roll_56_bit_key_bytes(byte[] key_56_bit_bytes, CipherType rd) {
+    public static List<byte[]> roll_56_bit_key_bytes(byte[] key_56_bit_bytes, OperationType rd) {
         byte[] tmp_56_bit_bytes = new byte[7];
         System.arraycopy(key_56_bit_bytes, 0, tmp_56_bit_bytes, 0, 7);
 
         List<byte[]> list = new ArrayList<>();
         for (int i = 1; i <= 16; i++) {
             byte[] current_key;
-            if (rd == CipherType.ENCRYPT) {
+            if (rd == OperationType.ENCRYPT) {
                 if (i == 1 || i == 2 || i == 9 || i == 16) {
                     current_key = rotate_left(tmp_56_bit_bytes);
                 } else {
@@ -59,7 +59,7 @@ public class DESKey {
         byte[] key_56_bit_bytes = DESKey.from_64_to_56_bit_key_bytes(key_64_bit_bytes);
 
         // 56 bit --> 56 bit list
-        List<byte[]> sub_key_56_bit_list = DESKey.roll_56_bit_key_bytes(key_56_bit_bytes, CipherType.ENCRYPT);
+        List<byte[]> sub_key_56_bit_list = DESKey.roll_56_bit_key_bytes(key_56_bit_bytes, OperationType.ENCRYPT);
 
         // 56 bit list --> 48 bit list
         List<byte[]> sub_key_48_bit_list = DESKey.from_56_to_48_bit_sub_key_list(sub_key_56_bit_list);

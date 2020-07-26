@@ -2,6 +2,7 @@ package lsieun.tls.entity.handshake;
 
 import java.util.Arrays;
 
+// 占用1-byte，因此最多可以有256个值：0~255
 public enum HandshakeType {
     HELLO_REQUEST(0),
     CLIENT_HELLO(1),
@@ -12,7 +13,10 @@ public enum HandshakeType {
     SERVER_HELLO_DONE(14),
     CERTIFICATE_VERIFY(15),
     CLIENT_KEY_EXCHANGE(16),
-    FINISHED(20);
+    FINISHED(20),
+    CERTIFICATE_URL(21),
+    CERTIFICATE_STATUS(22),
+    ;
 
     public final int val;
 
@@ -21,6 +25,7 @@ public enum HandshakeType {
     }
 
     public static HandshakeType valueOf(int val) {
+        System.out.println("handshake type value = " + val);
         return Arrays.stream(values()).filter(item -> item.val == val).findFirst().get();
     }
 

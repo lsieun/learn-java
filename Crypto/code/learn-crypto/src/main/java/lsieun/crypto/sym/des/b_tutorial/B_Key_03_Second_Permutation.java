@@ -1,6 +1,6 @@
 package lsieun.crypto.sym.des.b_tutorial;
 
-import lsieun.crypto.sym.CipherType;
+import lsieun.crypto.sym.OperationType;
 import lsieun.crypto.sym.des.DESConst;
 import lsieun.crypto.sym.des.DESUtils;
 import lsieun.utils.ByteUtils;
@@ -18,7 +18,7 @@ public class B_Key_03_Second_Permutation {
         byte[] key_56_bit_bytes = DESUtils.permute(key_64_bit_bytes, DESConst.pc1_table);
 
         // (3) 56 bit --> 56 bit list
-        List<byte[]> sub_key_56_bit_bytes_list = DESKey.roll_56_bit_key_bytes(key_56_bit_bytes, CipherType.ENCRYPT);
+        List<byte[]> sub_key_56_bit_bytes_list = DESKey.roll_56_bit_key_bytes(key_56_bit_bytes, OperationType.ENCRYPT);
 
         // (4) 56 bit list --> 48 bit list
         List<byte[]> sub_key_48_bit_list = new ArrayList<>();

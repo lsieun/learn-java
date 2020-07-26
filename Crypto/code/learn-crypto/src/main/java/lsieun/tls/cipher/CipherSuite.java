@@ -1,67 +1,103 @@
 package lsieun.tls.cipher;
 
-import lsieun.crypto.sym.BlockOperation;
-import lsieun.crypto.sym.OperationMode;
-import lsieun.crypto.sym.des.DESUtils;
-import lsieun.crypto.sym.des.TripleDESUtils;
-import lsieun.crypto.hash.DigestCtx;
-import lsieun.crypto.hash.HashContextAlgorithm;
-import lsieun.tls.cst.TLSConst;
-
 import java.util.Arrays;
 
 public enum CipherSuite {
     TLS_NULL_WITH_NULL_NULL(
             CipherSuiteIdentifier.TLS_NULL_WITH_NULL_NULL,
-            0, 0, 0, 0,
-            null, null, OperationMode.ECB,
-            null),
+            KeyExchange.NULL,
+            BulkCipherAlgorithm.NULL,
+            OperationMode.NULL,
+            MACAlgorithm.NULL
+    ),
     TLS_RSA_WITH_NULL_MD5(
             CipherSuiteIdentifier.TLS_RSA_WITH_NULL_MD5,
-            0, 0, 0, TLSConst.MD5_BYTE_SIZE,
-            null, null, OperationMode.ECB,
-            DigestCtx::new_md5_digest),
+            KeyExchange.RSA,
+            BulkCipherAlgorithm.NULL,
+            OperationMode.NULL,
+            MACAlgorithm.MD5
+    ),
     TLS_RSA_WITH_NULL_SHA(
             CipherSuiteIdentifier.TLS_RSA_WITH_NULL_SHA,
-            0, 0, 0, TLSConst.SHA1_BYTE_SIZE,
-            null, null, OperationMode.ECB,
-            DigestCtx::new_sha1_digest),
+            KeyExchange.RSA,
+            BulkCipherAlgorithm.NULL,
+            OperationMode.NULL,
+            MACAlgorithm.SHA1
+    ),
+    TLS_RSA_WITH_RC4_128_MD5(
+            CipherSuiteIdentifier.TLS_RSA_WITH_RC4_128_MD5,
+            KeyExchange.RSA,
+            BulkCipherAlgorithm.RC4,
+            OperationMode.NULL,
+            MACAlgorithm.MD5
+    ),
+    TLS_RSA_WITH_RC4_128_SHA(
+            CipherSuiteIdentifier.TLS_RSA_WITH_RC4_128_SHA,
+            KeyExchange.RSA,
+            BulkCipherAlgorithm.RC4,
+            OperationMode.NULL,
+            MACAlgorithm.SHA1
+    ),
     TLS_RSA_WITH_DES_CBC_SHA(
             CipherSuiteIdentifier.TLS_RSA_WITH_DES_CBC_SHA,
-            8, 8, 8, TLSConst.SHA1_BYTE_SIZE,
-            DESUtils::des_block_encrypt, DESUtils::des_block_decrypt, OperationMode.CBC,
-            DigestCtx::new_sha1_digest),
+            KeyExchange.RSA,
+            BulkCipherAlgorithm.DES,
+            OperationMode.CBC,
+            MACAlgorithm.SHA1
+    ),
     TLS_RSA_WITH_3DES_EDE_CBC_SHA(
             CipherSuiteIdentifier.TLS_RSA_WITH_3DES_EDE_CBC_SHA,
-            8, 8, 24, TLSConst.SHA1_BYTE_SIZE,
-            TripleDESUtils::des_block_encrypt, TripleDESUtils::des_block_decrypt, OperationMode.CBC,
-            DigestCtx::new_sha1_digest),
+            KeyExchange.RSA,
+            BulkCipherAlgorithm.TRIPLE_DES,
+            OperationMode.CBC,
+            MACAlgorithm.SHA1
+    ),
+    TLS_RSA_WITH_AES_128_CBC_SHA(
+            CipherSuiteIdentifier.TLS_RSA_WITH_AES_128_CBC_SHA,
+            KeyExchange.RSA,
+            BulkCipherAlgorithm.AES128,
+            OperationMode.CBC,
+            MACAlgorithm.SHA1
+    ),
+    TLS_RSA_WITH_AES_256_CBC_SHA(
+            CipherSuiteIdentifier.TLS_RSA_WITH_AES_256_CBC_SHA,
+            KeyExchange.RSA,
+            BulkCipherAlgorithm.AES256,
+            OperationMode.CBC,
+            MACAlgorithm.SHA1
+    ),
+    TLS_DHE_RSA_WITH_AES_128_CBC_SHA(
+            CipherSuiteIdentifier.TLS_DHE_RSA_WITH_AES_128_CBC_SHA,
+            KeyExchange.DHE_RSA,
+            BulkCipherAlgorithm.AES128,
+            OperationMode.CBC,
+            MACAlgorithm.SHA1
+    ),
+    TLS_DHE_RSA_WITH_AES_256_CBC_SHA(
+            CipherSuiteIdentifier.TLS_DHE_RSA_WITH_AES_256_CBC_SHA,
+            KeyExchange.DHE_RSA,
+            BulkCipherAlgorithm.AES256,
+            OperationMode.CBC,
+            MACAlgorithm.SHA1
+    ),
     ;
+
     public final CipherSuiteIdentifier id;
-    public final int block_size;
-    public final int iv_size;
-    public final int key_size;
-    public final int hash_size;
-    public final BlockOperation bulk_encrypt;
-    public final BlockOperation bulk_decrypt;
+    public final KeyExchange key_exchange;
+    public final BulkCipherAlgorithm bulk_cipher_algorithm;
     public final OperationMode mode;
-    public final HashContextAlgorithm hash_algorithm;
+    public final MACAlgorithm mac_algorithm;
 
     CipherSuite(CipherSuiteIdentifier id,
-                int block_size, int iv_size, int key_size, int hash_size,
-                BlockOperation bulk_encrypt,
-                BlockOperation bulk_decrypt,
+                KeyExchange key_exchange,
+                BulkCipherAlgorithm bulk_cipher_algorithm,
                 OperationMode mode,
-                HashContextAlgorithm hash_algorithm) {
+                MACAlgorithm mac_algorithm) {
         this.id = id;
-        this.block_size = block_size;
-        this.iv_size = iv_size;
-        this.key_size = key_size;
-        this.hash_size = hash_size;
-        this.bulk_encrypt = bulk_encrypt;
-        this.bulk_decrypt = bulk_decrypt;
+        this.key_exchange = key_exchange;
+        this.bulk_cipher_algorithm = bulk_cipher_algorithm;
         this.mode = mode;
-        this.hash_algorithm = hash_algorithm;
+        this.mac_algorithm = mac_algorithm;
     }
 
     public static CipherSuite valueOf(CipherSuiteIdentifier id) {

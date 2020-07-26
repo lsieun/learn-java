@@ -1,6 +1,6 @@
 package lsieun.crypto.sym.des;
 
-import lsieun.crypto.sym.CipherType;
+import lsieun.crypto.sym.OperationType;
 import lsieun.utils.ByteUtils;
 
 import java.util.Arrays;
@@ -9,7 +9,7 @@ import java.util.Formatter;
 public class DESDetails {
     public static final String FORMAT = "%30s: %s%n";
 
-    public static byte[] des_block_operate(byte[] input_64_bit_bytes, byte[] key_64_bit_bytes, CipherType type) {
+    public static byte[] des_block_operate(byte[] input_64_bit_bytes, byte[] key_64_bit_bytes, OperationType type) {
         StringBuilder sb = new StringBuilder();
         Formatter fm = new Formatter(sb);
         fm.format(FORMAT, "CipherType", type);
@@ -33,7 +33,7 @@ public class DESDetails {
             fm.format(FORMAT, "Round", i);
 
             // key
-            if (type == CipherType.ENCRYPT) {
+            if (type == OperationType.ENCRYPT) {
                 if (i == 1 || i == 2 || i == 9 || i == 16) {
                     DESUtils.rotate_left(current_56_bit_key_bytes);
                 } else {
@@ -42,7 +42,7 @@ public class DESDetails {
             }
             fm.format(FORMAT, "key(56-bit)", ByteUtils.toHex(current_56_bit_key_bytes));
             byte[] current_48_bit_sub_key_bytes = DESUtils.permute(current_56_bit_key_bytes, DESConst.pc2_table);
-            if (type == CipherType.DECRYPT) {
+            if (type == OperationType.DECRYPT) {
                 if (i == 16 || i == 15 || i == 8 || i == 1) {
                     DESUtils.rotate_right(current_56_bit_key_bytes);
                 } else {

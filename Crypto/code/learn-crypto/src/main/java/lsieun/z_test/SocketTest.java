@@ -1,7 +1,5 @@
 package lsieun.z_test;
 
-import lsieun.utils.ByteUtils;
-
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import java.io.*;
@@ -12,10 +10,13 @@ import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class SocketTest {
     public static final String DOMAIN_NAME = "www.baidu.com";
+    public static final String CLIENT_PROTOCOLS = "TLSv1.1";
+    public static final String[] CIPHER_SUITES = new String[] {
+            "TLS_RSA_WITH_AES_256_CBC_SHA"
+    };
     private static final InetSocketAddress address;
 
     static {
@@ -27,17 +28,13 @@ public class SocketTest {
         }
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
+        System.setProperty("javax.net.debug", "all:verbose");
+        System.setProperty("jdk.tls.client.protocols", CLIENT_PROTOCOLS);
         List<String> lines = getRequestContent();
-        Optional<byte[]> result = fetch(lines);
-        if (result.isPresent()) {
-            byte[] bytes = result.get();
-            String content = new String(bytes, StandardCharsets.UTF_8);
-            System.out.println(content);
-        }
-        else {
-            System.out.println("NO");
-        }
+        byte[] result = fetch(lines);
+        String content = new String(result, StandardCharsets.UTF_8);
+        System.out.println(content);
     }
 
     public static List<String> getRequestContent() {
@@ -51,20 +48,17 @@ public class SocketTest {
         return list;
     }
 
-    public static Optional<byte[]> fetch(List<String> list) {
+    public static byte[] fetch(List<String> list) {
         SSLSocketFactory factory = (SSLSocketFactory) SSLSocketFactory.getDefault();
         try (
                 Socket s = factory.createSocket();
         ) {
             if (s instanceof SSLSocket) {
-                System.out.println("Hello");
                 SSLSocket ss = (SSLSocket) s;
-                ss.setEnabledCipherSuites(new String[]{
-                        "TLS_RSA_WITH_AES_128_CBC_SHA"
-                });
+                ss.setEnabledCipherSuites(CIPHER_SUITES);
             }
-            s.setSoTimeout(120000);
-            s.connect(address, 20000);
+            s.setSoTimeout(10000);
+            s.connect(address, 10000);
             try (
                     InputStream in = s.getInputStream();
                     BufferedInputStream bin = new BufferedInputStream(in);
@@ -96,12 +90,11 @@ public class SocketTest {
                 for (int len = bin.read(buff); len != -1; len = bin.read(buff)) {
                     bao.write(buff, 0, len);
                 }
-                byte[] bytes = bao.toByteArray();
-                return Optional.of(bytes);
+                return bao.toByteArray();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return Optional.empty();
+        throw new RuntimeException("Something Wrong!");
     }
 }

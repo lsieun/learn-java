@@ -204,11 +204,11 @@ public class AESUtils {
         }
     }
 
-    public static void aes_block_encrypt(byte[] input_block, byte[] output_block, byte[] key_bytes, int key_size) {
+    public static byte[] aes_block_encrypt(byte[] input_block, byte[] key_bytes) {
+        int key_size = key_bytes.length;
         byte[][] state = new byte[4][4];
         from_block_to_state(input_block, state);
 
-        display(state);
 
         // rounds = key size in 4-byte words + 6
         int nr = (key_size >> 2) + 6;
@@ -217,35 +217,29 @@ public class AESUtils {
         byte[][] word_bytes = new byte[4][4];
         fill_word_bytes(key_list_bytes, 0, word_bytes);
 
-        display(word_bytes);
-
         add_round_key(state, word_bytes);
-
-        display(state);
 
         for (int round = 0; round < nr; round++) {
             sub_bytes(state);
 
-            display(state);
             shift_rows(state);
 
-            display(state);
             if (round < (nr - 1)) {
                 mix_columns(state);
-                display(state);
             }
 
             fill_word_bytes(key_list_bytes, (round + 1) * 4, word_bytes);
-            display(word_bytes);
 
             add_round_key(state, word_bytes);
-            display(state);
         }
 
+        byte[] output_block = new byte[AESConst.AES_BLOCK_SIZE];
         from_state_to_block(output_block, state);
+        return output_block;
     }
 
-    public static void aes_block_decrypt(byte[] input_block, byte[] output_block, byte[] key_bytes, int key_size) {
+    public static byte[] aes_block_decrypt(byte[] input_block, byte[] key_bytes) {
+        int key_size = key_bytes.length;
         byte[][] state = new byte[4][4];
 
         from_block_to_state(input_block, state);
@@ -265,14 +259,14 @@ public class AESUtils {
             inv_sub_bytes(state);
             fill_word_bytes(key_list_bytes, (round - 1) * 4, word_bytes);
             add_round_key(state, word_bytes);
-            display(state);
             if (round > 1) {
                 inv_mix_columns(state);
-                display(state);
             }
         }
 
+        byte[] output_block = new byte[AESConst.AES_BLOCK_SIZE];
         from_state_to_block(output_block, state);
+        return output_block;
     }
 
     // TODO: key生成key schedule之后，应该进行缓存，因为它可以进行复用
@@ -280,7 +274,6 @@ public class AESUtils {
         int count = input_len / AESConst.AES_BLOCK_SIZE;
 
         byte[] input_block = new byte[AESConst.AES_BLOCK_SIZE];
-        byte[] output_block = new byte[AESConst.AES_BLOCK_SIZE];
         byte[] iv_block = new byte[AESConst.AES_BLOCK_SIZE];
 
         System.arraycopy(iv_128_bit_bytes, 0, iv_block, 0, AESConst.AES_BLOCK_SIZE);
@@ -288,7 +281,7 @@ public class AESUtils {
         for (int i = 0; i < count; i++) {
             System.arraycopy(input, i * AESConst.AES_BLOCK_SIZE, input_block, 0, AESConst.AES_BLOCK_SIZE);
             xor(input_block, iv_block, AESConst.AES_BLOCK_SIZE);
-            aes_block_encrypt(input_block, output_block, key, key_length);
+            byte[] output_block = aes_block_encrypt(input_block, key);
             System.arraycopy(output_block, 0, iv_block, 0, AESConst.AES_BLOCK_SIZE);
             System.arraycopy(output_block, 0, output, i * AESConst.AES_BLOCK_SIZE, AESConst.AES_BLOCK_SIZE);
         }
@@ -298,14 +291,13 @@ public class AESUtils {
         int count = input_len / AESConst.AES_BLOCK_SIZE;
 
         byte[] input_block = new byte[AESConst.AES_BLOCK_SIZE];
-        byte[] output_block = new byte[AESConst.AES_BLOCK_SIZE];
         byte[] iv_block = new byte[AESConst.AES_BLOCK_SIZE];
 
         System.arraycopy(iv_128_bit_bytes, 0, iv_block, 0, AESConst.AES_BLOCK_SIZE);
 
         for (int i = 0; i < count; i++) {
             System.arraycopy(input, i * AESConst.AES_BLOCK_SIZE, input_block, 0, AESConst.AES_BLOCK_SIZE);
-            aes_block_decrypt(input_block, output_block, key_bytes, key_length);
+            byte[] output_block = aes_block_decrypt(input_block, key_bytes);
             xor(output_block, iv_block, AESConst.AES_BLOCK_SIZE);
             System.arraycopy(input_block, 0, iv_block, 0, AESConst.AES_BLOCK_SIZE);
             System.arraycopy(output_block, 0, output, i * AESConst.AES_BLOCK_SIZE, AESConst.AES_BLOCK_SIZE);
@@ -329,33 +321,4 @@ public class AESUtils {
         aes_decrypt(cipher_text_bytes, ciper_text_len, plain_text_bytes, iv_128_bit_bytes, key_bytes, 32);
     }
 
-    public static void display(byte[][] matrix) {
-        display_line(matrix);
-    }
-
-    public static void display_line(byte[][] matrix) {
-        StringBuilder sb = new StringBuilder();
-        Formatter fm = new Formatter(sb);
-        for (int col = 0; col < 4; col++) {
-            for (int row = 0; row < 4; row++) {
-                fm.format("%02x", matrix[row][col]);
-            }
-        }
-        System.out.println(sb.toString());
-    }
-
-    public static void display_matrix(byte[][] matrix) {
-        StringBuilder sb = new StringBuilder();
-        Formatter fm = new Formatter(sb);
-        int row = matrix.length;
-        for (int i = 0; i < row; i++) {
-            byte[] bytes = matrix[i];
-            int col = bytes.length;
-            for (int j = 0; j < col; j++) {
-                fm.format("%02x ", bytes[j]);
-            }
-            fm.format("%n");
-        }
-        System.out.println(sb.toString());
-    }
 }

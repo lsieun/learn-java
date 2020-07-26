@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 
 public class HTTPSUtils {
     public static void http_get(TLSConnection conn, TLSParameters tls_context, String host, String path) throws IOException {
-        String content = String.format("GET %s HTTP/1.1\r\nHost:%s\r\nConnection: close\r\n\r\n", path, host);
+        String content = String.format("GET %s HTTP/1.1\r\nHost: %s\r\nConnection: close\r\n\r\n", path, host);
         byte[] bytes = content.getBytes(StandardCharsets.UTF_8);
         TLSUtils.tls_send(conn, tls_context, bytes);
     }

@@ -1,6 +1,6 @@
 package lsieun.crypto.sym.des.d_test;
 
-import lsieun.crypto.sym.CipherType;
+import lsieun.crypto.sym.OperationType;
 import lsieun.crypto.sym.des.DESUtils;
 import lsieun.utils.ByteUtils;
 
@@ -17,8 +17,8 @@ public class Problems_With_56bit_Key {
         byte[] key_64_bit_bytes2 = {'p', 'a', 's', 's', 'w', 'o', 'r', 'e'};
 
         // 使用不同的密钥进行加密
-        byte[] encrypt_bytes1 = DESUtils.des_block_operate(msg_64_bit_bytes, key_64_bit_bytes1, CipherType.ENCRYPT);
-        byte[] encrypt_bytes2 = DESUtils.des_block_operate(msg_64_bit_bytes, key_64_bit_bytes2, CipherType.ENCRYPT);
+        byte[] encrypt_bytes1 = DESUtils.des_block_operate(msg_64_bit_bytes, key_64_bit_bytes1, OperationType.ENCRYPT);
+        byte[] encrypt_bytes2 = DESUtils.des_block_operate(msg_64_bit_bytes, key_64_bit_bytes2, OperationType.ENCRYPT);
 
         // 判断是否相等
         System.out.println(Arrays.equals(encrypt_bytes1, encrypt_bytes2));

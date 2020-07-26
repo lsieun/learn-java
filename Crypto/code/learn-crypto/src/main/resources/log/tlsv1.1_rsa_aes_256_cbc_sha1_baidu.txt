@@ -1,0 +1,1261 @@
+keyStore is :
+keyStore type is : jks
+keyStore provider is :
+init keystore
+init keymanager of type SunX509
+trigger seeding of SecureRandom
+done seeding SecureRandom
+main, setSoTimeout(10000) called
+Allow unsafe renegotiation: false
+Allow legacy hello messages: true
+Is initial handshake: true
+Is secure renegotiation: false
+%% No cached client session
+update handshake state: client_hello[1]
+upcoming handshake states: server_hello[2]
+*** ClientHello, TLSv1.1
+RandomCookie:  GMT: 1595595567 bytes = { 56, 214, 236, 67, 171, 105, 159, 129, 70, 188, 209, 158, 200, 215, 87, 75, 185, 151, 247, 81, 12, 83, 254, 19, 29, 3, 249, 90 }
+Session ID:  {}
+Cipher Suites: [TLS_RSA_WITH_AES_256_CBC_SHA]
+Compression Methods:  { 0 }
+Extension extended_master_secret
+Extension server_name, server_name: [type=host_name (0), value=www.baidu.com]
+Extension renegotiation_info, renegotiated_connection: <empty>
+***
+[write] MD5 and SHA1 hashes:  len = 78
+0000: 01 00 00 4A 03 02 5F 1B   DB 2F 38 D6 EC 43 AB 69  ...J.._../8..C.i
+0010: 9F 81 46 BC D1 9E C8 D7   57 4B B9 97 F7 51 0C 53  ..F.....WK...Q.S
+0020: FE 13 1D 03 F9 5A 00 00   02 00 35 01 00 00 1F 00  .....Z....5.....
+0030: 17 00 00 00 00 00 12 00   10 00 00 0D 77 77 77 2E  ............www.
+0040: 62 61 69 64 75 2E 63 6F   6D FF 01 00 01 00        baidu.com.....
+main, WRITE: TLSv1.1 Handshake, length = 78
+[Raw write]: length = 83
+0000: 16 03 02 00 4E 01 00 00   4A 03 02 5F 1B DB 2F 38  ....N...J.._../8
+0010: D6 EC 43 AB 69 9F 81 46   BC D1 9E C8 D7 57 4B B9  ..C.i..F.....WK.
+0020: 97 F7 51 0C 53 FE 13 1D   03 F9 5A 00 00 02 00 35  ..Q.S.....Z....5
+0030: 01 00 00 1F 00 17 00 00   00 00 00 12 00 10 00 00  ................
+0040: 0D 77 77 77 2E 62 61 69   64 75 2E 63 6F 6D FF 01  .www.baidu.com..
+0050: 00 01 00                                           ...
+[Raw read]: length = 5
+0000: 16 03 02 00 4A                                     ....J
+[Raw read]: length = 74
+0000: 02 00 00 46 03 02 5F 1B   DB 2F 82 28 2B EB 9B C3  ...F.._../.(+...
+0010: 61 CC 92 C0 DC D9 6C 3D   02 04 B4 D8 1F 27 65 9E  a.....l=.....'e.
+0020: 4A 6F 78 4D 84 9E 20 72   E7 36 C8 93 E0 20 49 8B  JoxM.. r.6... I.
+0030: 4F 24 13 1D 4D 97 91 1E   0C B5 85 19 63 89 19 15  O$..M.......c...
+0040: EB EC 3B 35 AE 68 03 00   35 00                    ..;5.h..5.
+main, READ: TLSv1.1 Handshake, length = 74
+check handshake state: server_hello[2]
+*** ServerHello, TLSv1.1
+RandomCookie:  GMT: 1595595567 bytes = { 130, 40, 43, 235, 155, 195, 97, 204, 146, 192, 220, 217, 108, 61, 2, 4, 180, 216, 31, 39, 101, 158, 74, 111, 120, 77, 132, 158 }
+Session ID:  {114, 231, 54, 200, 147, 224, 32, 73, 139, 79, 36, 19, 29, 77, 151, 145, 30, 12, 181, 133, 25, 99, 137, 25, 21, 235, 236, 59, 53, 174, 104, 3}
+Cipher Suite: TLS_RSA_WITH_AES_256_CBC_SHA
+Compression Method: 0
+***
+Warning: No renegotiation indication extension in ServerHello
+%% Initialized:  [Session-1, TLS_RSA_WITH_AES_256_CBC_SHA]
+** TLS_RSA_WITH_AES_256_CBC_SHA
+update handshake state: server_hello[2]
+upcoming handshake states: server certificate[11]
+upcoming handshake states: certificate_request[13](optional)
+upcoming handshake states: server_hello_done[14]
+upcoming handshake states: client certificate[11](optional)
+upcoming handshake states: client_key_exchange[16]
+upcoming handshake states: certificate_verify[15](optional)
+upcoming handshake states: client change_cipher_spec[-1]
+upcoming handshake states: client finished[20]
+upcoming handshake states: server change_cipher_spec[-1]
+upcoming handshake states: server finished[20]
+[read] MD5 and SHA1 hashes:  len = 74
+0000: 02 00 00 46 03 02 5F 1B   DB 2F 82 28 2B EB 9B C3  ...F.._../.(+...
+0010: 61 CC 92 C0 DC D9 6C 3D   02 04 B4 D8 1F 27 65 9E  a.....l=.....'e.
+0020: 4A 6F 78 4D 84 9E 20 72   E7 36 C8 93 E0 20 49 8B  JoxM.. r.6... I.
+0030: 4F 24 13 1D 4D 97 91 1E   0C B5 85 19 63 89 19 15  O$..M.......c...
+0040: EB EC 3B 35 AE 68 03 00   35 00                    ..;5.h..5.
+[Raw read]: length = 5
+0000: 16 03 02 0E AC                                     .....
+[Raw read]: length = 3756
+0000: 0B 00 0E A8 00 0E A5 00   0A 32 30 82 0A 2E 30 82  .........20...0.
+0010: 09 16 A0 03 02 01 02 02   0C 72 58 78 36 6E 9F 56  .........rXx6n.V
+0020: E8 1D 41 88 48 30 0D 06   09 2A 86 48 86 F7 0D 01  ..A.H0...*.H....
+0030: 01 0B 05 00 30 66 31 0B   30 09 06 03 55 04 06 13  ....0f1.0...U...
+0040: 02 42 45 31 19 30 17 06   03 55 04 0A 13 10 47 6C  .BE1.0...U....Gl
+0050: 6F 62 61 6C 53 69 67 6E   20 6E 76 2D 73 61 31 3C  obalSign nv-sa1<
+0060: 30 3A 06 03 55 04 03 13   33 47 6C 6F 62 61 6C 53  0:..U...3GlobalS
+0070: 69 67 6E 20 4F 72 67 61   6E 69 7A 61 74 69 6F 6E  ign Organization
+0080: 20 56 61 6C 69 64 61 74   69 6F 6E 20 43 41 20 2D   Validation CA -
+0090: 20 53 48 41 32 35 36 20   2D 20 47 32 30 1E 17 0D   SHA256 - G20...
+00A0: 32 30 30 34 30 32 30 37   30 34 35 38 5A 17 0D 32  200402070458Z..2
+00B0: 31 30 37 32 36 30 35 33   31 30 32 5A 30 81 A7 31  10726053102Z0..1
+00C0: 0B 30 09 06 03 55 04 06   13 02 43 4E 31 10 30 0E  .0...U....CN1.0.
+00D0: 06 03 55 04 08 13 07 62   65 69 6A 69 6E 67 31 10  ..U....beijing1.
+00E0: 30 0E 06 03 55 04 07 13   07 62 65 69 6A 69 6E 67  0...U....beijing
+00F0: 31 25 30 23 06 03 55 04   0B 13 1C 73 65 72 76 69  1%0#..U....servi
+0100: 63 65 20 6F 70 65 72 61   74 69 6F 6E 20 64 65 70  ce operation dep
+0110: 61 72 74 6D 65 6E 74 31   39 30 37 06 03 55 04 0A  artment1907..U..
+0120: 13 30 42 65 69 6A 69 6E   67 20 42 61 69 64 75 20  .0Beijing Baidu
+0130: 4E 65 74 63 6F 6D 20 53   63 69 65 6E 63 65 20 54  Netcom Science T
+0140: 65 63 68 6E 6F 6C 6F 67   79 20 43 6F 2E 2C 20 4C  echnology Co., L
+0150: 74 64 31 12 30 10 06 03   55 04 03 13 09 62 61 69  td1.0...U....bai
+0160: 64 75 2E 63 6F 6D 30 82   01 22 30 0D 06 09 2A 86  du.com0.."0...*.
+0170: 48 86 F7 0D 01 01 01 05   00 03 82 01 0F 00 30 82  H.............0.
+0180: 01 0A 02 82 01 01 00 C1   A9 B0 AE 47 1A D2 57 EB  ...........G..W.
+0190: 1D 15 1F 6E 5C B2 E4 F8   0B 20 DB EA 00 DF 29 FF  ...n\.... ....).
+01A0: A4 6B 89 26 4B 9F 23 2F   EC 57 B0 8A B8 46 40 2A  .k.&K.#/.W...F@*
+01B0: 7E BC DC 5A 45 97 4F AD   41 0E BC 20 86 4B 0C 5D  ...ZE.O.A.. .K.]
+01C0: 55 21 47 E2 31 3C 57 A7   EC 99 47 EB 47 0D 72 D7  U!G.1<W...G.G.r.
+01D0: C8 16 54 75 EF D3 45 11   0F 4B CE 60 7A 46 5C 28  ..Tu..E..K.`zF\(
+01E0: 74 AE 8E 1B BE D8 70 66   7B A8 93 49 28 D2 A3 76  t.....pf...I(..v
+01F0: 94 55 DE 7C 27 F2 0F F7   98 0C AD 86 DA C6 AE FD  .U..'...........
+0200: 9F F0 D9 81 32 9A 97 E3   21 EE 04 92 96 E4 78 11  ....2...!.....x.
+0210: E5 C4 10 0E 10 31 7A 4A   97 A0 EB C7 9B C4 DA 89  .....1zJ........
+0220: 37 A9 C3 37 D7 56 B1 7F   52 C7 D9 26 0A D6 AF 38  7..7.V..R..&...8
+0230: 16 B1 6D FB 73 79 B1 68   79 03 90 EB 88 7B 8C 48  ..m.sy.hy......H
+0240: 91 98 51 A5 07 94 86 A5   78 46 79 8F 58 9B E9 35  ..Q.....xFy.X..5
+0250: 59 A7 F1 7B 57 31 0A 90   CF 24 CE 0D 24 E7 92 B2  Y...W1...$..$...
+0260: 6A E9 E6 96 37 0A B8 7C   87 2F 74 D2 5C E8 4B 0A  j...7..../t.\.K.
+0270: 5F 66 18 A7 41 86 CF 26   A6 08 8E A5 49 17 92 53  _f..A..&....I..S
+0280: B3 91 A5 CF 53 B0 31 02   03 01 00 01 A3 82 06 98  ....S.1.........
+0290: 30 82 06 94 30 0E 06 03   55 1D 0F 01 01 FF 04 04  0...0...U.......
+02A0: 03 02 05 A0 30 81 A0 06   08 2B 06 01 05 05 07 01  ....0....+......
+02B0: 01 04 81 93 30 81 90 30   4D 06 08 2B 06 01 05 05  ....0..0M..+....
+02C0: 07 30 02 86 41 68 74 74   70 3A 2F 2F 73 65 63 75  .0..Ahttp://secu
+02D0: 72 65 2E 67 6C 6F 62 61   6C 73 69 67 6E 2E 63 6F  re.globalsign.co
+02E0: 6D 2F 63 61 63 65 72 74   2F 67 73 6F 72 67 61 6E  m/cacert/gsorgan
+02F0: 69 7A 61 74 69 6F 6E 76   61 6C 73 68 61 32 67 32  izationvalsha2g2
+0300: 72 31 2E 63 72 74 30 3F   06 08 2B 06 01 05 05 07  r1.crt0?..+.....
+0310: 30 01 86 33 68 74 74 70   3A 2F 2F 6F 63 73 70 32  0..3http://ocsp2
+0320: 2E 67 6C 6F 62 61 6C 73   69 67 6E 2E 63 6F 6D 2F  .globalsign.com/
+0330: 67 73 6F 72 67 61 6E 69   7A 61 74 69 6F 6E 76 61  gsorganizationva
+0340: 6C 73 68 61 32 67 32 30   56 06 03 55 1D 20 04 4F  lsha2g20V..U. .O
+0350: 30 4D 30 41 06 09 2B 06   01 04 01 A0 32 01 14 30  0M0A..+.....2..0
+0360: 34 30 32 06 08 2B 06 01   05 05 07 02 01 16 26 68  402..+........&h
+0370: 74 74 70 73 3A 2F 2F 77   77 77 2E 67 6C 6F 62 61  ttps://www.globa
+0380: 6C 73 69 67 6E 2E 63 6F   6D 2F 72 65 70 6F 73 69  lsign.com/reposi
+0390: 74 6F 72 79 2F 30 08 06   06 67 81 0C 01 02 02 30  tory/0...g.....0
+03A0: 09 06 03 55 1D 13 04 02   30 00 30 49 06 03 55 1D  ...U....0.0I..U.
+03B0: 1F 04 42 30 40 30 3E A0   3C A0 3A 86 38 68 74 74  ..B0@0>.<.:.8htt
+03C0: 70 3A 2F 2F 63 72 6C 2E   67 6C 6F 62 61 6C 73 69  p://crl.globalsi
+03D0: 67 6E 2E 63 6F 6D 2F 67   73 2F 67 73 6F 72 67 61  gn.com/gs/gsorga
+03E0: 6E 69 7A 61 74 69 6F 6E   76 61 6C 73 68 61 32 67  nizationvalsha2g
+03F0: 32 2E 63 72 6C 30 82 03   4E 06 03 55 1D 11 04 82  2.crl0..N..U....
+0400: 03 45 30 82 03 41 82 09   62 61 69 64 75 2E 63 6F  .E0..A..baidu.co
+0410: 6D 82 0C 62 61 69 66 75   62 61 6F 2E 63 6F 6D 82  m..baifubao.com.
+0420: 0C 77 77 77 2E 62 61 69   64 75 2E 63 6E 82 10 77  .www.baidu.cn..w
+0430: 77 77 2E 62 61 69 64 75   2E 63 6F 6D 2E 63 6E 82  ww.baidu.com.cn.
+0440: 0F 6D 63 74 2E 79 2E 6E   75 6F 6D 69 2E 63 6F 6D  .mct.y.nuomi.com
+0450: 82 0B 61 70 6F 6C 6C 6F   2E 61 75 74 6F 82 06 64  ..apollo.auto..d
+0460: 77 7A 2E 63 6E 82 0B 2A   2E 62 61 69 64 75 2E 63  wz.cn..*.baidu.c
+0470: 6F 6D 82 0E 2A 2E 62 61   69 66 75 62 61 6F 2E 63  om..*.baifubao.c
+0480: 6F 6D 82 11 2A 2E 62 61   69 64 75 73 74 61 74 69  om..*.baidustati
+0490: 63 2E 63 6F 6D 82 0E 2A   2E 62 64 73 74 61 74 69  c.com..*.bdstati
+04A0: 63 2E 63 6F 6D 82 0B 2A   2E 62 64 69 6D 67 2E 63  c.com..*.bdimg.c
+04B0: 6F 6D 82 0C 2A 2E 68 61   6F 31 32 33 2E 63 6F 6D  om..*.hao123.com
+04C0: 82 0B 2A 2E 6E 75 6F 6D   69 2E 63 6F 6D 82 0D 2A  ..*.nuomi.com..*
+04D0: 2E 63 68 75 61 6E 6B 65   2E 63 6F 6D 82 0D 2A 2E  .chuanke.com..*.
+04E0: 74 72 75 73 74 67 6F 2E   63 6F 6D 82 0F 2A 2E 62  trustgo.com..*.b
+04F0: 63 65 2E 62 61 69 64 75   2E 63 6F 6D 82 10 2A 2E  ce.baidu.com..*.
+0500: 65 79 75 6E 2E 62 61 69   64 75 2E 63 6F 6D 82 0F  eyun.baidu.com..
+0510: 2A 2E 6D 61 70 2E 62 61   69 64 75 2E 63 6F 6D 82  *.map.baidu.com.
+0520: 0F 2A 2E 6D 62 64 2E 62   61 69 64 75 2E 63 6F 6D  .*.mbd.baidu.com
+0530: 82 11 2A 2E 66 61 6E 79   69 2E 62 61 69 64 75 2E  ..*.fanyi.baidu.
+0540: 63 6F 6D 82 0E 2A 2E 62   61 69 64 75 62 63 65 2E  com..*.baidubce.
+0550: 63 6F 6D 82 0C 2A 2E 6D   69 70 63 64 6E 2E 63 6F  com..*.mipcdn.co
+0560: 6D 82 10 2A 2E 6E 65 77   73 2E 62 61 69 64 75 2E  m..*.news.baidu.
+0570: 63 6F 6D 82 0E 2A 2E 62   61 69 64 75 70 63 73 2E  com..*.baidupcs.
+0580: 63 6F 6D 82 0C 2A 2E 61   69 70 61 67 65 2E 63 6F  com..*.aipage.co
+0590: 6D 82 0B 2A 2E 61 69 70   61 67 65 2E 63 6E 82 0D  m..*.aipage.cn..
+05A0: 2A 2E 62 63 65 68 6F 73   74 2E 63 6F 6D 82 10 2A  *.bcehost.com..*
+05B0: 2E 73 61 66 65 2E 62 61   69 64 75 2E 63 6F 6D 82  .safe.baidu.com.
+05C0: 0E 2A 2E 69 6D 2E 62 61   69 64 75 2E 63 6F 6D 82  .*.im.baidu.com.
+05D0: 12 2A 2E 62 61 69 64 75   63 6F 6E 74 65 6E 74 2E  .*.baiducontent.
+05E0: 63 6F 6D 82 0B 2A 2E 64   6C 6E 65 6C 2E 63 6F 6D  com..*.dlnel.com
+05F0: 82 0B 2A 2E 64 6C 6E 65   6C 2E 6F 72 67 82 12 2A  ..*.dlnel.org..*
+0600: 2E 64 75 65 72 6F 73 2E   62 61 69 64 75 2E 63 6F  .dueros.baidu.co
+0610: 6D 82 0E 2A 2E 73 75 2E   62 61 69 64 75 2E 63 6F  m..*.su.baidu.co
+0620: 6D 82 08 2A 2E 39 31 2E   63 6F 6D 82 12 2A 2E 68  m..*.91.com..*.h
+0630: 61 6F 31 32 33 2E 62 61   69 64 75 2E 63 6F 6D 82  ao123.baidu.com.
+0640: 0D 2A 2E 61 70 6F 6C 6C   6F 2E 61 75 74 6F 82 12  .*.apollo.auto..
+0650: 2A 2E 78 75 65 73 68 75   2E 62 61 69 64 75 2E 63  *.xueshu.baidu.c
+0660: 6F 6D 82 11 2A 2E 62 6A   2E 62 61 69 64 75 62 63  om..*.bj.baidubc
+0670: 65 2E 63 6F 6D 82 11 2A   2E 67 7A 2E 62 61 69 64  e.com..*.gz.baid
+0680: 75 62 63 65 2E 63 6F 6D   82 0E 2A 2E 73 6D 61 72  ubce.com..*.smar
+0690: 74 61 70 70 73 2E 63 6E   82 0D 2A 2E 62 64 74 6A  tapps.cn..*.bdtj
+06A0: 72 63 76 2E 63 6F 6D 82   0C 2A 2E 68 61 6F 32 32  rcv.com..*.hao22
+06B0: 32 2E 63 6F 6D 82 0C 2A   2E 68 61 6F 6B 61 6E 2E  2.com..*.haokan.
+06C0: 63 6F 6D 82 0F 2A 2E 70   61 65 2E 62 61 69 64 75  com..*.pae.baidu
+06D0: 2E 63 6F 6D 82 11 2A 2E   76 64 2E 62 64 73 74 61  .com..*.vd.bdsta
+06E0: 74 69 63 2E 63 6F 6D 82   12 63 6C 69 63 6B 2E 68  tic.com..click.h
+06F0: 6D 2E 62 61 69 64 75 2E   63 6F 6D 82 10 6C 6F 67  m.baidu.com..log
+0700: 2E 68 6D 2E 62 61 69 64   75 2E 63 6F 6D 82 10 63  .hm.baidu.com..c
+0710: 6D 2E 70 6F 73 2E 62 61   69 64 75 2E 63 6F 6D 82  m.pos.baidu.com.
+0720: 10 77 6E 2E 70 6F 73 2E   62 61 69 64 75 2E 63 6F  .wn.pos.baidu.co
+0730: 6D 82 14 75 70 64 61 74   65 2E 70 61 6E 2E 62 61  m..update.pan.ba
+0740: 69 64 75 2E 63 6F 6D 30   1D 06 03 55 1D 25 04 16  idu.com0...U.%..
+0750: 30 14 06 08 2B 06 01 05   05 07 03 01 06 08 2B 06  0...+.........+.
+0760: 01 05 05 07 03 02 30 1F   06 03 55 1D 23 04 18 30  ......0...U.#..0
+0770: 16 80 14 96 DE 61 F1 BD   1C 16 29 53 1C C0 CC 7D  .....a....)S....
+0780: 3B 83 00 40 E6 1A 7C 30   1D 06 03 55 1D 0E 04 16  ;..@...0...U....
+0790: 04 14 9E C9 79 D7 E9 5B   AB 8A 16 CC 32 8E C6 99  ....y..[....2...
+07A0: E6 9F 20 42 35 87 30 82   01 7E 06 0A 2B 06 01 04  .. B5.0.....+...
+07B0: 01 D6 79 02 04 02 04 82   01 6E 04 82 01 6A 01 68  ..y......n...j.h
+07C0: 00 76 00 5C DC 43 92 FE   E6 AB 45 44 B1 5E 9A D4  .v.\.C....ED.^..
+07D0: 56 E6 10 37 FB D5 FA 47   DC A1 73 94 B2 5E E6 F6  V..7...G..s..^..
+07E0: C7 0E CA 00 00 01 71 39   B5 3C BA 00 00 04 03 00  ......q9.<......
+07F0: 47 30 45 02 20 69 86 68   31 21 B3 59 5D A3 D6 89  G0E. i.h1!.Y]...
+0800: 4A 97 45 66 0B 69 14 93   DF C2 9E 72 87 A4 28 8A  J.Ef.i.....r..(.
+0810: 1F E5 F5 E6 B2 02 21 00   C9 19 B4 5F 17 C8 A0 AE  ......!...._....
+0820: FE 76 65 97 57 BD BC 89   4A 6D 6F 11 AD 4A FF EF  .ve.W...Jmo..J..
+0830: 81 E9 99 27 15 45 1B 01   00 76 00 6F 53 76 AC 31  ...'.E...v.oSv.1
+0840: F0 31 19 D8 99 00 A4 51   15 FF 77 15 1C 11 D9 02  .1.....Q..w.....
+0850: C1 00 29 06 8D B2 08 9A   37 D9 13 00 00 01 71 39  ..).....7.....q9
+0860: B5 3C E4 00 00 04 03 00   47 30 45 02 20 54 45 6C  .<......G0E. TEl
+0870: 30 4E 05 D9 FB D2 15 DE   68 66 13 41 0E CD B8 3D  0N......hf.A...=
+0880: D3 50 CB 46 CC DB 2C 8A   5A 7C 36 3F 5E 02 21 00  .P.F..,.Z.6?^.!.
+0890: BB 2F 10 6A 9B 05 5A E9   1B 18 4A A1 35 65 CF BF  ./.j..Z...J.5e..
+08A0: 86 5A 89 BC 4A B7 D4 78   77 27 E3 EF 43 9F BC 46  .Z..J..xw'..C..F
+08B0: 00 76 00 F6 5C 94 2F D1   77 30 22 14 54 18 08 30  .v..\./.w0".T..0
+08C0: 94 56 8E E3 4D 13 19 33   BF DF 0C 2F 20 0B CC 4E  .V..M..3.../ ..N
+08D0: F1 64 E3 00 00 01 71 39   B5 3C AB 00 00 04 03 00  .d....q9.<......
+08E0: 47 30 45 02 20 45 05 83   F1 28 47 61 95 FE 9B A9  G0E. E...(Ga....
+08F0: BC 31 41 8E ED B2 48 1D   A0 5B A5 3F 13 E6 76 BC  .1A...H..[.?..v.
+0900: D2 E6 D3 69 3F 02 21 00   A9 CA AB 0C DC 87 DF 25  ...i?.!........%
+0910: 20 D4 18 CC B0 15 E7 6F   82 F0 65 D9 3D 71 59 35   ......o..e.=qY5
+0920: F8 5F A4 CE 2D 43 AC 5B   30 0D 06 09 2A 86 48 86  ._..-C.[0...*.H.
+0930: F7 0D 01 01 0B 05 00 03   82 01 01 00 BC DC 02 D0  ................
+0940: D9 DE 8C C5 E2 D9 FE 4D   EF BA D1 22 8B 34 42 59  .......M...".4BY
+0950: 84 92 31 82 D5 0A BC 40   35 DB 06 B2 13 6E C8 CF  ..1....@5....n..
+0960: 01 F1 5F C0 E7 B7 34 37   3A A8 08 F2 9F 32 D5 F9  .._...47:....2..
+0970: 20 80 9F BF D3 FF 6D 47   9C 76 D1 CB F1 C7 F1 DB   .....mG.v......
+0980: 83 33 37 E5 3F 18 A7 00   E2 BD DA FE 4F 29 45 57  .37.?.......O)EW
+0990: 87 78 5F 53 85 0D B3 A3   5C 63 93 FE E0 26 5E F9  .x_S....\c...&^.
+09A0: 92 8C ED 76 A3 5F 39 E6   22 05 36 C5 32 73 D0 CD  ...v._9.".6.2s..
+09B0: 51 AA C8 C3 1F A8 AC 5B   26 B7 D9 94 60 08 81 81  Q......[&...`...
+09C0: D3 F5 B7 7A 4F DF 39 21   58 33 B5 15 63 02 8C B8  ...zO.9!X3..c...
+09D0: 22 EA D9 7A 74 EC 5A 41   BB 3D A7 C9 E2 40 21 EA  "..zt.ZA.=...@!.
+09E0: 34 1A 4A ED 73 60 46 C7   96 3B 99 E4 F5 E5 92 13  4.J.s`F..;......
+09F0: CE F4 3C 16 D5 62 0F BA   0E 99 AE 5C A5 2D 34 D8  ..<..b.....\.-4.
+0A00: 9A 55 B7 58 44 CE 01 38   BB D0 76 2C 64 DE 8D 00  .U.XD..8..v,d...
+0A10: 2B 99 E2 DD 61 10 ED C0   B0 5E E5 AA 37 40 D8 7C  +...a....^..7@..
+0A20: 13 37 5D 05 5F 61 EE 69   4B DF E4 EC CF F8 F2 AE  .7]._a.iK.......
+0A30: A5 5F 55 2B 0F 31 F2 64   0A 53 AB EB 00 04 6D 30  ._U+.1.d.S....m0
+0A40: 82 04 69 30 82 03 51 A0   03 02 01 02 02 0B 04 00  ..i0..Q.........
+0A50: 00 00 00 01 44 4E F0 42   47 30 0D 06 09 2A 86 48  ....DN.BG0...*.H
+0A60: 86 F7 0D 01 01 0B 05 00   30 57 31 0B 30 09 06 03  ........0W1.0...
+0A70: 55 04 06 13 02 42 45 31   19 30 17 06 03 55 04 0A  U....BE1.0...U..
+0A80: 13 10 47 6C 6F 62 61 6C   53 69 67 6E 20 6E 76 2D  ..GlobalSign nv-
+0A90: 73 61 31 10 30 0E 06 03   55 04 0B 13 07 52 6F 6F  sa1.0...U....Roo
+0AA0: 74 20 43 41 31 1B 30 19   06 03 55 04 03 13 12 47  t CA1.0...U....G
+0AB0: 6C 6F 62 61 6C 53 69 67   6E 20 52 6F 6F 74 20 43  lobalSign Root C
+0AC0: 41 30 1E 17 0D 31 34 30   32 32 30 31 30 30 30 30  A0...14022010000
+0AD0: 30 5A 17 0D 32 34 30 32   32 30 31 30 30 30 30 30  0Z..240220100000
+0AE0: 5A 30 66 31 0B 30 09 06   03 55 04 06 13 02 42 45  Z0f1.0...U....BE
+0AF0: 31 19 30 17 06 03 55 04   0A 13 10 47 6C 6F 62 61  1.0...U....Globa
+0B00: 6C 53 69 67 6E 20 6E 76   2D 73 61 31 3C 30 3A 06  lSign nv-sa1<0:.
+0B10: 03 55 04 03 13 33 47 6C   6F 62 61 6C 53 69 67 6E  .U...3GlobalSign
+0B20: 20 4F 72 67 61 6E 69 7A   61 74 69 6F 6E 20 56 61   Organization Va
+0B30: 6C 69 64 61 74 69 6F 6E   20 43 41 20 2D 20 53 48  lidation CA - SH
+0B40: 41 32 35 36 20 2D 20 47   32 30 82 01 22 30 0D 06  A256 - G20.."0..
+0B50: 09 2A 86 48 86 F7 0D 01   01 01 05 00 03 82 01 0F  .*.H............
+0B60: 00 30 82 01 0A 02 82 01   01 00 C7 0E 6C 3F 23 93  .0..........l?#.
+0B70: 7F CC 70 A5 9D 20 C3 0E   53 3F 7E C0 4E C2 98 49  ..p.. ..S?..N..I
+0B80: CA 47 D5 23 EF 03 34 85   74 C8 A3 02 2E 46 5C 0B  .G.#..4.t....F\.
+0B90: 7D C9 88 9D 4F 8B F0 F8   9C 6C 8C 55 35 DB BF F2  ....O....l.U5...
+0BA0: B3 EA FB E3 56 E7 4A 46   D9 13 22 CA 36 D5 9B C1  ....V.JF..".6...
+0BB0: A8 E3 96 43 93 F2 0C BC   E6 F9 E6 E8 99 C8 63 48  ...C..........cH
+0BC0: 78 7F 57 36 69 1A 19 1D   5A D1 D4 7D C2 9C D4 7F  x.W6i...Z.......
+0BD0: E1 80 12 AE 7A EA 88 EA   57 D8 CA 0A 0A 3A 12 49  ....z...W....:.I
+0BE0: A2 62 19 7A 0D 24 F7 37   EB B4 73 92 7B 05 23 9B  .b.z.$.7..s...#.
+0BF0: 12 B5 CE EB 29 DF A4 14   02 B9 01 A5 D4 A6 9C 43  ....)..........C
+0C00: 64 88 DE F8 7E FE E3 F5   1E E5 FE DC A3 A8 E4 66  d..............f
+0C10: 31 D9 4C 25 E9 18 B9 89   59 09 AE E9 9D 1C 6D 37  1.L%....Y.....m7
+0C20: 0F 4A 1E 35 20 28 E2 AF   D4 21 8B 01 C4 45 AD 6E  .J.5 (...!...E.n
+0C30: 2B 63 AB 92 6B 61 0A 4D   20 ED 73 BA 7C CE FE 16  +c..ka.M .s.....
+0C40: B5 DB 9F 80 F0 D6 8B 6C   D9 08 79 4A 4F 78 65 DA  .......l..yJOxe.
+0C50: 92 BC BE 35 F9 B3 C4 F9   27 80 4E FF 96 52 E6 02  ...5....'.N..R..
+0C60: 20 E1 07 73 E9 5D 2B BD   B2 F1 02 03 01 00 01 A3   ..s.]+.........
+0C70: 82 01 25 30 82 01 21 30   0E 06 03 55 1D 0F 01 01  ..%0..!0...U....
+0C80: FF 04 04 03 02 01 06 30   12 06 03 55 1D 13 01 01  .......0...U....
+0C90: FF 04 08 30 06 01 01 FF   02 01 00 30 1D 06 03 55  ...0.......0...U
+0CA0: 1D 0E 04 16 04 14 96 DE   61 F1 BD 1C 16 29 53 1C  ........a....)S.
+0CB0: C0 CC 7D 3B 83 00 40 E6   1A 7C 30 47 06 03 55 1D  ...;..@...0G..U.
+0CC0: 20 04 40 30 3E 30 3C 06   04 55 1D 20 00 30 34 30   .@0>0<..U. .040
+0CD0: 32 06 08 2B 06 01 05 05   07 02 01 16 26 68 74 74  2..+........&htt
+0CE0: 70 73 3A 2F 2F 77 77 77   2E 67 6C 6F 62 61 6C 73  ps://www.globals
+0CF0: 69 67 6E 2E 63 6F 6D 2F   72 65 70 6F 73 69 74 6F  ign.com/reposito
+0D00: 72 79 2F 30 33 06 03 55   1D 1F 04 2C 30 2A 30 28  ry/03..U...,0*0(
+0D10: A0 26 A0 24 86 22 68 74   74 70 3A 2F 2F 63 72 6C  .&.$."http://crl
+0D20: 2E 67 6C 6F 62 61 6C 73   69 67 6E 2E 6E 65 74 2F  .globalsign.net/
+0D30: 72 6F 6F 74 2E 63 72 6C   30 3D 06 08 2B 06 01 05  root.crl0=..+...
+0D40: 05 07 01 01 04 31 30 2F   30 2D 06 08 2B 06 01 05  .....10/0-..+...
+0D50: 05 07 30 01 86 21 68 74   74 70 3A 2F 2F 6F 63 73  ..0..!http://ocs
+0D60: 70 2E 67 6C 6F 62 61 6C   73 69 67 6E 2E 63 6F 6D  p.globalsign.com
+0D70: 2F 72 6F 6F 74 72 31 30   1F 06 03 55 1D 23 04 18  /rootr10...U.#..
+0D80: 30 16 80 14 60 7B 66 1A   45 0D 97 CA 89 50 2F 7D  0...`.f.E....P/.
+0D90: 04 CD 34 A8 FF FC FD 4B   30 0D 06 09 2A 86 48 86  ..4....K0...*.H.
+0DA0: F7 0D 01 01 0B 05 00 03   82 01 01 00 46 2A EE 5E  ............F*.^
+0DB0: BD AE 01 60 37 31 11 86   71 74 B6 46 49 C8 10 16  ...`71..qt.FI...
+0DC0: FE 2F 62 23 17 AB 1F 87   F8 82 ED CA DF 0E 2C DF  ./b#..........,.
+0DD0: 64 75 8E E5 18 72 A7 8C   3A 8B C9 AC A5 77 50 F7  du...r..:....wP.
+0DE0: EF 9E A4 E0 A0 8F 14 57   A3 2A 5F EC 7E 6D 10 E6  .......W.*_..m..
+0DF0: BA 8D B0 08 87 76 0E 4C   B2 D9 51 BB 11 02 F2 5C  .....v.L..Q....\
+0E00: DD 1C BD F3 55 96 0F D4   06 C0 FC E2 23 8A 24 70  ....U.......#.$p
+0E10: D3 BB F0 79 1A A7 61 70   83 8A AF 06 C5 20 D8 A1  ...y..ap..... ..
+0E20: 63 D0 6C AE 4F 32 D7 AE   7C 18 45 75 05 29 77 DF  c.l.O2....Eu.)w.
+0E30: 42 40 64 64 86 BE 2A 76   09 31 6F 1D 24 F4 99 D0  B@dd..*v.1o.$...
+0E40: 85 FE F2 21 08 F9 C6 F6   F1 D0 59 ED D6 56 3C 08  ...!......Y..V<.
+0E50: 28 03 67 BA F0 F9 F1 90   16 47 AE 67 E6 BC 80 48  (.g......G.g...H
+0E60: E9 42 76 34 97 55 69 24   0E 83 D6 A0 2D B4 F5 F3  .Bv4.Ui$....-...
+0E70: 79 8A 49 28 74 1A 41 A1   C2 D3 24 88 35 30 60 94  y.I(t.A...$.50`.
+0E80: 17 B4 E1 04 22 31 3D 3B   2F 17 06 B2 B8 9D 86 2B  ...."1=;/......+
+0E90: 5A 69 EF 83 F5 4B C4 AA   B4 2A F8 7C A1 B1 85 94  Zi...K...*......
+0EA0: 8C F4 0C 87 0C F4 AC 40   F8 59 49 98              .......@.YI.
+main, READ: TLSv1.1 Handshake, length = 3756
+check handshake state: certificate[11]
+update handshake state: certificate[11]
+upcoming handshake states: certificate_request[13](optional)
+upcoming handshake states: server_hello_done[14]
+upcoming handshake states: client certificate[11](optional)
+upcoming handshake states: client_key_exchange[16]
+upcoming handshake states: certificate_verify[15](optional)
+upcoming handshake states: client change_cipher_spec[-1]
+upcoming handshake states: client finished[20]
+upcoming handshake states: server change_cipher_spec[-1]
+upcoming handshake states: server finished[20]
+*** Certificate chain
+chain [0] = [
+[
+  Version: V3
+  Subject: CN=baidu.com, O="Beijing Baidu Netcom Science Technology Co., Ltd", OU=service operation department, L=beijing, ST=beijing, C=CN
+  Signature Algorithm: SHA256withRSA, OID = 1.2.840.113549.1.1.11
+
+  Key:  Sun RSA public key, 2048 bits
+  modulus: 24447670194681134930622535078849307650955709445907141319429480038436215335358073627900931159797668335850497404378455565832224636917345203491168006207927092349898005019173027938424401309836372580357513567321708170696086150650622138642758058891488241515864554714488540371116467529413156897546991986743817547978784330145647870682680887376850278609713886918023141693015453400702875454035455875710531226071413246691218088873710308709233736395323607087215365814260642368927749970191077661316040264473990918611638306735542549194843604547458738232510083862807640123860703823935330939847871556783613794587557047453884618092593
+  public exponent: 65537
+  Validity: [From: Thu Apr 02 15:04:58 CST 2020,
+               To: Mon Jul 26 13:31:02 CST 2021]
+  Issuer: CN=GlobalSign Organization Validation CA - SHA256 - G2, O=GlobalSign nv-sa, C=BE
+  SerialNumber: [    72587836 6e9f56e8 1d418848]
+
+Certificate Extensions: 10
+[1]: ObjectId: 1.3.6.1.4.1.11129.2.4.2 Criticality=false
+Extension unknown: DER encoded OCTET string =
+0000: 04 82 01 6E 04 82 01 6A   01 68 00 76 00 5C DC 43  ...n...j.h.v.\.C
+0010: 92 FE E6 AB 45 44 B1 5E   9A D4 56 E6 10 37 FB D5  ....ED.^..V..7..
+0020: FA 47 DC A1 73 94 B2 5E   E6 F6 C7 0E CA 00 00 01  .G..s..^........
+0030: 71 39 B5 3C BA 00 00 04   03 00 47 30 45 02 20 69  q9.<......G0E. i
+0040: 86 68 31 21 B3 59 5D A3   D6 89 4A 97 45 66 0B 69  .h1!.Y]...J.Ef.i
+0050: 14 93 DF C2 9E 72 87 A4   28 8A 1F E5 F5 E6 B2 02  .....r..(.......
+0060: 21 00 C9 19 B4 5F 17 C8   A0 AE FE 76 65 97 57 BD  !...._.....ve.W.
+0070: BC 89 4A 6D 6F 11 AD 4A   FF EF 81 E9 99 27 15 45  ..Jmo..J.....'.E
+0080: 1B 01 00 76 00 6F 53 76   AC 31 F0 31 19 D8 99 00  ...v.oSv.1.1....
+0090: A4 51 15 FF 77 15 1C 11   D9 02 C1 00 29 06 8D B2  .Q..w.......)...
+00A0: 08 9A 37 D9 13 00 00 01   71 39 B5 3C E4 00 00 04  ..7.....q9.<....
+00B0: 03 00 47 30 45 02 20 54   45 6C 30 4E 05 D9 FB D2  ..G0E. TEl0N....
+00C0: 15 DE 68 66 13 41 0E CD   B8 3D D3 50 CB 46 CC DB  ..hf.A...=.P.F..
+00D0: 2C 8A 5A 7C 36 3F 5E 02   21 00 BB 2F 10 6A 9B 05  ,.Z.6?^.!../.j..
+00E0: 5A E9 1B 18 4A A1 35 65   CF BF 86 5A 89 BC 4A B7  Z...J.5e...Z..J.
+00F0: D4 78 77 27 E3 EF 43 9F   BC 46 00 76 00 F6 5C 94  .xw'..C..F.v..\.
+0100: 2F D1 77 30 22 14 54 18   08 30 94 56 8E E3 4D 13  /.w0".T..0.V..M.
+0110: 19 33 BF DF 0C 2F 20 0B   CC 4E F1 64 E3 00 00 01  .3.../ ..N.d....
+0120: 71 39 B5 3C AB 00 00 04   03 00 47 30 45 02 20 45  q9.<......G0E. E
+0130: 05 83 F1 28 47 61 95 FE   9B A9 BC 31 41 8E ED B2  ...(Ga.....1A...
+0140: 48 1D A0 5B A5 3F 13 E6   76 BC D2 E6 D3 69 3F 02  H..[.?..v....i?.
+0150: 21 00 A9 CA AB 0C DC 87   DF 25 20 D4 18 CC B0 15  !........% .....
+0160: E7 6F 82 F0 65 D9 3D 71   59 35 F8 5F A4 CE 2D 43  .o..e.=qY5._..-C
+0170: AC 5B                                              .[
+
+
+[2]: ObjectId: 1.3.6.1.5.5.7.1.1 Criticality=false
+AuthorityInfoAccess [
+  [
+   accessMethod: caIssuers
+   accessLocation: URIName: http://secure.globalsign.com/cacert/gsorganizationvalsha2g2r1.crt
+,
+   accessMethod: ocsp
+   accessLocation: URIName: http://ocsp2.globalsign.com/gsorganizationvalsha2g2
+]
+]
+
+[3]: ObjectId: 2.5.29.35 Criticality=false
+AuthorityKeyIdentifier [
+KeyIdentifier [
+0000: 96 DE 61 F1 BD 1C 16 29   53 1C C0 CC 7D 3B 83 00  ..a....)S....;..
+0010: 40 E6 1A 7C                                        @...
+]
+]
+
+[4]: ObjectId: 2.5.29.19 Criticality=false
+BasicConstraints:[
+  CA:false
+  PathLen: undefined
+]
+
+[5]: ObjectId: 2.5.29.31 Criticality=false
+CRLDistributionPoints [
+  [DistributionPoint:
+     [URIName: http://crl.globalsign.com/gs/gsorganizationvalsha2g2.crl]
+]]
+
+[6]: ObjectId: 2.5.29.32 Criticality=false
+CertificatePolicies [
+  [CertificatePolicyId: [1.3.6.1.4.1.4146.1.20]
+[PolicyQualifierInfo: [
+  qualifierID: 1.3.6.1.5.5.7.2.1
+  qualifier: 0000: 16 26 68 74 74 70 73 3A   2F 2F 77 77 77 2E 67 6C  .&https://www.gl
+0010: 6F 62 61 6C 73 69 67 6E   2E 63 6F 6D 2F 72 65 70  obalsign.com/rep
+0020: 6F 73 69 74 6F 72 79 2F                            ository/
+
+]]  ]
+  [CertificatePolicyId: [2.23.140.1.2.2]
+[]  ]
+]
+
+[7]: ObjectId: 2.5.29.37 Criticality=false
+ExtendedKeyUsages [
+  serverAuth
+  clientAuth
+]
+
+[8]: ObjectId: 2.5.29.15 Criticality=true
+KeyUsage [
+  DigitalSignature
+  Key_Encipherment
+]
+
+[9]: ObjectId: 2.5.29.17 Criticality=false
+SubjectAlternativeName [
+  DNSName: baidu.com
+  DNSName: baifubao.com
+  DNSName: www.baidu.cn
+  DNSName: www.baidu.com.cn
+  DNSName: mct.y.nuomi.com
+  DNSName: apollo.auto
+  DNSName: dwz.cn
+  DNSName: *.baidu.com
+  DNSName: *.baifubao.com
+  DNSName: *.baidustatic.com
+  DNSName: *.bdstatic.com
+  DNSName: *.bdimg.com
+  DNSName: *.hao123.com
+  DNSName: *.nuomi.com
+  DNSName: *.chuanke.com
+  DNSName: *.trustgo.com
+  DNSName: *.bce.baidu.com
+  DNSName: *.eyun.baidu.com
+  DNSName: *.map.baidu.com
+  DNSName: *.mbd.baidu.com
+  DNSName: *.fanyi.baidu.com
+  DNSName: *.baidubce.com
+  DNSName: *.mipcdn.com
+  DNSName: *.news.baidu.com
+  DNSName: *.baidupcs.com
+  DNSName: *.aipage.com
+  DNSName: *.aipage.cn
+  DNSName: *.bcehost.com
+  DNSName: *.safe.baidu.com
+  DNSName: *.im.baidu.com
+  DNSName: *.baiducontent.com
+  DNSName: *.dlnel.com
+  DNSName: *.dlnel.org
+  DNSName: *.dueros.baidu.com
+  DNSName: *.su.baidu.com
+  DNSName: *.91.com
+  DNSName: *.hao123.baidu.com
+  DNSName: *.apollo.auto
+  DNSName: *.xueshu.baidu.com
+  DNSName: *.bj.baidubce.com
+  DNSName: *.gz.baidubce.com
+  DNSName: *.smartapps.cn
+  DNSName: *.bdtjrcv.com
+  DNSName: *.hao222.com
+  DNSName: *.haokan.com
+  DNSName: *.pae.baidu.com
+  DNSName: *.vd.bdstatic.com
+  DNSName: click.hm.baidu.com
+  DNSName: log.hm.baidu.com
+  DNSName: cm.pos.baidu.com
+  DNSName: wn.pos.baidu.com
+  DNSName: update.pan.baidu.com
+]
+
+[10]: ObjectId: 2.5.29.14 Criticality=false
+SubjectKeyIdentifier [
+KeyIdentifier [
+0000: 9E C9 79 D7 E9 5B AB 8A   16 CC 32 8E C6 99 E6 9F  ..y..[....2.....
+0010: 20 42 35 87                                         B5.
+]
+]
+
+]
+  Algorithm: [SHA256withRSA]
+  Signature:
+0000: BC DC 02 D0 D9 DE 8C C5   E2 D9 FE 4D EF BA D1 22  ...........M..."
+0010: 8B 34 42 59 84 92 31 82   D5 0A BC 40 35 DB 06 B2  .4BY..1....@5...
+0020: 13 6E C8 CF 01 F1 5F C0   E7 B7 34 37 3A A8 08 F2  .n...._...47:...
+0030: 9F 32 D5 F9 20 80 9F BF   D3 FF 6D 47 9C 76 D1 CB  .2.. .....mG.v..
+0040: F1 C7 F1 DB 83 33 37 E5   3F 18 A7 00 E2 BD DA FE  .....37.?.......
+0050: 4F 29 45 57 87 78 5F 53   85 0D B3 A3 5C 63 93 FE  O)EW.x_S....\c..
+0060: E0 26 5E F9 92 8C ED 76   A3 5F 39 E6 22 05 36 C5  .&^....v._9.".6.
+0070: 32 73 D0 CD 51 AA C8 C3   1F A8 AC 5B 26 B7 D9 94  2s..Q......[&...
+0080: 60 08 81 81 D3 F5 B7 7A   4F DF 39 21 58 33 B5 15  `......zO.9!X3..
+0090: 63 02 8C B8 22 EA D9 7A   74 EC 5A 41 BB 3D A7 C9  c..."..zt.ZA.=..
+00A0: E2 40 21 EA 34 1A 4A ED   73 60 46 C7 96 3B 99 E4  .@!.4.J.s`F..;..
+00B0: F5 E5 92 13 CE F4 3C 16   D5 62 0F BA 0E 99 AE 5C  ......<..b.....\
+00C0: A5 2D 34 D8 9A 55 B7 58   44 CE 01 38 BB D0 76 2C  .-4..U.XD..8..v,
+00D0: 64 DE 8D 00 2B 99 E2 DD   61 10 ED C0 B0 5E E5 AA  d...+...a....^..
+00E0: 37 40 D8 7C 13 37 5D 05   5F 61 EE 69 4B DF E4 EC  7@...7]._a.iK...
+00F0: CF F8 F2 AE A5 5F 55 2B   0F 31 F2 64 0A 53 AB EB  ....._U+.1.d.S..
+
+]
+chain [1] = [
+[
+  Version: V3
+  Subject: CN=GlobalSign Organization Validation CA - SHA256 - G2, O=GlobalSign nv-sa, C=BE
+  Signature Algorithm: SHA256withRSA, OID = 1.2.840.113549.1.1.11
+
+  Key:  Sun RSA public key, 2048 bits
+  modulus: 25128534854946729689874225426937401505000881204706872255627098498474475295641403147428295231173090028665490451781016201369028386293751105000607980749389164896950295472415799544200821826598281622670047877476444380361331431510582219613042406283138772574077178828514459453291208108705648245160199047848714530696719439161049181407350831720090579906068909416515809757315311589912849752912945272005465192109502201681085714022553142452002065884519487869175097916258424515352321964381962068601310395827347949688386139631202235593096601000028863153912492627308071474449386570163993017908691119484112907211941619220357798802161
+  public exponent: 65537
+  Validity: [From: Thu Feb 20 18:00:00 CST 2014,
+               To: Tue Feb 20 18:00:00 CST 2024]
+  Issuer: CN=GlobalSign Root CA, OU=Root CA, O=GlobalSign nv-sa, C=BE
+  SerialNumber: [    04000000 0001444e f04247]
+
+Certificate Extensions: 7
+[1]: ObjectId: 1.3.6.1.5.5.7.1.1 Criticality=false
+AuthorityInfoAccess [
+  [
+   accessMethod: ocsp
+   accessLocation: URIName: http://ocsp.globalsign.com/rootr1
+]
+]
+
+[2]: ObjectId: 2.5.29.35 Criticality=false
+AuthorityKeyIdentifier [
+KeyIdentifier [
+0000: 60 7B 66 1A 45 0D 97 CA   89 50 2F 7D 04 CD 34 A8  `.f.E....P/...4.
+0010: FF FC FD 4B                                        ...K
+]
+]
+
+[3]: ObjectId: 2.5.29.19 Criticality=true
+BasicConstraints:[
+  CA:true
+  PathLen:0
+]
+
+[4]: ObjectId: 2.5.29.31 Criticality=false
+CRLDistributionPoints [
+  [DistributionPoint:
+     [URIName: http://crl.globalsign.net/root.crl]
+]]
+
+[5]: ObjectId: 2.5.29.32 Criticality=false
+CertificatePolicies [
+  [CertificatePolicyId: [2.5.29.32.0]
+[PolicyQualifierInfo: [
+  qualifierID: 1.3.6.1.5.5.7.2.1
+  qualifier: 0000: 16 26 68 74 74 70 73 3A   2F 2F 77 77 77 2E 67 6C  .&https://www.gl
+0010: 6F 62 61 6C 73 69 67 6E   2E 63 6F 6D 2F 72 65 70  obalsign.com/rep
+0020: 6F 73 69 74 6F 72 79 2F                            ository/
+
+]]  ]
+]
+
+[6]: ObjectId: 2.5.29.15 Criticality=true
+KeyUsage [
+  Key_CertSign
+  Crl_Sign
+]
+
+[7]: ObjectId: 2.5.29.14 Criticality=false
+SubjectKeyIdentifier [
+KeyIdentifier [
+0000: 96 DE 61 F1 BD 1C 16 29   53 1C C0 CC 7D 3B 83 00  ..a....)S....;..
+0010: 40 E6 1A 7C                                        @...
+]
+]
+
+]
+  Algorithm: [SHA256withRSA]
+  Signature:
+0000: 46 2A EE 5E BD AE 01 60   37 31 11 86 71 74 B6 46  F*.^...`71..qt.F
+0010: 49 C8 10 16 FE 2F 62 23   17 AB 1F 87 F8 82 ED CA  I..../b#........
+0020: DF 0E 2C DF 64 75 8E E5   18 72 A7 8C 3A 8B C9 AC  ..,.du...r..:...
+0030: A5 77 50 F7 EF 9E A4 E0   A0 8F 14 57 A3 2A 5F EC  .wP........W.*_.
+0040: 7E 6D 10 E6 BA 8D B0 08   87 76 0E 4C B2 D9 51 BB  .m.......v.L..Q.
+0050: 11 02 F2 5C DD 1C BD F3   55 96 0F D4 06 C0 FC E2  ...\....U.......
+0060: 23 8A 24 70 D3 BB F0 79   1A A7 61 70 83 8A AF 06  #.$p...y..ap....
+0070: C5 20 D8 A1 63 D0 6C AE   4F 32 D7 AE 7C 18 45 75  . ..c.l.O2....Eu
+0080: 05 29 77 DF 42 40 64 64   86 BE 2A 76 09 31 6F 1D  .)w.B@dd..*v.1o.
+0090: 24 F4 99 D0 85 FE F2 21   08 F9 C6 F6 F1 D0 59 ED  $......!......Y.
+00A0: D6 56 3C 08 28 03 67 BA   F0 F9 F1 90 16 47 AE 67  .V<.(.g......G.g
+00B0: E6 BC 80 48 E9 42 76 34   97 55 69 24 0E 83 D6 A0  ...H.Bv4.Ui$....
+00C0: 2D B4 F5 F3 79 8A 49 28   74 1A 41 A1 C2 D3 24 88  -...y.I(t.A...$.
+00D0: 35 30 60 94 17 B4 E1 04   22 31 3D 3B 2F 17 06 B2  50`....."1=;/...
+00E0: B8 9D 86 2B 5A 69 EF 83   F5 4B C4 AA B4 2A F8 7C  ...+Zi...K...*..
+00F0: A1 B1 85 94 8C F4 0C 87   0C F4 AC 40 F8 59 49 98  ...........@.YI.
+
+]
+***
+Found trusted certificate:
+[
+[
+  Version: V3
+  Subject: CN=GlobalSign Root CA, OU=Root CA, O=GlobalSign nv-sa, C=BE
+  Signature Algorithm: SHA1withRSA, OID = 1.2.840.113549.1.1.5
+
+  Key:  Sun RSA public key, 2048 bits
+  modulus: 27527298331346624659307815003393871405544020859223571253338520804765223430982458246098772321151941672961640627675186276205051526242643378100158885513217742058056466168392650055013100104849176312294167242041140310435772026717601763184706480259485212806902223894888566729634266984619221168862421838192203495151893762216777748330129909588210203299778581898175320882908371930984451809054509645379277309791084909705758372477320893336152882629891014286744815684371510751674825920204180490258122986862539585201934155220945732937830308834387108046657005363452071776396707181283143463213972159925612976006433949563180335468751
+  public exponent: 65537
+  Validity: [From: Tue Sep 01 20:00:00 CST 1998,
+               To: Fri Jan 28 20:00:00 CST 2028]
+  Issuer: CN=GlobalSign Root CA, OU=Root CA, O=GlobalSign nv-sa, C=BE
+  SerialNumber: [    04000000 0001154b 5ac394]
+
+Certificate Extensions: 3
+[1]: ObjectId: 2.5.29.19 Criticality=true
+BasicConstraints:[
+  CA:true
+  PathLen:2147483647
+]
+
+[2]: ObjectId: 2.5.29.15 Criticality=true
+KeyUsage [
+  Key_CertSign
+  Crl_Sign
+]
+
+[3]: ObjectId: 2.5.29.14 Criticality=false
+SubjectKeyIdentifier [
+KeyIdentifier [
+0000: 60 7B 66 1A 45 0D 97 CA   89 50 2F 7D 04 CD 34 A8  `.f.E....P/...4.
+0010: FF FC FD 4B                                        ...K
+]
+]
+
+]
+  Algorithm: [SHA1withRSA]
+  Signature:
+0000: D6 73 E7 7C 4F 76 D0 8D   BF EC BA A2 BE 34 C5 28  .s..Ov.......4.(
+0010: 32 B5 7C FC 6C 9C 2C 2B   BD 09 9E 53 BF 6B 5E AA  2...l.,+...S.k^.
+0020: 11 48 B6 E5 08 A3 B3 CA   3D 61 4D D3 46 09 B3 3E  .H......=aM.F..>
+0030: C3 A0 E3 63 55 1B F2 BA   EF AD 39 E1 43 B9 38 A3  ...cU.....9.C.8.
+0040: E6 2F 8A 26 3B EF A0 50   56 F9 C6 0A FD 38 CD C4  ./.&;..PV....8..
+0050: 0B 70 51 94 97 98 04 DF   C3 5F 94 D5 15 C9 14 41  .pQ......_.....A
+0060: 9C C4 5D 75 64 15 0D FF   55 30 EC 86 8F FF 0D EF  ..]ud...U0......
+0070: 2C B9 63 46 F6 AA FC DF   BC 69 FD 2E 12 48 64 9A  ,.cF.....i...Hd.
+0080: E0 95 F0 A6 EF 29 8F 01   B1 15 B5 0C 1D A5 FE 69  .....).........i
+0090: 2C 69 24 78 1E B3 A7 1C   71 62 EE CA C8 97 AC 17  ,i$x....qb......
+00A0: 5D 8A C2 F8 47 86 6E 2A   C4 56 31 95 D0 67 89 85  ]...G.n*.V1..g..
+00B0: 2B F9 6C A6 5D 46 9D 0C   AA 82 E4 99 51 DD 70 B7  +.l.]F......Q.p.
+00C0: DB 56 3D 61 E4 6A E1 5C   D6 F6 FE 3D DE 41 CC 07  .V=a.j.\...=.A..
+00D0: AE 63 52 BF 53 53 F4 2B   E9 C7 FD B6 F7 82 5F 85  .cR.SS.+......_.
+00E0: D2 41 18 DB 81 B3 04 1C   C5 1F A4 80 6F 15 20 C9  .A..........o. .
+00F0: DE 0C 88 0A 1D D6 66 55   E2 FC 48 C9 29 26 69 E0  ......fU..H.)&i.
+
+]
+[read] MD5 and SHA1 hashes:  len = 3756
+0000: 0B 00 0E A8 00 0E A5 00   0A 32 30 82 0A 2E 30 82  .........20...0.
+0010: 09 16 A0 03 02 01 02 02   0C 72 58 78 36 6E 9F 56  .........rXx6n.V
+0020: E8 1D 41 88 48 30 0D 06   09 2A 86 48 86 F7 0D 01  ..A.H0...*.H....
+0030: 01 0B 05 00 30 66 31 0B   30 09 06 03 55 04 06 13  ....0f1.0...U...
+0040: 02 42 45 31 19 30 17 06   03 55 04 0A 13 10 47 6C  .BE1.0...U....Gl
+0050: 6F 62 61 6C 53 69 67 6E   20 6E 76 2D 73 61 31 3C  obalSign nv-sa1<
+0060: 30 3A 06 03 55 04 03 13   33 47 6C 6F 62 61 6C 53  0:..U...3GlobalS
+0070: 69 67 6E 20 4F 72 67 61   6E 69 7A 61 74 69 6F 6E  ign Organization
+0080: 20 56 61 6C 69 64 61 74   69 6F 6E 20 43 41 20 2D   Validation CA -
+0090: 20 53 48 41 32 35 36 20   2D 20 47 32 30 1E 17 0D   SHA256 - G20...
+00A0: 32 30 30 34 30 32 30 37   30 34 35 38 5A 17 0D 32  200402070458Z..2
+00B0: 31 30 37 32 36 30 35 33   31 30 32 5A 30 81 A7 31  10726053102Z0..1
+00C0: 0B 30 09 06 03 55 04 06   13 02 43 4E 31 10 30 0E  .0...U....CN1.0.
+00D0: 06 03 55 04 08 13 07 62   65 69 6A 69 6E 67 31 10  ..U....beijing1.
+00E0: 30 0E 06 03 55 04 07 13   07 62 65 69 6A 69 6E 67  0...U....beijing
+00F0: 31 25 30 23 06 03 55 04   0B 13 1C 73 65 72 76 69  1%0#..U....servi
+0100: 63 65 20 6F 70 65 72 61   74 69 6F 6E 20 64 65 70  ce operation dep
+0110: 61 72 74 6D 65 6E 74 31   39 30 37 06 03 55 04 0A  artment1907..U..
+0120: 13 30 42 65 69 6A 69 6E   67 20 42 61 69 64 75 20  .0Beijing Baidu
+0130: 4E 65 74 63 6F 6D 20 53   63 69 65 6E 63 65 20 54  Netcom Science T
+0140: 65 63 68 6E 6F 6C 6F 67   79 20 43 6F 2E 2C 20 4C  echnology Co., L
+0150: 74 64 31 12 30 10 06 03   55 04 03 13 09 62 61 69  td1.0...U....bai
+0160: 64 75 2E 63 6F 6D 30 82   01 22 30 0D 06 09 2A 86  du.com0.."0...*.
+0170: 48 86 F7 0D 01 01 01 05   00 03 82 01 0F 00 30 82  H.............0.
+0180: 01 0A 02 82 01 01 00 C1   A9 B0 AE 47 1A D2 57 EB  ...........G..W.
+0190: 1D 15 1F 6E 5C B2 E4 F8   0B 20 DB EA 00 DF 29 FF  ...n\.... ....).
+01A0: A4 6B 89 26 4B 9F 23 2F   EC 57 B0 8A B8 46 40 2A  .k.&K.#/.W...F@*
+01B0: 7E BC DC 5A 45 97 4F AD   41 0E BC 20 86 4B 0C 5D  ...ZE.O.A.. .K.]
+01C0: 55 21 47 E2 31 3C 57 A7   EC 99 47 EB 47 0D 72 D7  U!G.1<W...G.G.r.
+01D0: C8 16 54 75 EF D3 45 11   0F 4B CE 60 7A 46 5C 28  ..Tu..E..K.`zF\(
+01E0: 74 AE 8E 1B BE D8 70 66   7B A8 93 49 28 D2 A3 76  t.....pf...I(..v
+01F0: 94 55 DE 7C 27 F2 0F F7   98 0C AD 86 DA C6 AE FD  .U..'...........
+0200: 9F F0 D9 81 32 9A 97 E3   21 EE 04 92 96 E4 78 11  ....2...!.....x.
+0210: E5 C4 10 0E 10 31 7A 4A   97 A0 EB C7 9B C4 DA 89  .....1zJ........
+0220: 37 A9 C3 37 D7 56 B1 7F   52 C7 D9 26 0A D6 AF 38  7..7.V..R..&...8
+0230: 16 B1 6D FB 73 79 B1 68   79 03 90 EB 88 7B 8C 48  ..m.sy.hy......H
+0240: 91 98 51 A5 07 94 86 A5   78 46 79 8F 58 9B E9 35  ..Q.....xFy.X..5
+0250: 59 A7 F1 7B 57 31 0A 90   CF 24 CE 0D 24 E7 92 B2  Y...W1...$..$...
+0260: 6A E9 E6 96 37 0A B8 7C   87 2F 74 D2 5C E8 4B 0A  j...7..../t.\.K.
+0270: 5F 66 18 A7 41 86 CF 26   A6 08 8E A5 49 17 92 53  _f..A..&....I..S
+0280: B3 91 A5 CF 53 B0 31 02   03 01 00 01 A3 82 06 98  ....S.1.........
+0290: 30 82 06 94 30 0E 06 03   55 1D 0F 01 01 FF 04 04  0...0...U.......
+02A0: 03 02 05 A0 30 81 A0 06   08 2B 06 01 05 05 07 01  ....0....+......
+02B0: 01 04 81 93 30 81 90 30   4D 06 08 2B 06 01 05 05  ....0..0M..+....
+02C0: 07 30 02 86 41 68 74 74   70 3A 2F 2F 73 65 63 75  .0..Ahttp://secu
+02D0: 72 65 2E 67 6C 6F 62 61   6C 73 69 67 6E 2E 63 6F  re.globalsign.co
+02E0: 6D 2F 63 61 63 65 72 74   2F 67 73 6F 72 67 61 6E  m/cacert/gsorgan
+02F0: 69 7A 61 74 69 6F 6E 76   61 6C 73 68 61 32 67 32  izationvalsha2g2
+0300: 72 31 2E 63 72 74 30 3F   06 08 2B 06 01 05 05 07  r1.crt0?..+.....
+0310: 30 01 86 33 68 74 74 70   3A 2F 2F 6F 63 73 70 32  0..3http://ocsp2
+0320: 2E 67 6C 6F 62 61 6C 73   69 67 6E 2E 63 6F 6D 2F  .globalsign.com/
+0330: 67 73 6F 72 67 61 6E 69   7A 61 74 69 6F 6E 76 61  gsorganizationva
+0340: 6C 73 68 61 32 67 32 30   56 06 03 55 1D 20 04 4F  lsha2g20V..U. .O
+0350: 30 4D 30 41 06 09 2B 06   01 04 01 A0 32 01 14 30  0M0A..+.....2..0
+0360: 34 30 32 06 08 2B 06 01   05 05 07 02 01 16 26 68  402..+........&h
+0370: 74 74 70 73 3A 2F 2F 77   77 77 2E 67 6C 6F 62 61  ttps://www.globa
+0380: 6C 73 69 67 6E 2E 63 6F   6D 2F 72 65 70 6F 73 69  lsign.com/reposi
+0390: 74 6F 72 79 2F 30 08 06   06 67 81 0C 01 02 02 30  tory/0...g.....0
+03A0: 09 06 03 55 1D 13 04 02   30 00 30 49 06 03 55 1D  ...U....0.0I..U.
+03B0: 1F 04 42 30 40 30 3E A0   3C A0 3A 86 38 68 74 74  ..B0@0>.<.:.8htt
+03C0: 70 3A 2F 2F 63 72 6C 2E   67 6C 6F 62 61 6C 73 69  p://crl.globalsi
+03D0: 67 6E 2E 63 6F 6D 2F 67   73 2F 67 73 6F 72 67 61  gn.com/gs/gsorga
+03E0: 6E 69 7A 61 74 69 6F 6E   76 61 6C 73 68 61 32 67  nizationvalsha2g
+03F0: 32 2E 63 72 6C 30 82 03   4E 06 03 55 1D 11 04 82  2.crl0..N..U....
+0400: 03 45 30 82 03 41 82 09   62 61 69 64 75 2E 63 6F  .E0..A..baidu.co
+0410: 6D 82 0C 62 61 69 66 75   62 61 6F 2E 63 6F 6D 82  m..baifubao.com.
+0420: 0C 77 77 77 2E 62 61 69   64 75 2E 63 6E 82 10 77  .www.baidu.cn..w
+0430: 77 77 2E 62 61 69 64 75   2E 63 6F 6D 2E 63 6E 82  ww.baidu.com.cn.
+0440: 0F 6D 63 74 2E 79 2E 6E   75 6F 6D 69 2E 63 6F 6D  .mct.y.nuomi.com
+0450: 82 0B 61 70 6F 6C 6C 6F   2E 61 75 74 6F 82 06 64  ..apollo.auto..d
+0460: 77 7A 2E 63 6E 82 0B 2A   2E 62 61 69 64 75 2E 63  wz.cn..*.baidu.c
+0470: 6F 6D 82 0E 2A 2E 62 61   69 66 75 62 61 6F 2E 63  om..*.baifubao.c
+0480: 6F 6D 82 11 2A 2E 62 61   69 64 75 73 74 61 74 69  om..*.baidustati
+0490: 63 2E 63 6F 6D 82 0E 2A   2E 62 64 73 74 61 74 69  c.com..*.bdstati
+04A0: 63 2E 63 6F 6D 82 0B 2A   2E 62 64 69 6D 67 2E 63  c.com..*.bdimg.c
+04B0: 6F 6D 82 0C 2A 2E 68 61   6F 31 32 33 2E 63 6F 6D  om..*.hao123.com
+04C0: 82 0B 2A 2E 6E 75 6F 6D   69 2E 63 6F 6D 82 0D 2A  ..*.nuomi.com..*
+04D0: 2E 63 68 75 61 6E 6B 65   2E 63 6F 6D 82 0D 2A 2E  .chuanke.com..*.
+04E0: 74 72 75 73 74 67 6F 2E   63 6F 6D 82 0F 2A 2E 62  trustgo.com..*.b
+04F0: 63 65 2E 62 61 69 64 75   2E 63 6F 6D 82 10 2A 2E  ce.baidu.com..*.
+0500: 65 79 75 6E 2E 62 61 69   64 75 2E 63 6F 6D 82 0F  eyun.baidu.com..
+0510: 2A 2E 6D 61 70 2E 62 61   69 64 75 2E 63 6F 6D 82  *.map.baidu.com.
+0520: 0F 2A 2E 6D 62 64 2E 62   61 69 64 75 2E 63 6F 6D  .*.mbd.baidu.com
+0530: 82 11 2A 2E 66 61 6E 79   69 2E 62 61 69 64 75 2E  ..*.fanyi.baidu.
+0540: 63 6F 6D 82 0E 2A 2E 62   61 69 64 75 62 63 65 2E  com..*.baidubce.
+0550: 63 6F 6D 82 0C 2A 2E 6D   69 70 63 64 6E 2E 63 6F  com..*.mipcdn.co
+0560: 6D 82 10 2A 2E 6E 65 77   73 2E 62 61 69 64 75 2E  m..*.news.baidu.
+0570: 63 6F 6D 82 0E 2A 2E 62   61 69 64 75 70 63 73 2E  com..*.baidupcs.
+0580: 63 6F 6D 82 0C 2A 2E 61   69 70 61 67 65 2E 63 6F  com..*.aipage.co
+0590: 6D 82 0B 2A 2E 61 69 70   61 67 65 2E 63 6E 82 0D  m..*.aipage.cn..
+05A0: 2A 2E 62 63 65 68 6F 73   74 2E 63 6F 6D 82 10 2A  *.bcehost.com..*
+05B0: 2E 73 61 66 65 2E 62 61   69 64 75 2E 63 6F 6D 82  .safe.baidu.com.
+05C0: 0E 2A 2E 69 6D 2E 62 61   69 64 75 2E 63 6F 6D 82  .*.im.baidu.com.
+05D0: 12 2A 2E 62 61 69 64 75   63 6F 6E 74 65 6E 74 2E  .*.baiducontent.
+05E0: 63 6F 6D 82 0B 2A 2E 64   6C 6E 65 6C 2E 63 6F 6D  com..*.dlnel.com
+05F0: 82 0B 2A 2E 64 6C 6E 65   6C 2E 6F 72 67 82 12 2A  ..*.dlnel.org..*
+0600: 2E 64 75 65 72 6F 73 2E   62 61 69 64 75 2E 63 6F  .dueros.baidu.co
+0610: 6D 82 0E 2A 2E 73 75 2E   62 61 69 64 75 2E 63 6F  m..*.su.baidu.co
+0620: 6D 82 08 2A 2E 39 31 2E   63 6F 6D 82 12 2A 2E 68  m..*.91.com..*.h
+0630: 61 6F 31 32 33 2E 62 61   69 64 75 2E 63 6F 6D 82  ao123.baidu.com.
+0640: 0D 2A 2E 61 70 6F 6C 6C   6F 2E 61 75 74 6F 82 12  .*.apollo.auto..
+0650: 2A 2E 78 75 65 73 68 75   2E 62 61 69 64 75 2E 63  *.xueshu.baidu.c
+0660: 6F 6D 82 11 2A 2E 62 6A   2E 62 61 69 64 75 62 63  om..*.bj.baidubc
+0670: 65 2E 63 6F 6D 82 11 2A   2E 67 7A 2E 62 61 69 64  e.com..*.gz.baid
+0680: 75 62 63 65 2E 63 6F 6D   82 0E 2A 2E 73 6D 61 72  ubce.com..*.smar
+0690: 74 61 70 70 73 2E 63 6E   82 0D 2A 2E 62 64 74 6A  tapps.cn..*.bdtj
+06A0: 72 63 76 2E 63 6F 6D 82   0C 2A 2E 68 61 6F 32 32  rcv.com..*.hao22
+06B0: 32 2E 63 6F 6D 82 0C 2A   2E 68 61 6F 6B 61 6E 2E  2.com..*.haokan.
+06C0: 63 6F 6D 82 0F 2A 2E 70   61 65 2E 62 61 69 64 75  com..*.pae.baidu
+06D0: 2E 63 6F 6D 82 11 2A 2E   76 64 2E 62 64 73 74 61  .com..*.vd.bdsta
+06E0: 74 69 63 2E 63 6F 6D 82   12 63 6C 69 63 6B 2E 68  tic.com..click.h
+06F0: 6D 2E 62 61 69 64 75 2E   63 6F 6D 82 10 6C 6F 67  m.baidu.com..log
+0700: 2E 68 6D 2E 62 61 69 64   75 2E 63 6F 6D 82 10 63  .hm.baidu.com..c
+0710: 6D 2E 70 6F 73 2E 62 61   69 64 75 2E 63 6F 6D 82  m.pos.baidu.com.
+0720: 10 77 6E 2E 70 6F 73 2E   62 61 69 64 75 2E 63 6F  .wn.pos.baidu.co
+0730: 6D 82 14 75 70 64 61 74   65 2E 70 61 6E 2E 62 61  m..update.pan.ba
+0740: 69 64 75 2E 63 6F 6D 30   1D 06 03 55 1D 25 04 16  idu.com0...U.%..
+0750: 30 14 06 08 2B 06 01 05   05 07 03 01 06 08 2B 06  0...+.........+.
+0760: 01 05 05 07 03 02 30 1F   06 03 55 1D 23 04 18 30  ......0...U.#..0
+0770: 16 80 14 96 DE 61 F1 BD   1C 16 29 53 1C C0 CC 7D  .....a....)S....
+0780: 3B 83 00 40 E6 1A 7C 30   1D 06 03 55 1D 0E 04 16  ;..@...0...U....
+0790: 04 14 9E C9 79 D7 E9 5B   AB 8A 16 CC 32 8E C6 99  ....y..[....2...
+07A0: E6 9F 20 42 35 87 30 82   01 7E 06 0A 2B 06 01 04  .. B5.0.....+...
+07B0: 01 D6 79 02 04 02 04 82   01 6E 04 82 01 6A 01 68  ..y......n...j.h
+07C0: 00 76 00 5C DC 43 92 FE   E6 AB 45 44 B1 5E 9A D4  .v.\.C....ED.^..
+07D0: 56 E6 10 37 FB D5 FA 47   DC A1 73 94 B2 5E E6 F6  V..7...G..s..^..
+07E0: C7 0E CA 00 00 01 71 39   B5 3C BA 00 00 04 03 00  ......q9.<......
+07F0: 47 30 45 02 20 69 86 68   31 21 B3 59 5D A3 D6 89  G0E. i.h1!.Y]...
+0800: 4A 97 45 66 0B 69 14 93   DF C2 9E 72 87 A4 28 8A  J.Ef.i.....r..(.
+0810: 1F E5 F5 E6 B2 02 21 00   C9 19 B4 5F 17 C8 A0 AE  ......!...._....
+0820: FE 76 65 97 57 BD BC 89   4A 6D 6F 11 AD 4A FF EF  .ve.W...Jmo..J..
+0830: 81 E9 99 27 15 45 1B 01   00 76 00 6F 53 76 AC 31  ...'.E...v.oSv.1
+0840: F0 31 19 D8 99 00 A4 51   15 FF 77 15 1C 11 D9 02  .1.....Q..w.....
+0850: C1 00 29 06 8D B2 08 9A   37 D9 13 00 00 01 71 39  ..).....7.....q9
+0860: B5 3C E4 00 00 04 03 00   47 30 45 02 20 54 45 6C  .<......G0E. TEl
+0870: 30 4E 05 D9 FB D2 15 DE   68 66 13 41 0E CD B8 3D  0N......hf.A...=
+0880: D3 50 CB 46 CC DB 2C 8A   5A 7C 36 3F 5E 02 21 00  .P.F..,.Z.6?^.!.
+0890: BB 2F 10 6A 9B 05 5A E9   1B 18 4A A1 35 65 CF BF  ./.j..Z...J.5e..
+08A0: 86 5A 89 BC 4A B7 D4 78   77 27 E3 EF 43 9F BC 46  .Z..J..xw'..C..F
+08B0: 00 76 00 F6 5C 94 2F D1   77 30 22 14 54 18 08 30  .v..\./.w0".T..0
+08C0: 94 56 8E E3 4D 13 19 33   BF DF 0C 2F 20 0B CC 4E  .V..M..3.../ ..N
+08D0: F1 64 E3 00 00 01 71 39   B5 3C AB 00 00 04 03 00  .d....q9.<......
+08E0: 47 30 45 02 20 45 05 83   F1 28 47 61 95 FE 9B A9  G0E. E...(Ga....
+08F0: BC 31 41 8E ED B2 48 1D   A0 5B A5 3F 13 E6 76 BC  .1A...H..[.?..v.
+0900: D2 E6 D3 69 3F 02 21 00   A9 CA AB 0C DC 87 DF 25  ...i?.!........%
+0910: 20 D4 18 CC B0 15 E7 6F   82 F0 65 D9 3D 71 59 35   ......o..e.=qY5
+0920: F8 5F A4 CE 2D 43 AC 5B   30 0D 06 09 2A 86 48 86  ._..-C.[0...*.H.
+0930: F7 0D 01 01 0B 05 00 03   82 01 01 00 BC DC 02 D0  ................
+0940: D9 DE 8C C5 E2 D9 FE 4D   EF BA D1 22 8B 34 42 59  .......M...".4BY
+0950: 84 92 31 82 D5 0A BC 40   35 DB 06 B2 13 6E C8 CF  ..1....@5....n..
+0960: 01 F1 5F C0 E7 B7 34 37   3A A8 08 F2 9F 32 D5 F9  .._...47:....2..
+0970: 20 80 9F BF D3 FF 6D 47   9C 76 D1 CB F1 C7 F1 DB   .....mG.v......
+0980: 83 33 37 E5 3F 18 A7 00   E2 BD DA FE 4F 29 45 57  .37.?.......O)EW
+0990: 87 78 5F 53 85 0D B3 A3   5C 63 93 FE E0 26 5E F9  .x_S....\c...&^.
+09A0: 92 8C ED 76 A3 5F 39 E6   22 05 36 C5 32 73 D0 CD  ...v._9.".6.2s..
+09B0: 51 AA C8 C3 1F A8 AC 5B   26 B7 D9 94 60 08 81 81  Q......[&...`...
+09C0: D3 F5 B7 7A 4F DF 39 21   58 33 B5 15 63 02 8C B8  ...zO.9!X3..c...
+09D0: 22 EA D9 7A 74 EC 5A 41   BB 3D A7 C9 E2 40 21 EA  "..zt.ZA.=...@!.
+09E0: 34 1A 4A ED 73 60 46 C7   96 3B 99 E4 F5 E5 92 13  4.J.s`F..;......
+09F0: CE F4 3C 16 D5 62 0F BA   0E 99 AE 5C A5 2D 34 D8  ..<..b.....\.-4.
+0A00: 9A 55 B7 58 44 CE 01 38   BB D0 76 2C 64 DE 8D 00  .U.XD..8..v,d...
+0A10: 2B 99 E2 DD 61 10 ED C0   B0 5E E5 AA 37 40 D8 7C  +...a....^..7@..
+0A20: 13 37 5D 05 5F 61 EE 69   4B DF E4 EC CF F8 F2 AE  .7]._a.iK.......
+0A30: A5 5F 55 2B 0F 31 F2 64   0A 53 AB EB 00 04 6D 30  ._U+.1.d.S....m0
+0A40: 82 04 69 30 82 03 51 A0   03 02 01 02 02 0B 04 00  ..i0..Q.........
+0A50: 00 00 00 01 44 4E F0 42   47 30 0D 06 09 2A 86 48  ....DN.BG0...*.H
+0A60: 86 F7 0D 01 01 0B 05 00   30 57 31 0B 30 09 06 03  ........0W1.0...
+0A70: 55 04 06 13 02 42 45 31   19 30 17 06 03 55 04 0A  U....BE1.0...U..
+0A80: 13 10 47 6C 6F 62 61 6C   53 69 67 6E 20 6E 76 2D  ..GlobalSign nv-
+0A90: 73 61 31 10 30 0E 06 03   55 04 0B 13 07 52 6F 6F  sa1.0...U....Roo
+0AA0: 74 20 43 41 31 1B 30 19   06 03 55 04 03 13 12 47  t CA1.0...U....G
+0AB0: 6C 6F 62 61 6C 53 69 67   6E 20 52 6F 6F 74 20 43  lobalSign Root C
+0AC0: 41 30 1E 17 0D 31 34 30   32 32 30 31 30 30 30 30  A0...14022010000
+0AD0: 30 5A 17 0D 32 34 30 32   32 30 31 30 30 30 30 30  0Z..240220100000
+0AE0: 5A 30 66 31 0B 30 09 06   03 55 04 06 13 02 42 45  Z0f1.0...U....BE
+0AF0: 31 19 30 17 06 03 55 04   0A 13 10 47 6C 6F 62 61  1.0...U....Globa
+0B00: 6C 53 69 67 6E 20 6E 76   2D 73 61 31 3C 30 3A 06  lSign nv-sa1<0:.
+0B10: 03 55 04 03 13 33 47 6C   6F 62 61 6C 53 69 67 6E  .U...3GlobalSign
+0B20: 20 4F 72 67 61 6E 69 7A   61 74 69 6F 6E 20 56 61   Organization Va
+0B30: 6C 69 64 61 74 69 6F 6E   20 43 41 20 2D 20 53 48  lidation CA - SH
+0B40: 41 32 35 36 20 2D 20 47   32 30 82 01 22 30 0D 06  A256 - G20.."0..
+0B50: 09 2A 86 48 86 F7 0D 01   01 01 05 00 03 82 01 0F  .*.H............
+0B60: 00 30 82 01 0A 02 82 01   01 00 C7 0E 6C 3F 23 93  .0..........l?#.
+0B70: 7F CC 70 A5 9D 20 C3 0E   53 3F 7E C0 4E C2 98 49  ..p.. ..S?..N..I
+0B80: CA 47 D5 23 EF 03 34 85   74 C8 A3 02 2E 46 5C 0B  .G.#..4.t....F\.
+0B90: 7D C9 88 9D 4F 8B F0 F8   9C 6C 8C 55 35 DB BF F2  ....O....l.U5...
+0BA0: B3 EA FB E3 56 E7 4A 46   D9 13 22 CA 36 D5 9B C1  ....V.JF..".6...
+0BB0: A8 E3 96 43 93 F2 0C BC   E6 F9 E6 E8 99 C8 63 48  ...C..........cH
+0BC0: 78 7F 57 36 69 1A 19 1D   5A D1 D4 7D C2 9C D4 7F  x.W6i...Z.......
+0BD0: E1 80 12 AE 7A EA 88 EA   57 D8 CA 0A 0A 3A 12 49  ....z...W....:.I
+0BE0: A2 62 19 7A 0D 24 F7 37   EB B4 73 92 7B 05 23 9B  .b.z.$.7..s...#.
+0BF0: 12 B5 CE EB 29 DF A4 14   02 B9 01 A5 D4 A6 9C 43  ....)..........C
+0C00: 64 88 DE F8 7E FE E3 F5   1E E5 FE DC A3 A8 E4 66  d..............f
+0C10: 31 D9 4C 25 E9 18 B9 89   59 09 AE E9 9D 1C 6D 37  1.L%....Y.....m7
+0C20: 0F 4A 1E 35 20 28 E2 AF   D4 21 8B 01 C4 45 AD 6E  .J.5 (...!...E.n
+0C30: 2B 63 AB 92 6B 61 0A 4D   20 ED 73 BA 7C CE FE 16  +c..ka.M .s.....
+0C40: B5 DB 9F 80 F0 D6 8B 6C   D9 08 79 4A 4F 78 65 DA  .......l..yJOxe.
+0C50: 92 BC BE 35 F9 B3 C4 F9   27 80 4E FF 96 52 E6 02  ...5....'.N..R..
+0C60: 20 E1 07 73 E9 5D 2B BD   B2 F1 02 03 01 00 01 A3   ..s.]+.........
+0C70: 82 01 25 30 82 01 21 30   0E 06 03 55 1D 0F 01 01  ..%0..!0...U....
+0C80: FF 04 04 03 02 01 06 30   12 06 03 55 1D 13 01 01  .......0...U....
+0C90: FF 04 08 30 06 01 01 FF   02 01 00 30 1D 06 03 55  ...0.......0...U
+0CA0: 1D 0E 04 16 04 14 96 DE   61 F1 BD 1C 16 29 53 1C  ........a....)S.
+0CB0: C0 CC 7D 3B 83 00 40 E6   1A 7C 30 47 06 03 55 1D  ...;..@...0G..U.
+0CC0: 20 04 40 30 3E 30 3C 06   04 55 1D 20 00 30 34 30   .@0>0<..U. .040
+0CD0: 32 06 08 2B 06 01 05 05   07 02 01 16 26 68 74 74  2..+........&htt
+0CE0: 70 73 3A 2F 2F 77 77 77   2E 67 6C 6F 62 61 6C 73  ps://www.globals
+0CF0: 69 67 6E 2E 63 6F 6D 2F   72 65 70 6F 73 69 74 6F  ign.com/reposito
+0D00: 72 79 2F 30 33 06 03 55   1D 1F 04 2C 30 2A 30 28  ry/03..U...,0*0(
+0D10: A0 26 A0 24 86 22 68 74   74 70 3A 2F 2F 63 72 6C  .&.$."http://crl
+0D20: 2E 67 6C 6F 62 61 6C 73   69 67 6E 2E 6E 65 74 2F  .globalsign.net/
+0D30: 72 6F 6F 74 2E 63 72 6C   30 3D 06 08 2B 06 01 05  root.crl0=..+...
+0D40: 05 07 01 01 04 31 30 2F   30 2D 06 08 2B 06 01 05  .....10/0-..+...
+0D50: 05 07 30 01 86 21 68 74   74 70 3A 2F 2F 6F 63 73  ..0..!http://ocs
+0D60: 70 2E 67 6C 6F 62 61 6C   73 69 67 6E 2E 63 6F 6D  p.globalsign.com
+0D70: 2F 72 6F 6F 74 72 31 30   1F 06 03 55 1D 23 04 18  /rootr10...U.#..
+0D80: 30 16 80 14 60 7B 66 1A   45 0D 97 CA 89 50 2F 7D  0...`.f.E....P/.
+0D90: 04 CD 34 A8 FF FC FD 4B   30 0D 06 09 2A 86 48 86  ..4....K0...*.H.
+0DA0: F7 0D 01 01 0B 05 00 03   82 01 01 00 46 2A EE 5E  ............F*.^
+0DB0: BD AE 01 60 37 31 11 86   71 74 B6 46 49 C8 10 16  ...`71..qt.FI...
+0DC0: FE 2F 62 23 17 AB 1F 87   F8 82 ED CA DF 0E 2C DF  ./b#..........,.
+0DD0: 64 75 8E E5 18 72 A7 8C   3A 8B C9 AC A5 77 50 F7  du...r..:....wP.
+0DE0: EF 9E A4 E0 A0 8F 14 57   A3 2A 5F EC 7E 6D 10 E6  .......W.*_..m..
+0DF0: BA 8D B0 08 87 76 0E 4C   B2 D9 51 BB 11 02 F2 5C  .....v.L..Q....\
+0E00: DD 1C BD F3 55 96 0F D4   06 C0 FC E2 23 8A 24 70  ....U.......#.$p
+0E10: D3 BB F0 79 1A A7 61 70   83 8A AF 06 C5 20 D8 A1  ...y..ap..... ..
+0E20: 63 D0 6C AE 4F 32 D7 AE   7C 18 45 75 05 29 77 DF  c.l.O2....Eu.)w.
+0E30: 42 40 64 64 86 BE 2A 76   09 31 6F 1D 24 F4 99 D0  B@dd..*v.1o.$...
+0E40: 85 FE F2 21 08 F9 C6 F6   F1 D0 59 ED D6 56 3C 08  ...!......Y..V<.
+0E50: 28 03 67 BA F0 F9 F1 90   16 47 AE 67 E6 BC 80 48  (.g......G.g...H
+0E60: E9 42 76 34 97 55 69 24   0E 83 D6 A0 2D B4 F5 F3  .Bv4.Ui$....-...
+0E70: 79 8A 49 28 74 1A 41 A1   C2 D3 24 88 35 30 60 94  y.I(t.A...$.50`.
+0E80: 17 B4 E1 04 22 31 3D 3B   2F 17 06 B2 B8 9D 86 2B  ...."1=;/......+
+0E90: 5A 69 EF 83 F5 4B C4 AA   B4 2A F8 7C A1 B1 85 94  Zi...K...*......
+0EA0: 8C F4 0C 87 0C F4 AC 40   F8 59 49 98              .......@.YI.
+[Raw read]: length = 5
+0000: 16 03 02 00 04                                     .....
+[Raw read]: length = 4
+0000: 0E 00 00 00                                        ....
+main, READ: TLSv1.1 Handshake, length = 4
+check handshake state: server_hello_done[14]
+update handshake state: server_hello_done[14]
+upcoming handshake states: client certificate[11](optional)
+upcoming handshake states: client_key_exchange[16]
+upcoming handshake states: certificate_verify[15](optional)
+upcoming handshake states: client change_cipher_spec[-1]
+upcoming handshake states: client finished[20]
+upcoming handshake states: server change_cipher_spec[-1]
+upcoming handshake states: server finished[20]
+*** ServerHelloDone
+[read] MD5 and SHA1 hashes:  len = 4
+0000: 0E 00 00 00                                        ....
+*** ClientKeyExchange, RSA PreMasterSecret, TLSv1.1
+update handshake state: client_key_exchange[16]
+upcoming handshake states: certificate_verify[15](optional)
+upcoming handshake states: client change_cipher_spec[-1]
+upcoming handshake states: client finished[20]
+upcoming handshake states: server change_cipher_spec[-1]
+upcoming handshake states: server finished[20]
+[write] MD5 and SHA1 hashes:  len = 262
+0000: 10 00 01 02 01 00 B4 52   0E 27 65 F4 5F AF 0F A0  .......R.'e._...
+0010: E9 2E 66 A6 3C F3 69 E6   10 28 EF 62 0A 6C 39 C4  ..f.<.i..(.b.l9.
+0020: 32 AD E1 02 68 B2 3B A5   C9 C9 21 4F D5 F5 01 D1  2...h.;...!O....
+0030: 39 F7 D4 31 AD 1C 7F 99   20 B2 92 F6 01 CF 43 7F  9..1.... .....C.
+0040: 8A EC D4 93 F3 A7 B4 32   2A 7E 85 C9 DB A6 0B FE  .......2*.......
+0050: BE E1 D6 DC 78 2D 4B 5C   B0 BA E4 EA FD 9D C3 08  ....x-K\........
+0060: 16 F1 B2 E4 D7 5C 3A A7   36 AF B0 07 42 66 38 CD  .....\:.6...Bf8.
+0070: 6E A1 8A 56 41 D1 A0 11   BB 4A C2 0E 6E 10 A2 CD  n..VA....J..n...
+0080: 2A 06 A6 A8 98 E5 F2 EB   99 D5 25 DB CE 4F C9 18  *.........%..O..
+0090: 45 60 D1 D8 FE 28 B2 AF   2C 5E 18 97 C8 62 5B 35  E`...(..,^...b[5
+00A0: CF F5 B0 4B 6C 72 B9 62   81 63 99 9A C2 D7 D8 85  ...Klr.b.c......
+00B0: F5 10 CE B7 92 D4 D8 7D   1D EA FD C8 A7 3C DD 2D  .............<.-
+00C0: 9E 25 F3 E6 05 B7 F8 01   70 28 08 F9 0E B2 B7 77  .%......p(.....w
+00D0: 18 C8 E2 F9 AF BD 24 B0   9E CB 6B AF B6 6B D9 E5  ......$...k..k..
+00E0: F5 41 4F B2 00 55 3D 52   56 80 6B 97 FD E5 6B 1B  .AO..U=RV.k...k.
+00F0: AC F4 52 F6 6B B0 B0 2C   CA E1 27 8D DF 56 3F ED  ..R.k..,..'..V?.
+0100: 80 3C 08 2F ED C5                                  .<./..
+main, WRITE: TLSv1.1 Handshake, length = 262
+[Raw write]: length = 267
+0000: 16 03 02 01 06 10 00 01   02 01 00 B4 52 0E 27 65  ............R.'e
+0010: F4 5F AF 0F A0 E9 2E 66   A6 3C F3 69 E6 10 28 EF  ._.....f.<.i..(.
+0020: 62 0A 6C 39 C4 32 AD E1   02 68 B2 3B A5 C9 C9 21  b.l9.2...h.;...!
+0030: 4F D5 F5 01 D1 39 F7 D4   31 AD 1C 7F 99 20 B2 92  O....9..1.... ..
+0040: F6 01 CF 43 7F 8A EC D4   93 F3 A7 B4 32 2A 7E 85  ...C........2*..
+0050: C9 DB A6 0B FE BE E1 D6   DC 78 2D 4B 5C B0 BA E4  .........x-K\...
+0060: EA FD 9D C3 08 16 F1 B2   E4 D7 5C 3A A7 36 AF B0  ..........\:.6..
+0070: 07 42 66 38 CD 6E A1 8A   56 41 D1 A0 11 BB 4A C2  .Bf8.n..VA....J.
+0080: 0E 6E 10 A2 CD 2A 06 A6   A8 98 E5 F2 EB 99 D5 25  .n...*.........%
+0090: DB CE 4F C9 18 45 60 D1   D8 FE 28 B2 AF 2C 5E 18  ..O..E`...(..,^.
+00A0: 97 C8 62 5B 35 CF F5 B0   4B 6C 72 B9 62 81 63 99  ..b[5...Klr.b.c.
+00B0: 9A C2 D7 D8 85 F5 10 CE   B7 92 D4 D8 7D 1D EA FD  ................
+00C0: C8 A7 3C DD 2D 9E 25 F3   E6 05 B7 F8 01 70 28 08  ..<.-.%......p(.
+00D0: F9 0E B2 B7 77 18 C8 E2   F9 AF BD 24 B0 9E CB 6B  ....w......$...k
+00E0: AF B6 6B D9 E5 F5 41 4F   B2 00 55 3D 52 56 80 6B  ..k...AO..U=RV.k
+00F0: 97 FD E5 6B 1B AC F4 52   F6 6B B0 B0 2C CA E1 27  ...k...R.k..,..'
+0100: 8D DF 56 3F ED 80 3C 08   2F ED C5                 ..V?..<./..
+SESSION KEYGEN:
+PreMaster Secret:
+0000: 03 02 85 40 91 20 72 80   0D D9 8C 1B B3 D4 86 B3  ...@. r.........
+0010: F8 98 CF F1 AB 9A 90 AD   9A 1B F3 EA 81 2F 48 91  ............./H.
+0020: 45 58 A1 B4 B4 6A 0D 6B   2C 08 0C C0 26 FA 56 42  EX...j.k,...&.VB
+CONNECTION KEYGEN:
+Client Nonce:
+0000: 5F 1B DB 2F 38 D6 EC 43   AB 69 9F 81 46 BC D1 9E  _../8..C.i..F...
+0010: C8 D7 57 4B B9 97 F7 51   0C 53 FE 13 1D 03 F9 5A  ..WK...Q.S.....Z
+Server Nonce:
+0000: 5F 1B DB 2F 82 28 2B EB   9B C3 61 CC 92 C0 DC D9  _../.(+...a.....
+0010: 6C 3D 02 04 B4 D8 1F 27   65 9E 4A 6F 78 4D 84 9E  l=.....'e.JoxM..
+Master Secret:
+0000: F1 AC FF 5C BC 36 D5 54   7B DA 60 E6 ED E7 BA 3E  ...\.6.T..`....>
+0010: 41 99 54 41 E1 34 E3 2D   59 38 0D 80 2E 63 F9 C6  A.TA.4.-Y8...c..
+0020: 20 CC C4 AD D3 AC 3C DA   0C F4 8D A4 23 85 63 38   .....<.....#.c8
+Client MAC write Secret:
+0000: 86 5F 99 85 0C A7 6F F2   53 3E 40 39 1F 03 C6 EC  ._....o.S>@9....
+0010: 7A 25 79 D6                                        z%y.
+Server MAC write Secret:
+0000: F5 F4 96 C4 C9 00 E1 BF   36 4C FD C8 A8 95 16 3D  ........6L.....=
+0010: 97 5E 39 27                                        .^9'
+Client write key:
+0000: 61 D0 EF 85 21 9C EC B4   9C 3C E6 5E 77 8B 0C 5C  a...!....<.^w..\
+0010: 6C 2A 57 64 CF DE 7C B4   BE E2 0F B1 37 F1 B8 1C  l*Wd........7...
+Server write key:
+0000: AF 31 52 6C 43 C4 69 F6   CA 4A BF 29 CD 6A F8 30  .1RlC.i..J.).j.0
+0010: E1 6C 70 1E 3F 64 65 05   6C 0C 56 79 96 DF 99 53  .lp.?de.l.Vy...S
+... no IV derived for this protocol
+update handshake state: change_cipher_spec
+upcoming handshake states: client finished[20]
+upcoming handshake states: server change_cipher_spec[-1]
+upcoming handshake states: server finished[20]
+main, WRITE: TLSv1.1 Change Cipher Spec, length = 1
+[Raw write]: length = 6
+0000: 14 03 02 00 01 01                                  ......
+*** Finished
+verify_data:  { 170, 0, 111, 227, 4, 245, 143, 48, 236, 218, 246, 163 }
+***
+update handshake state: finished[20]
+upcoming handshake states: server change_cipher_spec[-1]
+upcoming handshake states: server finished[20]
+[write] MD5 and SHA1 hashes:  len = 16
+0000: 14 00 00 0C AA 00 6F E3   04 F5 8F 30 EC DA F6 A3  ......o....0....
+Padded plaintext before ENCRYPTION:  len = 64
+0000: BF 88 04 C4 10 4E 2E 47   E7 44 0B D8 06 4F 73 B9  .....N.G.D...Os.
+0010: 14 00 00 0C AA 00 6F E3   04 F5 8F 30 EC DA F6 A3  ......o....0....
+0020: 59 11 03 98 59 3F 4A B2   C7 E1 60 AA F9 FF 02 3E  Y...Y?J...`....>
+0030: 33 0E 9D 05 0B 0B 0B 0B   0B 0B 0B 0B 0B 0B 0B 0B  3...............
+main, WRITE: TLSv1.1 Handshake, length = 64
+[Raw write]: length = 69
+0000: 16 03 02 00 40 23 1C 56   92 1F D7 B4 A4 D4 47 8B  ....@#.V......G.
+0010: 21 67 28 4F 88 D7 46 C6   A8 4E E6 78 7A FE 9C 33  !g(O..F..N.xz..3
+0020: 81 4F 57 50 7E 6C C9 B3   4C 3F FC 4D 2A 42 EC 5B  .OWP.l..L?.M*B.[
+0030: B2 DC E4 4F 5C 06 2A 9A   90 2F A3 C6 47 3F 1E AA  ...O\.*../..G?..
+0040: B1 73 4D FE 45                                     .sM.E
+[Raw read]: length = 5
+0000: 14 03 02 00 01                                     .....
+[Raw read]: length = 1
+0000: 01                                                 .
+main, READ: TLSv1.1 Change Cipher Spec, length = 1
+update handshake state: change_cipher_spec
+upcoming handshake states: server finished[20]
+[Raw read]: length = 5
+0000: 16 03 02 00 40                                     ....@
+[Raw read]: length = 64
+0000: AC 59 F5 39 12 58 B9 69   A8 43 5C 1B 37 F3 CA B9  .Y.9.X.i.C\.7...
+0010: 7A C8 81 D5 7E 09 AD B4   D8 27 79 4C 6F 9D 68 CE  z........'yLo.h.
+0020: 11 35 A5 FF 6D 6C 11 6F   27 17 E6 1F 6F 27 EE 9B  .5..ml.o'...o'..
+0030: 54 AB D0 AD B5 49 0D 76   E8 E1 C0 B4 DF C9 1A 77  T....I.v.......w
+main, READ: TLSv1.1 Handshake, length = 64
+Padded plaintext after DECRYPTION:  len = 64
+0000: 18 88 08 44 FD AC 40 DE   18 EE F7 8F 6C 2D 5E A9  ...D..@.....l-^.
+0010: 14 00 00 0C 73 FD D9 08   B4 0D FE EC 3B 71 FF 1E  ....s.......;q..
+0020: 71 71 35 66 31 52 02 31   3A D3 8E B0 6D 64 AB 0D  qq5f1R.1:...md..
+0030: 37 C9 54 3B 0B 0B 0B 0B   0B 0B 0B 0B 0B 0B 0B 0B  7.T;............
+check handshake state: finished[20]
+update handshake state: finished[20]
+*** Finished
+verify_data:  { 115, 253, 217, 8, 180, 13, 254, 236, 59, 113, 255, 30 }
+***
+%% Cached client session: [Session-1, TLS_RSA_WITH_AES_256_CBC_SHA]
+[read] MD5 and SHA1 hashes:  len = 16
+0000: 14 00 00 0C 73 FD D9 08   B4 0D FE EC 3B 71 FF 1E  ....s.......;q..
+Padded plaintext before ENCRYPTION:  len = 176
+0000: 41 08 47 AF 28 17 4C DC   0D 07 E7 3A AB CB 5D 28  A.G.(.L....:..](
+0010: 47 45 54 20 2F 20 48 54   54 50 2F 31 2E 31 0D 0A  GET / HTTP/1.1..
+0020: 48 6F 73 74 3A 20 77 77   77 2E 62 61 69 64 75 2E  Host: www.baidu.
+0030: 63 6F 6D 0D 0A 43 6F 6E   6E 65 63 74 69 6F 6E 3A  com..Connection:
+0040: 20 63 6C 6F 73 65 0D 0A   55 73 65 72 2D 41 67 65   close..User-Age
+0050: 6E 74 3A 20 4D 6F 7A 69   6C 6C 61 2F 35 2E 30 0D  nt: Mozilla/5.0.
+0060: 0A 41 63 63 65 70 74 3A   20 74 65 78 74 2F 68 74  .Accept: text/ht
+0070: 6D 6C 0D 0A 41 63 63 65   70 74 2D 4C 61 6E 67 75  ml..Accept-Langu
+0080: 61 67 65 3A 20 65 6E 2D   55 53 0D 0A 0D 0A 0D 0A  age: en-US......
+0090: 8D 14 5E 21 F7 DC 8D 12   36 F7 66 70 E3 8D C3 DB  ..^!....6.fp....
+00A0: 1C 88 F9 15 0B 0B 0B 0B   0B 0B 0B 0B 0B 0B 0B 0B  ................
+main, WRITE: TLSv1.1 Application Data, length = 176
+[Raw write]: length = 181
+0000: 17 03 02 00 B0 82 08 B8   2E EC 88 E6 43 19 26 22  ............C.&"
+0010: 4F 4C 79 20 8D 13 B4 4A   CD 5F E4 21 44 EE E1 04  OLy ...J._.!D...
+0020: 3C B9 01 21 18 D4 60 1A   E4 8E EE 50 C0 03 F6 F0  <..!..`....P....
+0030: BE 7A 34 F7 C5 9C 00 C8   07 E1 DC A5 60 A2 51 08  .z4.........`.Q.
+0040: CF AD E0 50 20 16 C9 77   DA BA 67 8A FC 74 04 FE  ...P ..w..g..t..
+0050: 72 3D B3 0D 58 D7 B7 A4   D9 91 FC ED 34 8C 63 1D  r=..X.......4.c.
+0060: 08 E9 10 31 46 E9 0B 20   77 6B 6E 33 54 35 2C 7F  ...1F.. wkn3T5,.
+0070: 28 58 1F 89 BB FE 18 3E   11 6B 33 7A 10 A1 44 EA  (X.....>.k3z..D.
+0080: 7A 41 E0 72 FF 3F AA 52   12 D4 66 21 32 5B 49 5E  zA.r.?.R..f!2[I^
+0090: 32 A5 B6 52 C8 06 D1 7E   65 46 8C 48 CC 6E EC F6  2..R....eF.H.n..
+00A0: 3E 9E 9E C8 77 9E 22 BE   82 D1 7E DD 14 46 93 03  >...w."......F..
+00B0: 8C B6 95 84 C8                                     .....
+[Raw read]: length = 5
+0000: 17 03 02 04 80                                     .....
+[Raw read]: length = 1152
+0000: 91 FA D6 B1 C0 A5 82 EE   E3 C6 9C CB 92 7A 33 1A  .............z3.
+0010: 49 5A A1 29 0E DA 12 40   14 62 CB 12 5C 31 78 A7  IZ.)...@.b..\1x.
+0020: 89 35 AE 6C 47 AE EB 6D   C8 1A B6 5E FD 86 0F 2F  .5.lG..m...^.../
+0030: E9 45 9D 31 C7 3C 4F 58   06 E1 72 C4 D3 84 A3 B3  .E.1.<OX..r.....
+0040: DE EB 6C B9 6B BB 86 EB   86 60 8D A4 EF E9 44 E8  ..l.k....`....D.
+0050: 81 10 96 2F 46 B1 E9 00   CE 63 C3 F8 9E 3C BA 8C  .../F....c...<..
+0060: 7C AF D3 BC AA C5 15 C4   12 D1 F8 F7 4E 3D 82 84  ............N=..
+0070: 23 D1 40 E9 0A 6D 26 5F   BA C2 D8 FD D5 21 95 08  #.@..m&_.....!..
+0080: 64 CB A8 0A C4 B0 71 E9   1D 82 3E 1A 00 DE 8A C3  d.....q...>.....
+0090: 62 F8 AD 5A 56 FF E2 18   0A 57 15 DC D3 C8 7E 24  b..ZV....W.....$
+00A0: AD 68 08 43 B3 84 96 F8   44 A2 9B 05 D4 CA 7C DF  .h.C....D.......
+00B0: 67 65 E9 9C 41 8E 36 53   DB 08 68 6F 2F DC C3 4B  ge..A.6S..ho/..K
+00C0: C4 06 7C 49 6D 80 45 E1   56 1B 59 9E 91 7C 24 73  ...Im.E.V.Y...$s
+00D0: ED A0 74 91 C9 F5 D8 0A   DF 09 60 33 7F 4D D0 72  ..t.......`3.M.r
+00E0: 03 A3 A9 0D 20 A4 44 71   DB 57 0B 26 FF D1 AD 33  .... .Dq.W.&...3
+00F0: 19 97 A3 08 1E 4A CF 81   3C 13 27 B3 9C C4 FB 1C  .....J..<.'.....
+0100: 36 58 5F 40 F9 6C B9 EC   2C 5B 66 A9 B7 2B DC 5D  6X_@.l..,[f..+.]
+0110: 51 0F 65 C9 F8 94 47 93   3D 6F D4 77 F4 43 A8 CE  Q.e...G.=o.w.C..
+0120: 71 9C 27 78 42 07 C6 B8   89 1A BB DB 71 9F 69 6A  q.'xB.......q.ij
+0130: 1B 0E E3 54 8B 3A 4A 46   2A E8 3C F1 74 68 28 3D  ...T.:JF*.<.th(=
+0140: CA BE 96 E3 98 6B 23 CB   96 EE C2 DF B2 5F 70 36  .....k#......_p6
+0150: 9A 2F 6A 1F BB E6 BE D1   93 56 F9 7E DA E2 4F 3F  ./j......V....O?
+0160: A7 C0 38 BA 42 1C 59 1C   5F F1 12 5F 37 29 A7 ED  ..8.B.Y._.._7)..
+0170: 57 FB DE 28 80 B7 81 00   12 F3 07 E1 EA 50 97 F3  W..(.........P..
+0180: DF F5 31 D0 E4 7E 7A 34   0C 00 89 BF EF D7 90 01  ..1...z4........
+0190: BC E6 7D AD 42 CE 25 5E   4C 88 29 62 1B 06 77 8A  ....B.%^L.)b..w.
+01A0: 5D EF F4 52 06 C6 0D 07   D0 42 23 56 48 EA B2 4B  ]..R.....B#VH..K
+01B0: 29 79 EE BA 9E 51 21 FB   86 B3 23 6D FF B4 CA A8  )y...Q!...#m....
+01C0: 8A 2F 7D AE AD 3F 23 0F   1F 06 48 C6 0E 75 22 1B  ./...?#...H..u".
+01D0: 91 46 6E 19 6D 68 5F 87   25 AF 3E B8 A2 A3 05 36  .Fn.mh_.%.>....6
+01E0: EC FC 72 FA 90 DD 28 DA   00 91 C0 E4 EC 9E AB 9B  ..r...(.........
+01F0: 9F CD AF CA F6 A5 6A 81   A6 52 99 AB F2 B4 24 16  ......j..R....$.
+0200: 36 DC 19 80 37 2A 83 5E   1B 9F 93 C5 6F EA 82 4E  6...7*.^....o..N
+0210: 0A 03 5A 14 E0 1D E7 26   70 E6 41 5C BF 59 40 66  ..Z....&p.A\.Y@f
+0220: 9B A8 3B 3C 88 91 2E E7   DF FC 37 F5 70 6C 8C D0  ..;<......7.pl..
+0230: 08 81 46 01 0D 33 6D 33   60 3F BC A5 02 14 0E 9E  ..F..3m3`?......
+0240: CF 60 F3 56 96 3B 67 E7   E5 1E B5 C0 A8 24 54 4A  .`.V.;g......$TJ
+0250: 45 94 B3 48 B4 1A 57 12   E6 A2 48 E4 36 5D A8 18  E..H..W...H.6]..
+0260: D1 CE 49 5E 2E D0 04 F6   62 B9 D7 3A D9 15 2F 57  ..I^....b..:../W
+0270: C4 34 7C 9D C5 85 33 CC   C5 22 1C DF EE ED 4C F1  .4....3.."....L.
+0280: 9D 45 F1 11 FD 56 BD 26   B8 3C 3F C0 6D 37 C1 77  .E...V.&.<?.m7.w
+0290: 59 70 07 11 B4 0D 95 C0   9C 0C D9 42 0F 93 B2 0A  Yp.........B....
+02A0: 59 F1 10 16 B9 DC B8 21   C4 28 21 CC 8B F3 C3 BF  Y......!.(!.....
+02B0: 46 54 F8 18 A2 E9 89 E7   8C 54 BF 9C FC 61 E0 A5  FT.......T...a..
+02C0: 54 8F 86 E2 59 20 60 9A   90 70 8F 38 CE 45 9E E6  T...Y `..p.8.E..
+02D0: 6E 69 F7 8B 53 94 0D 5D   95 8E 63 B1 29 B1 79 2B  ni..S..]..c.).y+
+02E0: 88 85 05 23 F2 7C 92 BA   E9 1A B6 D1 91 C7 F1 6E  ...#...........n
+02F0: 6C 48 A5 1E 50 B8 25 3F   2E 8E 97 C7 48 8A 84 D4  lH..P.%?....H...
+0300: E0 89 48 F6 47 C4 08 2D   31 7F 27 E8 E3 F6 34 4A  ..H.G..-1.'...4J
+0310: D1 5B 1D 1B 59 DC 95 A9   A6 23 2D 1C 93 5E 1B EB  .[..Y....#-..^..
+0320: 6B D4 39 85 4C 54 18 D2   4F 00 6D E9 24 9B F7 CD  k.9.LT..O.m.$...
+0330: 8E B8 0F B9 8F AD B5 2C   E9 00 C7 68 08 27 57 27  .......,...h.'W'
+0340: 7A 62 01 4E FC 38 98 5B   F8 1E 86 17 28 A0 FC 39  zb.N.8.[....(..9
+0350: 7E 9C 2F 66 5B C2 87 74   C1 57 65 58 AA A9 5F B1  ../f[..t.WeX.._.
+0360: AF 81 37 D1 CD F4 C0 33   99 1C 03 8B 10 EB 31 8D  ..7....3......1.
+0370: 12 03 4A 1B 73 D1 C1 68   80 9B BD D5 1F E2 1E F6  ..J.s..h........
+0380: 15 9A 04 D5 35 38 67 65   94 E4 91 D9 68 B2 B2 C7  ....58ge....h...
+0390: A7 E3 0D 6C A3 F3 B5 03   70 00 51 43 66 31 D7 37  ...l....p.QCf1.7
+03A0: 7F 4D 08 59 C4 49 73 BB   80 53 10 68 3F 9F 05 D8  .M.Y.Is..S.h?...
+03B0: 75 BA 90 36 9B C3 78 D7   EC 8C CA B5 9B DE 06 28  u..6..x........(
+03C0: ED 01 D9 AB C0 11 7F 8D   C1 A0 90 23 94 BD 20 16  ...........#.. .
+03D0: D3 AE 33 42 37 58 4F 13   E1 96 38 B2 4C 2D 6A 4E  ..3B7XO...8.L-jN
+03E0: F8 41 E7 5B BC C5 AA B8   77 2F 18 8D DB F2 48 AD  .A.[....w/....H.
+03F0: AC AA 2C 9E 10 83 79 94   D2 E6 3D 5F CF 55 81 E0  ..,...y...=_.U..
+0400: 7D 2B E2 2F 41 28 B3 B5   5F 56 0E 18 8F 78 56 D8  .+./A(.._V...xV.
+0410: 9D 14 21 D5 1F 52 FB 2C   FB 07 D5 C7 01 F8 33 39  ..!..R.,......39
+0420: 3F B3 22 DD E3 F0 33 C2   18 5F 8B CB 73 E6 D5 2A  ?."...3.._..s..*
+0430: 90 70 93 71 15 4F 13 A3   23 3D ED 6F 09 86 B8 0B  .p.q.O..#=.o....
+0440: 2B 3E E8 18 7A 13 B0 A4   AA B8 DA 1D 86 48 31 98  +>..z........H1.
+0450: 14 08 26 61 38 34 5E EA   27 18 9D FF 69 95 71 95  ..&a84^.'...i.q.
+0460: 01 B3 A4 4B 29 D4 EF 5E   DC D6 4A 99 65 BB 7F B2  ...K)..^..J.e...
+0470: E3 81 21 C1 B7 47 0F 7F   9B BD A5 CA 8A E2 6A D3  ..!..G........j.
+main, READ: TLSv1.1 Application Data, length = 1152
+Padded plaintext after DECRYPTION:  len = 1152
+0000: 68 64 00 55 5C 42 6D 71   69 E2 20 AC 9F 72 A0 F7  hd.U\Bmqi. ..r..
+0010: 48 54 54 50 2F 31 2E 31   20 32 30 30 20 4F 4B 0D  HTTP/1.1 200 OK.
+0020: 0A 41 63 63 65 70 74 2D   52 61 6E 67 65 73 3A 20  .Accept-Ranges:
+0030: 62 79 74 65 73 0D 0A 43   61 63 68 65 2D 43 6F 6E  bytes..Cache-Con
+0040: 74 72 6F 6C 3A 20 6E 6F   2D 63 61 63 68 65 0D 0A  trol: no-cache..
+0050: 43 6F 6E 74 65 6E 74 2D   4C 65 6E 67 74 68 3A 20  Content-Length:
+0060: 32 32 37 0D 0A 43 6F 6E   74 65 6E 74 2D 54 79 70  227..Content-Typ
+0070: 65 3A 20 74 65 78 74 2F   68 74 6D 6C 0D 0A 44 61  e: text/html..Da
+0080: 74 65 3A 20 53 61 74 2C   20 32 35 20 4A 75 6C 20  te: Sat, 25 Jul
+0090: 32 30 32 30 20 30 37 3A   31 31 3A 34 33 20 47 4D  2020 07:11:43 GM
+00A0: 54 0D 0A 50 33 70 3A 20   43 50 3D 22 20 4F 54 49  T..P3p: CP=" OTI
+00B0: 20 44 53 50 20 43 4F 52   20 49 56 41 20 4F 55 52   DSP COR IVA OUR
+00C0: 20 49 4E 44 20 43 4F 4D   20 22 0D 0A 50 33 70 3A   IND COM "..P3p:
+00D0: 20 43 50 3D 22 20 4F 54   49 20 44 53 50 20 43 4F   CP=" OTI DSP CO
+00E0: 52 20 49 56 41 20 4F 55   52 20 49 4E 44 20 43 4F  R IVA OUR IND CO
+00F0: 4D 20 22 0D 0A 50 72 61   67 6D 61 3A 20 6E 6F 2D  M "..Pragma: no-
+0100: 63 61 63 68 65 0D 0A 53   65 72 76 65 72 3A 20 42  cache..Server: B
+0110: 57 53 2F 31 2E 31 0D 0A   53 65 74 2D 43 6F 6F 6B  WS/1.1..Set-Cook
+0120: 69 65 3A 20 42 44 5F 4E   4F 54 5F 48 54 54 50 53  ie: BD_NOT_HTTPS
+0130: 3D 31 3B 20 70 61 74 68   3D 2F 3B 20 4D 61 78 2D  =1; path=/; Max-
+0140: 41 67 65 3D 33 30 30 0D   0A 53 65 74 2D 43 6F 6F  Age=300..Set-Coo
+0150: 6B 69 65 3A 20 42 49 44   55 50 53 49 44 3D 45 36  kie: BIDUPSID=E6
+0160: 42 44 38 39 41 34 33 36   44 39 42 39 45 37 44 35  BD89A436D9B9E7D5
+0170: 42 32 34 35 32 44 42 42   39 45 44 46 39 38 3B 20  B2452DBB9EDF98;
+0180: 65 78 70 69 72 65 73 3D   54 68 75 2C 20 33 31 2D  expires=Thu, 31-
+0190: 44 65 63 2D 33 37 20 32   33 3A 35 35 3A 35 35 20  Dec-37 23:55:55
+01A0: 47 4D 54 3B 20 6D 61 78   2D 61 67 65 3D 32 31 34  GMT; max-age=214
+01B0: 37 34 38 33 36 34 37 3B   20 70 61 74 68 3D 2F 3B  7483647; path=/;
+01C0: 20 64 6F 6D 61 69 6E 3D   2E 62 61 69 64 75 2E 63   domain=.baidu.c
+01D0: 6F 6D 0D 0A 53 65 74 2D   43 6F 6F 6B 69 65 3A 20  om..Set-Cookie:
+01E0: 50 53 54 4D 3D 31 35 39   35 36 36 31 31 30 33 3B  PSTM=1595661103;
+01F0: 20 65 78 70 69 72 65 73   3D 54 68 75 2C 20 33 31   expires=Thu, 31
+0200: 2D 44 65 63 2D 33 37 20   32 33 3A 35 35 3A 35 35  -Dec-37 23:55:55
+0210: 20 47 4D 54 3B 20 6D 61   78 2D 61 67 65 3D 32 31   GMT; max-age=21
+0220: 34 37 34 38 33 36 34 37   3B 20 70 61 74 68 3D 2F  47483647; path=/
+0230: 3B 20 64 6F 6D 61 69 6E   3D 2E 62 61 69 64 75 2E  ; domain=.baidu.
+0240: 63 6F 6D 0D 0A 53 65 74   2D 43 6F 6F 6B 69 65 3A  com..Set-Cookie:
+0250: 20 42 41 49 44 55 49 44   3D 45 36 42 44 38 39 41   BAIDUID=E6BD89A
+0260: 34 33 36 44 39 42 39 45   37 32 34 46 35 34 42 33  436D9B9E724F54B3
+0270: 36 39 31 30 35 32 30 45   37 3A 46 47 3D 31 3B 20  6910520E7:FG=1;
+0280: 6D 61 78 2D 61 67 65 3D   33 31 35 33 36 30 30 30  max-age=31536000
+0290: 3B 20 65 78 70 69 72 65   73 3D 53 75 6E 2C 20 32  ; expires=Sun, 2
+02A0: 35 2D 4A 75 6C 2D 32 31   20 30 37 3A 31 31 3A 34  5-Jul-21 07:11:4
+02B0: 33 20 47 4D 54 3B 20 64   6F 6D 61 69 6E 3D 2E 62  3 GMT; domain=.b
+02C0: 61 69 64 75 2E 63 6F 6D   3B 20 70 61 74 68 3D 2F  aidu.com; path=/
+02D0: 3B 20 76 65 72 73 69 6F   6E 3D 31 3B 20 63 6F 6D  ; version=1; com
+02E0: 6D 65 6E 74 3D 62 64 0D   0A 53 74 72 69 63 74 2D  ment=bd..Strict-
+02F0: 54 72 61 6E 73 70 6F 72   74 2D 53 65 63 75 72 69  Transport-Securi
+0300: 74 79 3A 20 6D 61 78 2D   61 67 65 3D 30 0D 0A 54  ty: max-age=0..T
+0310: 72 61 63 65 69 64 3A 20   31 35 39 35 36 36 31 31  raceid: 15956611
+0320: 30 33 32 38 33 32 35 32   34 30 34 32 31 34 32 33  0328325240421423
+0330: 36 34 37 30 31 37 38 34   31 39 32 36 30 32 30 31  6470178419260201
+0340: 0D 0A 58 2D 55 61 2D 43   6F 6D 70 61 74 69 62 6C  ..X-Ua-Compatibl
+0350: 65 3A 20 49 45 3D 45 64   67 65 2C 63 68 72 6F 6D  e: IE=Edge,chrom
+0360: 65 3D 31 0D 0A 43 6F 6E   6E 65 63 74 69 6F 6E 3A  e=1..Connection:
+0370: 20 63 6C 6F 73 65 0D 0A   0D 0A 3C 68 74 6D 6C 3E   close....<html>
+0380: 0D 0A 3C 68 65 61 64 3E   0D 0A 09 3C 73 63 72 69  ..<head>...<scri
+0390: 70 74 3E 0D 0A 09 09 6C   6F 63 61 74 69 6F 6E 2E  pt>....location.
+03A0: 72 65 70 6C 61 63 65 28   6C 6F 63 61 74 69 6F 6E  replace(location
+03B0: 2E 68 72 65 66 2E 72 65   70 6C 61 63 65 28 22 68  .href.replace("h
+03C0: 74 74 70 73 3A 2F 2F 22   2C 22 68 74 74 70 3A 2F  ttps://","http:/
+03D0: 2F 22 29 29 3B 0D 0A 09   3C 2F 73 63 72 69 70 74  /"));...</script
+03E0: 3E 0D 0A 3C 2F 68 65 61   64 3E 0D 0A 3C 62 6F 64  >..</head>..<bod
+03F0: 79 3E 0D 0A 09 3C 6E 6F   73 63 72 69 70 74 3E 3C  y>...<noscript><
+0400: 6D 65 74 61 20 68 74 74   70 2D 65 71 75 69 76 3D  meta http-equiv=
+0410: 22 72 65 66 72 65 73 68   22 20 63 6F 6E 74 65 6E  "refresh" conten
+0420: 74 3D 22 30 3B 75 72 6C   3D 68 74 74 70 3A 2F 2F  t="0;url=http://
+0430: 77 77 77 2E 62 61 69 64   75 2E 63 6F 6D 2F 22 3E  www.baidu.com/">
+0440: 3C 2F 6E 6F 73 63 72 69   70 74 3E 0D 0A 3C 2F 62  </noscript>..</b
+0450: 6F 64 79 3E 0D 0A 3C 2F   68 74 6D 6C 3E CD 4A 30  ody>..</html>.J0
+0460: 3B E2 CB 2D CF C7 4C 9A   E1 47 62 D8 A4 7E 77 93  ;..-..L..Gb...w.
+0470: 8E 0E 0E 0E 0E 0E 0E 0E   0E 0E 0E 0E 0E 0E 0E 0E  ................
+[Raw read]: length = 5
+0000: 15 03 02 00 30                                     ....0
+[Raw read]: length = 48
+0000: 2C 40 B4 55 13 7D 61 77   8A 29 A3 B0 D5 04 3D C7  ,@.U..aw.)....=.
+0010: BD D9 DB 83 32 0F A8 3F   10 8F 16 26 2E 8A 60 7D  ....2..?...&..`.
+0020: 12 5B DF BF 09 79 E6 94   1B 3C 77 64 03 E1 13 21  .[...y...<wd...!
+main, READ: TLSv1.1 Alert, length = 48
+Padded plaintext after DECRYPTION:  len = 48
+0000: 7C 73 EF 84 7F 7A 8E A3   A8 F5 CB 78 B9 71 2B 0A  .s...z.....x.q+.
+0010: 01 00 40 EE 9B B5 F9 40   19 51 F9 32 2C 60 36 73  ..@....@.Q.2,`6s
+0020: 69 8B B6 0D CD 89 09 09   09 09 09 09 09 09 09 09  i...............
+main, RECV TLSv1.1 ALERT:  warning, close_notify
+main, called closeInternal(false)
+main, SEND TLSv1.1 ALERT:  warning, description = close_notify
+Padded plaintext before ENCRYPTION:  len = 48
+0000: 9F 44 63 03 E4 6E 58 F9   66 C3 90 55 49 D5 3D 18  .Dc..nX.f..UI.=.
+0010: 01 00 96 5A B0 39 02 39   62 AA 99 58 F1 48 34 10  ...Z.9.9b..X.H4.
+0020: B2 DD 06 17 76 67 09 09   09 09 09 09 09 09 09 09  ....vg..........
+main, WRITE: TLSv1.1 Alert, length = 48
+[Raw write]: length = 53
+0000: 15 03 02 00 30 F8 88 A8   FF DD D8 2B 54 0C 0B 9A  ....0......+T...
+0010: 2F FC CE F9 86 83 C2 98   EC F1 B7 B1 5C 1E 9B 3B  /...........\..;
+0020: 24 EE F4 2B 14 A3 34 30   AD 3A 0D 6E 49 38 CB 58  $..+..40.:.nI8.X
+0030: 8D 5A 95 1D 97                                     .Z...
+main, called closeSocket(false)
+main, called close()
+main, called closeInternal(true)
+main, called close()
+main, called closeInternal(true)
+main, called close()
+main, called closeInternal(true)
+main, called close()
+main, called closeInternal(true)
+main, called close()
+main, called closeInternal(true)
+main, called close()
+main, called closeInternal(true)
+<html>
+<head>
+	<script>
+		location.replace(location.href.replace("https://","http://"));
+	</script>
+</head>
+<body>
+	<noscript><meta http-equiv="refresh" content="0;url=http://www.baidu.com/"></noscript>
+</body>
+</html>

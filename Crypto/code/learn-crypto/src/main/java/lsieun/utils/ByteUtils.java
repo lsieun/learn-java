@@ -95,8 +95,25 @@ public class ByteUtils {
     public static byte[] toBytes(int value) {
         ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES);
         buffer.putInt(value);
-        byte[] array = buffer.array();
-        return array;
+        return buffer.array();
+    }
+
+    public static byte[] toBytes(int value, int len) {
+        if (len < 1 || len > 4) {
+            throw new RuntimeException("len should be 1 <= len <=4");
+        }
+
+        byte[] bytes = new byte[len];
+        for (int i = 0; i < len; i++) {
+            bytes[len - 1 - i] = (byte) (value >> (8 * i) & 0xFF);
+        }
+        return bytes;
+    }
+
+    public static byte[] toBytes(long value) {
+        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+        buffer.putLong(value);
+        return buffer.array();
     }
 
     public static List<byte[]> toList(byte[] bytes, int block_size) {
@@ -156,6 +173,20 @@ public class ByteUtils {
 
         System.arraycopy(bytes1, 0, result_bytes, 0, len1);
         System.arraycopy(bytes2, 0, result_bytes, len1, len2);
+
+        return result_bytes;
+    }
+
+    public static byte[] concatenate(byte[] bytes1, byte[] bytes2, byte[] bytes3) {
+        int len1 = bytes1.length;
+        int len2 = bytes2.length;
+        int len3 = bytes3.length;
+
+        byte[] result_bytes = new byte[len1 + len2 + len3];
+
+        System.arraycopy(bytes1, 0, result_bytes, 0, len1);
+        System.arraycopy(bytes2, 0, result_bytes, len1, len2);
+        System.arraycopy(bytes3, 0, result_bytes, len1 + len2, len3);
 
         return result_bytes;
     }

@@ -24,44 +24,10 @@ public class ChangeCipherSpec {
         }
     }
 
-    public static void validate(byte[] bytes) {
-        try {
-            if (bytes.length != 6) {
-                throw new RuntimeException("bytes.length is wrong: " + bytes.length);
-            }
-
-            ByteDashboard bd = new ByteDashboard(bytes);
-            byte type = bd.next();
-            if (type != ContentType.CONTENT_CHANGE_CIPHER_SPEC.val) {
-                throw new RuntimeException("type is wrong: " + type);
-            }
-
-            byte major = bd.next();
-            byte minor = bd.next();
-            if (major != 3) {
-                throw new RuntimeException("major is wrong: " + major);
-            }
-            if (minor < 0 || minor > 3) {
-                throw new RuntimeException("minor is wrong: " + minor);
-            }
-
-            int length = ByteUtils.toInt(bd.nextN(2));
-            if (length != 1) {
-                throw new RuntimeException("length is wrong: " + length);
-            }
-
-            byte val = bd.next();
-            if (val != 1) {
-                throw new RuntimeException("val is wrong: " + val);
-            }
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
-    public static ChangeCipherSpec fromBytes(byte[] bytes) {
-        validate(bytes);
-        return new ChangeCipherSpec();
+    public static byte[] getContent() {
+        byte[] content = new byte[1];
+        content[0] = 1;
+        return content;
     }
 
 }

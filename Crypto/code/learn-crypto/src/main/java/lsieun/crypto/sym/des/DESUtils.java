@@ -1,6 +1,6 @@
 package lsieun.crypto.sym.des;
 
-import lsieun.crypto.sym.CipherType;
+import lsieun.crypto.sym.OperationType;
 import lsieun.utils.ByteUtils;
 
 import java.util.Arrays;
@@ -214,7 +214,7 @@ public class DESUtils {
     // endregion
 
     // region aes algorithm
-    public static byte[] des_block_operate(byte[] plain_text_64_bit_bytes, byte[] key_64_bit_bytes, CipherType type) {
+    public static byte[] des_block_operate(byte[] plain_text_64_bit_bytes, byte[] key_64_bit_bytes, OperationType type) {
         // Initial permutation
         byte[] ip_64_bit_bytes = DESUtils.permute(plain_text_64_bit_bytes, DESConst.ip_table);
 
@@ -229,7 +229,7 @@ public class DESUtils {
         for (int i = 1; i <= 16; i++) {
 
             // Key schedule computation: rotate left
-            if (type == CipherType.ENCRYPT) {
+            if (type == OperationType.ENCRYPT) {
                 if (i == 1 || i == 2 || i == 9 || i == 16) {
                     DESUtils.rotate_left(current_56_bit_key_bytes);
                 } else {
@@ -239,7 +239,7 @@ public class DESUtils {
             // Key schedule computation: PC-2
             byte[] current_48_bit_sub_key_bytes = DESUtils.permute(current_56_bit_key_bytes, DESConst.pc2_table);
             // Key schedule computation: rotate right
-            if (type == CipherType.DECRYPT) {
+            if (type == OperationType.DECRYPT) {
                 if (i == 16 || i == 15 || i == 8 || i == 1) {
                     DESUtils.rotate_right(current_56_bit_key_bytes);
                 } else {
@@ -277,15 +277,15 @@ public class DESUtils {
     }
 
     public static byte[] des_block_encrypt(byte[] input_64_bit_block, byte[] key_64_bit_bytes) {
-        return des_block_operate(input_64_bit_block, key_64_bit_bytes, CipherType.ENCRYPT);
+        return des_block_operate(input_64_bit_block, key_64_bit_bytes, OperationType.ENCRYPT);
     }
 
     public static byte[] des_block_decrypt(byte[] input_64_bit_block, byte[] key_64_bit_bytes) {
-        return des_block_operate(input_64_bit_block, key_64_bit_bytes, CipherType.DECRYPT);
+        return des_block_operate(input_64_bit_block, key_64_bit_bytes, OperationType.DECRYPT);
     }
 
     @SuppressWarnings("Duplicates")
-    public static byte[] des_operate(byte[] input, byte[] key_64_bit_bytes, CipherType type) {
+    public static byte[] des_operate(byte[] input, byte[] key_64_bit_bytes, OperationType type) {
         int block_size = DESConst.DES_BLOCK_SIZE;
 
         int input_length = input.length;

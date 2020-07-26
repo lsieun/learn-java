@@ -1,6 +1,7 @@
 package lsieun.utils;
 
 import javax.management.relation.RoleUnresolved;
+import java.nio.charset.StandardCharsets;
 
 /**
  * <p>
@@ -102,16 +103,26 @@ public class ByteDashboard {
     }
 
     public int nextInt(int n) {
-        if (n < 1 || n > 4) {
+        byte[] array = nextN(n);
+        return toInt(array);
+    }
+
+    private int toInt(byte[] buff) {
+        int length = buff.length;
+        if (length < 1 || length > 4) {
             throw new RuntimeException("Int Length should be 1~4");
         }
 
         int total = 0;
-        for (int i = 0; i < n; i++) {
-            byte b = next();
+        for (byte b : buff) {
             total = (total << 8) | (b & 0xFF);
         }
         return total;
+    }
+
+    public String nextUTF8(int n) {
+        byte[] buffer = nextN(n);
+        return new String(buffer, StandardCharsets.UTF_8);
     }
 
     public byte peek() {
@@ -122,6 +133,11 @@ public class ByteDashboard {
     public byte peek(int offset) {
         byte b = this.bytes[index + offset];
         return b;
+    }
+
+    public int peekInt(int n) {
+        byte[] array = peekN(n);
+        return toInt(array);
     }
 
     public byte[] peekN(int n) {

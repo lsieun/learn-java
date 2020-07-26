@@ -13,26 +13,22 @@ public abstract class Handshake {
         this.hand_shake_type = hand_shake_type;
     }
 
-    public byte[] toBytes() {
-        try {
-            ByteArrayOutputStream bao = new ByteArrayOutputStream();
-            bao.write(hand_shake_type.val); // handshake type
+    public byte[] toBytes() throws IOException {
+        ByteArrayOutputStream bao = new ByteArrayOutputStream();
+        bao.write(hand_shake_type.val); // handshake type
 
-            byte[] data = getData();
-            int length = data.length;
+        byte[] data = getData();
+        int length = data.length;
 
-            bao.write((length >> 16) & 0xFF); // length 24-bits(!)
-            bao.write((length >> 8) & 0xFF);
-            bao.write(length & 0xFF);
+        bao.write((length >> 16) & 0xFF); // length 24-bits(!)
+        bao.write((length >> 8) & 0xFF);
+        bao.write(length & 0xFF);
 
-            bao.write(data);
-            return bao.toByteArray();
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
+        bao.write(data);
+        return bao.toByteArray();
     }
 
-    public abstract byte[] getData();
+    public abstract byte[] getData() throws IOException;
 
     public static Handshake parse(byte[] bytes) {
         ByteDashboard bd = new ByteDashboard(bytes);
@@ -48,6 +44,14 @@ public abstract class Handshake {
                 return ServerHello.fromBytes(data);
             case CERTIFICATE:
                 return Certificate.fromBytes(data);
+            case SERVER_KEY_EXCHANGE:
+                return ServerKeyExchange.fromBytes(data);
+            case SERVER_HELLO_DONE:
+                return new ServerHelloDone();
+            case CLIENT_KEY_EXCHANGE:
+                return ClientKeyExchange.fromBytes(data);
+            case FINISHED:
+                return Finished.fromBytes(data);
             default:
                 throw new RuntimeException("Unsupported Handshake Type: " + hand_shake_type);
         }

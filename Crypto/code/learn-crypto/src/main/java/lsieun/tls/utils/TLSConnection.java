@@ -20,9 +20,18 @@ public class TLSConnection implements Closeable {
     }
 
     public void send(byte[] data) throws IOException {
-        DisplayUtils.display_record(data);
         this.out.write(data);
         this.out.flush();
+    }
+
+    public byte[] receive(int length) throws IOException {
+        byte[] data = new byte[length];
+        int accum_bytes = 0;
+        while (accum_bytes < length) {
+            int byte_read = this.in.read(data, accum_bytes, length - accum_bytes);
+            accum_bytes += byte_read;
+        }
+        return data;
     }
 
     @Override

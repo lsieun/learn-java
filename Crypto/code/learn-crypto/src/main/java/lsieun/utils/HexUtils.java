@@ -60,6 +60,8 @@ public class HexUtils {
 
     public static String format(byte[] bytes, HexFormat format) {
         switch (format) {
+            case FORMAT_FF_FF:
+                return format(bytes, "", 0);
             case FORMAT_FF_SPACE_FF:
                 return format(bytes, " ", 0);
             case FORMAT_FF_SPACE_FF_16:

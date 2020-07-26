@@ -23,13 +23,23 @@ public class PRFUtils {
         return result_bytes;
     }
 
+    /**
+     * 这里的一个问题是，secret的长度是奇数时候，该怎么处理？ <br/>
+     * 在RFC 4346中，5. HMAC and the Pseudorandom Function对这个问题进行了说明。
+     */
     public static byte[] PRF(byte[] secret, byte[] label, byte[] seed, int out_len) {
         int secret_len = secret.length;
         int half_secret_len = secret_len / 2;
+
+        int remainder = secret_len % 2;
+        if (remainder != 0) {
+            half_secret_len += 1;
+        }
+
         byte[] secret_first = new byte[half_secret_len];
         byte[] secret_second = new byte[half_secret_len];
         System.arraycopy(secret, 0, secret_first, 0, half_secret_len);
-        System.arraycopy(secret, half_secret_len, secret_second, 0, half_secret_len);
+        System.arraycopy(secret, secret_len - half_secret_len, secret_second, 0, half_secret_len);
 
         byte[] input = ByteUtils.concatenate(label, seed);
 

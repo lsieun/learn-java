@@ -1,6 +1,6 @@
 package lsieun.crypto.sym.des.b_tutorial;
 
-import lsieun.crypto.sym.CipherType;
+import lsieun.crypto.sym.OperationType;
 import lsieun.utils.ByteUtils;
 
 import java.util.List;
@@ -17,7 +17,7 @@ public class B_Key_04_Full {
         System.out.println(ByteUtils.toBinary(key_56_bit_bytes));
 
         // (3) 56 bit --> 56 bit list
-        List<byte[]> sub_key_56_bit_list = DESKey.roll_56_bit_key_bytes(key_56_bit_bytes, CipherType.ENCRYPT);
+        List<byte[]> sub_key_56_bit_list = DESKey.roll_56_bit_key_bytes(key_56_bit_bytes, OperationType.ENCRYPT);
 
         // (4) 56 bit list --> 48 bit list
         List<byte[]> sub_key_48_bit_list = DESKey.from_56_to_48_bit_sub_key_list(sub_key_56_bit_list);

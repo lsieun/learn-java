@@ -1,6 +1,6 @@
 package lsieun.crypto.sym.des;
 
-import lsieun.crypto.sym.CipherType;
+import lsieun.crypto.sym.OperationType;
 import lsieun.utils.PaddingUtils;
 
 import java.util.Arrays;
@@ -18,8 +18,8 @@ public class DESTest_NIST8003APadding {
         byte[] padded_input = PaddingUtils.add_nist_8003a_padding(input, DESConst.DES_BLOCK_SIZE);
 
         // encrypt and decrypt
-        byte[] encrypted_message = DESUtils.des_operate(padded_input, key, CipherType.ENCRYPT);
-        byte[] decrypted_message = DESUtils.des_operate(encrypted_message, key, CipherType.DECRYPT);
+        byte[] encrypted_message = DESUtils.des_operate(padded_input, key, OperationType.ENCRYPT);
+        byte[] decrypted_message = DESUtils.des_operate(encrypted_message, key, OperationType.DECRYPT);
 
         // remove padding
         byte[] pad_removed_bytes = PaddingUtils.remove_nist_8003a_padding(decrypted_message);

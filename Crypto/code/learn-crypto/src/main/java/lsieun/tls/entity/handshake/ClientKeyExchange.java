@@ -1,5 +1,7 @@
 package lsieun.tls.entity.handshake;
 
+import java.io.IOException;
+
 public class ClientKeyExchange extends Handshake {
 
     public final byte[] data;
@@ -10,7 +12,11 @@ public class ClientKeyExchange extends Handshake {
     }
 
     @Override
-    public byte[] getData() {
+    public byte[] getData() throws IOException {
         return this.data;
+    }
+
+    public static ClientKeyExchange fromBytes(byte[] data) {
+        return new ClientKeyExchange(data);
     }
 }
