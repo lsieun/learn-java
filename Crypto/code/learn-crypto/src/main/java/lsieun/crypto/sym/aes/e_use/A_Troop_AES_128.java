@@ -1,7 +1,7 @@
 package lsieun.crypto.sym.aes.e_use;
 
 import lsieun.crypto.sym.aes.AESUtils;
-import lsieun.utils.ByteUtils;
+import lsieun.utils.HexUtils;
 
 import java.nio.charset.StandardCharsets;
 
@@ -18,6 +18,6 @@ public class A_Troop_AES_128 {
         int length = plain_text_bytes.length;
         byte[] encrypted_bytes = new byte[length];
         AESUtils.aes_128_encrypt(plain_text_bytes, length, encrypted_bytes, iv_bytes, key_bytes);
-        System.out.println(ByteUtils.toHex(encrypted_bytes));
+        System.out.println(HexUtils.toHex(encrypted_bytes));
     }
 }

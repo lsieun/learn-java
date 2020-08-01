@@ -7,14 +7,14 @@ import lsieun.cert.asn1.ASN1Converter;
 import lsieun.cert.asn1.ASN1Struct;
 import lsieun.cert.asn1.ASN1Utils;
 import lsieun.cert.cst.ObjectIdentifier;
-import lsieun.cert.cst.SignatureAlgorithmIdentifier;
+import lsieun.cert.cst.HashSignatureIdentifier;
 import lsieun.cert.rsa.RSAPublicKey;
 import lsieun.cert.x509.extensions.*;
-import lsieun.crypto.hash.dsa.DsaParams;
-import lsieun.crypto.hash.dsa.DsaSignature;
-import lsieun.crypto.hash.dsa.DsaUtils;
-import lsieun.crypto.hash.dsa_ecc.ECDSAUtils;
-import lsieun.crypto.hash.dsa_ecc.EllipticCurve;
+import lsieun.crypto.signature.dsa.DsaParams;
+import lsieun.crypto.signature.dsa.DsaSignature;
+import lsieun.crypto.signature.dsa.DsaUtils;
+import lsieun.crypto.signature.dsa_ecc.ECDSAUtils;
+import lsieun.crypto.signature.dsa_ecc.EllipticCurve;
 import lsieun.crypto.hash.md5.MD5Utils;
 import lsieun.crypto.hash.sha1.SHA1Utils;
 import lsieun.crypto.hash.sha256.SHA256Utils;
@@ -33,7 +33,7 @@ public class X509Utils {
         ASN1Struct asn1_signature_value = asn1_signed_cert.children.get(2);
 
         TBSCertificate tbs_certificate = parse_tbs_certificate(asn1_tbs_certificate);
-        SignatureAlgorithmIdentifier signature_algorithm = parse_signature_algorithm_identifier(asn1_signature_algorithm);
+        HashSignatureIdentifier signature_algorithm = parse_signature_algorithm_identifier(asn1_signature_algorithm);
         SignatureValue signature_value = SignatureValue.parse(asn1_signature_value);
 
         return new SignedCertificate(tbs_certificate, signature_algorithm, signature_value);
@@ -60,7 +60,7 @@ public class X509Utils {
 
         index++;
         ASN1Struct asn1_signature = children.get(index);
-        SignatureAlgorithmIdentifier signature = parse_signature_algorithm_identifier(asn1_signature);
+        HashSignatureIdentifier signature = parse_signature_algorithm_identifier(asn1_signature);
 
         index++;
         ASN1Struct asn1_issuer = children.get(index);
@@ -98,10 +98,10 @@ public class X509Utils {
                 extensions);
     }
 
-    public static SignatureAlgorithmIdentifier parse_signature_algorithm_identifier(ASN1Struct struct) {
+    public static HashSignatureIdentifier parse_signature_algorithm_identifier(ASN1Struct struct) {
         byte[] data = struct.children.get(0).data;
         ObjectIdentifier oid = ObjectIdentifier.valueOf(data);
-        return SignatureAlgorithmIdentifier.valueOf(oid);
+        return HashSignatureIdentifier.valueOf(oid);
     }
 
 
@@ -134,7 +134,7 @@ public class X509Utils {
         byte[] tbs_certificate_bytes = ByteUtils.concatenate(asn1_tbs_certificate.header, asn1_tbs_certificate.data);
 
         // 第三步，获取证书的签名算法，并计算hash值
-        SignatureAlgorithmIdentifier algorithm = parse_signature_algorithm_identifier(asn1_signature_algorithm);
+        HashSignatureIdentifier algorithm = parse_signature_algorithm_identifier(asn1_signature_algorithm);
 
         byte[] tbs_certificate_hash_bytes = null;
         switch (algorithm.hid) {
@@ -178,7 +178,7 @@ public class X509Utils {
         byte[] main_content_bytes = asn1_main_content.toByteArray();
 
         // 第三步，获取签名算法，计算hash值
-        SignatureAlgorithmIdentifier signature_algorithm = parse_signature_algorithm_identifier(asn1_signature_algorithm);
+        HashSignatureIdentifier signature_algorithm = parse_signature_algorithm_identifier(asn1_signature_algorithm);
 
         byte[] hash_bytes;
         switch (signature_algorithm.hid) {

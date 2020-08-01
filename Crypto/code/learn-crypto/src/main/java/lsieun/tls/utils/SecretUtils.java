@@ -1,7 +1,7 @@
 package lsieun.tls.utils;
 
-import lsieun.crypto.hash.Digest;
-import lsieun.crypto.hash.DigestCtx;
+import lsieun.crypto.hash.updateable.Digest;
+import lsieun.crypto.hash.updateable.DigestCtx;
 import lsieun.tls.cipher.CipherSuite;
 import lsieun.tls.cipher.CipherSuiteIdentifier;
 import lsieun.tls.cst.TLSConst;
@@ -19,7 +19,7 @@ public class SecretUtils {
     public static CipherSuiteIdentifier select_cipher_suite(ClientHello client_hello) {
         // FIXME: 这里应该根据Client提供的cipher里面进行选择
 
-        return CipherSuiteIdentifier.TLS_RSA_WITH_RC4_128_SHA;
+        return CipherSuiteIdentifier.TLS_DHE_RSA_WITH_AES_256_CBC_SHA;
     }
 
     public static byte[] generate_pre_master_secret(ProtocolVersion protocol_version) {
@@ -34,17 +34,17 @@ public class SecretUtils {
     }
 
     public static void compute_master_secret(TLSParameters tls_context) {
-        tls_context.master_secret = calculate_master_secret(tls_context.pre_master_secret, tls_context.client_random, tls_context.server_random);
+        tls_context.master_secret = calculate_master_secret(tls_context.protocol_version, tls_context.pre_master_secret, tls_context.client_random, tls_context.server_random);
     }
 
     /**
      * master_secret = PRF(pre_master_secret, "master secret", ClientHello.random + ServerHello.random );
      * always 48 bytes in length.
      */
-    public static byte[] calculate_master_secret(byte[] pre_master_secret, byte[] client_random, byte[] server_random) {
+    public static byte[] calculate_master_secret(ProtocolVersion protocol_version, byte[] pre_master_secret, byte[] client_random, byte[] server_random) {
         byte[] label = "master secret".getBytes(StandardCharsets.UTF_8);
         byte[] seed = ByteUtils.concatenate(client_random, server_random);
-        return PRFUtils.PRF(pre_master_secret, label, seed, TLSConst.MASTER_SECRET_LENGTH);
+        return PRFUtils.PRF(protocol_version, pre_master_secret, label, seed, TLSConst.MASTER_SECRET_LENGTH);
     }
 
     public static void calculate_keys(TLSParameters tls_context) {
@@ -56,7 +56,7 @@ public class SecretUtils {
 
         int key_block_length = hash_size * 2 + key_size * 2 + iv_size * 2;
 
-        byte[] key_block = calculate_keys(key_block_length, tls_context.master_secret, tls_context.client_random, tls_context.server_random);
+        byte[] key_block = calculate_keys(tls_context.protocol_version, key_block_length, tls_context.master_secret, tls_context.client_random, tls_context.server_random);
 
         ByteDashboard bd = new ByteDashboard(key_block);
 
@@ -86,33 +86,51 @@ public class SecretUtils {
         }
     }
 
-    public static byte[] calculate_keys(int key_length, byte[] master_secret, byte[] client_random, byte[] server_random) {
+    public static byte[] calculate_keys(ProtocolVersion protocol_version, int key_length, byte[] master_secret, byte[] client_random, byte[] server_random) {
         byte[] label = "key expansion".getBytes(StandardCharsets.UTF_8);
         byte[] seed = ByteUtils.concatenate(server_random, client_random);
-        return PRFUtils.PRF(master_secret, label, seed, key_length);
+        return PRFUtils.PRF(protocol_version, master_secret, label, seed, key_length);
+    }
+
+    public static byte[] compute_verify_data(ConnectionEnd connection_end, TLSParameters tls_context) {
+        return compute_verify_data(connection_end,
+                tls_context.protocol_version,
+                tls_context.master_secret,
+                tls_context.md5_handshake_digest,
+                tls_context.sha1_handshake_digest,
+                tls_context.sha256_handshake_digest);
     }
 
     /**
-     * verify_data = PRF( master_secret, "client finished", MD5(handshake_messages) + SHA-1(handshake_messages));
-     * verify_data = PRF( master_secret, "server finished", MD5(handshake_messages) + SHA-1(handshake_messages));
+     * verify_data = PRF(master_secret, "client finished", MD5(handshake_messages) + SHA-1(handshake_messages));
+     * verify_data = PRF(master_secret, "server finished", MD5(handshake_messages) + SHA-1(handshake_messages));
+     *
      */
-    public static byte[] compute_verify_data(ConnectionEnd connection_end, byte[] master_secret, DigestCtx md5_handshake_digest, DigestCtx sha1_handshake_digest) {
-        byte[] finished_label;
-        switch (connection_end) {
-            case CLIENT:
-                finished_label = "client finished".getBytes(StandardCharsets.UTF_8);
+    public static byte[] compute_verify_data(ConnectionEnd connection_end,
+                                             ProtocolVersion protocol_version,
+                                             byte[] master_secret,
+                                             DigestCtx md5_handshake_digest,
+                                             DigestCtx sha1_handshake_digest,
+                                             DigestCtx sha256_handshake_digest) {
+        String finished_label = (connection_end == ConnectionEnd.CLIENT) ? "client finished" : "server finished";
+        byte[] finished_label_bytes = finished_label.getBytes(StandardCharsets.UTF_8);
+
+        byte[] handshake_hash;
+        switch (protocol_version) {
+            case TLSv1_0:
+            case TLSv1_1:
+                byte[] md5_digest = Digest.finalize_digest(md5_handshake_digest);
+                byte[] sha1_digest = Digest.finalize_digest(sha1_handshake_digest);
+                handshake_hash = ByteUtils.concatenate(md5_digest, sha1_digest);
                 break;
-            case SERVER:
-                finished_label = "server finished".getBytes(StandardCharsets.UTF_8);
+            case TLSv1_2:
+                handshake_hash = Digest.finalize_digest(sha256_handshake_digest);
                 break;
             default:
-                throw new RuntimeException("Unsupported Connection End");
+                throw new RuntimeException("Unsupported TLS Version: " + protocol_version);
         }
 
-        byte[] md5_digest = Digest.finalize_digest(md5_handshake_digest);
-        byte[] sha1_digest = Digest.finalize_digest(sha1_handshake_digest);
-        byte[] handshake_hash = ByteUtils.concatenate(md5_digest, sha1_digest);
-        return PRFUtils.PRF(master_secret, finished_label, handshake_hash, TLSConst.VERIFY_DATA_LEN);
+        return PRFUtils.PRF(protocol_version, master_secret, finished_label_bytes, handshake_hash, TLSConst.VERIFY_DATA_LEN);
     }
 
 }

@@ -89,6 +89,10 @@ public class ByteDashboard {
     }
 
     public byte[] nextN(int n) {
+        int remaining = stop - index;
+        if (remaining < n) {
+            throw new RuntimeException("Remaining: " + remaining + ", Wanted: " + n);
+        }
         byte[] array = new byte[n];
         for (int i = 0; i < n; i++) {
             byte b = this.bytes[index++];

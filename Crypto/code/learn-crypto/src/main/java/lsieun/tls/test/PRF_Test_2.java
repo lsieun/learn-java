@@ -1,5 +1,6 @@
 package lsieun.tls.test;
 
+import lsieun.tls.entity.ProtocolVersion;
 import lsieun.tls.utils.PRFUtils;
 import lsieun.utils.ByteUtils;
 import lsieun.utils.HexFormat;
@@ -16,11 +17,11 @@ public class PRF_Test_2 {
         byte[] seed = "seed".getBytes(StandardCharsets.UTF_8);
         int out_len = 20;
 
-
-        byte[] bytes = PRFUtils.PRF(secret, label, seed, out_len);
+        ProtocolVersion protocol_version = ProtocolVersion.TLSv1_0;
+        byte[] bytes = PRFUtils.PRF(protocol_version, secret, label, seed, out_len);
         System.out.println(HexUtils.format(bytes, HexFormat.FORMAT_FF_SPACE_FF));
 
         String hex_str = "b5baf4722b91851a8816d22ebd8c1d8cc2e94d55";
-        System.out.println(Arrays.equals(bytes, ByteUtils.fromHex(hex_str)));
+        System.out.println(Arrays.equals(bytes, HexUtils.parse(hex_str, HexFormat.FORMAT_FF_FF)));
     }
 }

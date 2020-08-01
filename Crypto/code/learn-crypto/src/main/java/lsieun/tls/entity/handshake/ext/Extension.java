@@ -41,6 +41,9 @@ public abstract class Extension {
             case EXTENDED_MASTER_SECRET: {
                 return ExtendedMasterSecret.parse(data);
             }
+            case SIGNATURE_ALGORITHMS: {
+                return SignatureAlgorithms.parse(data);
+            }
             case RENEGOTIATION_INFO:{
                 return RenegotiationInfo.parse(data);
             }

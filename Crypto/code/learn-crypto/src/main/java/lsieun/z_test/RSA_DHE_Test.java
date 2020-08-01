@@ -1,7 +1,7 @@
 package lsieun.z_test;
 
-import lsieun.crypto.hash.Digest;
-import lsieun.crypto.hash.DigestCtx;
+import lsieun.crypto.hash.updateable.Digest;
+import lsieun.crypto.hash.updateable.DigestCtx;
 import lsieun.tls.entity.TLSRecord;
 import lsieun.tls.entity.handshake.Certificate;
 import lsieun.tls.entity.handshake.ClientHello;

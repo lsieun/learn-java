@@ -1,14 +1,14 @@
 package lsieun.cert.x509;
 
-import lsieun.cert.cst.SignatureAlgorithmIdentifier;
+import lsieun.cert.cst.HashSignatureIdentifier;
 
 public class SignedCertificate {
     public final TBSCertificate tbs_certificate;
-    public final SignatureAlgorithmIdentifier signature_algorithm;
+    public final HashSignatureIdentifier signature_algorithm;
     public final SignatureValue signature_value;
 
     public SignedCertificate(TBSCertificate tbs_certificate,
-                             SignatureAlgorithmIdentifier signature_algorithm,
+                             HashSignatureIdentifier signature_algorithm,
                              SignatureValue signature_value) {
         this.tbs_certificate = tbs_certificate;
         this.signature_algorithm = signature_algorithm;

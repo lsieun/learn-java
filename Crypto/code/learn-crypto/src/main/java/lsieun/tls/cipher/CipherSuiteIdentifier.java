@@ -53,7 +53,7 @@ public enum CipherSuiteIdentifier {
     TLS_KRB5_EXPORT_WITH_RC2_CBC_40_MD5(0x002A),
     TLS_KRB5_EXPORT_WITH_RC4_40_MD5(0x002B),
 
-    // TLS_AES ciphersuites - RFC 3268
+    // TLS_AES cipher suites - RFC 3268
     TLS_RSA_WITH_AES_128_CBC_SHA(0x002F),
     TLS_DH_DSS_WITH_AES_128_CBC_SHA(0x0030),
     TLS_DH_RSA_WITH_AES_128_CBC_SHA(0x0031),

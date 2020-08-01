@@ -4,17 +4,16 @@ import lsieun.crypto.asym.rsa.RSAKey;
 import lsieun.crypto.asym.rsa.RSAUtils;
 import lsieun.crypto.hash.md5.MD5Utils;
 import lsieun.crypto.hash.sha1.SHA1Utils;
-import lsieun.tls.cipher.CipherSuite;
-import lsieun.tls.cipher.CipherSuiteIdentifier;
-import lsieun.tls.cipher.KeyExchange;
+import lsieun.crypto.hash.sha256.SHA256Utils;
+import lsieun.tls.cipher.*;
 import lsieun.tls.entity.ChangeCipherSpec;
 import lsieun.tls.entity.ContentType;
+import lsieun.tls.entity.ProtocolVersion;
 import lsieun.tls.entity.TLSRecord;
 import lsieun.tls.entity.alert.Alert;
 import lsieun.tls.entity.alert.AlertLevel;
 import lsieun.tls.entity.handshake.*;
 import lsieun.tls.key.DHKeyExchange;
-import lsieun.tls.cipher.ConnectionEnd;
 import lsieun.tls.param.ProtectionParameters;
 import lsieun.tls.param.TLSParameters;
 import lsieun.tls.param.TLSServerParameters;
@@ -36,8 +35,7 @@ public class TLSServerUtils {
 
         if (tls_context.session_id == null) {
             tls_accept_new(conn, tls_context);
-        }
-        else {
+        } else {
             tls_resume_old(conn, tls_context);
         }
     }
@@ -80,8 +78,7 @@ public class TLSServerUtils {
         byte[] session_id;
         if (tls_context.session_id == null) {
             session_id = TLSSession.generate_new_session_id();
-        }
-        else {
+        } else {
             session_id = tls_context.session_id;
         }
         CipherSuiteIdentifier cipher_suite_id = tls_context.pending_send_parameters.suite;
@@ -101,17 +98,35 @@ public class TLSServerUtils {
         CipherSuite cipher_suite = CipherSuite.valueOf(cipher_suite_id);
         KeyExchange key_exchange = cipher_suite.key_exchange;
 
+        ServerKeyExchange server_key_exchange = null;
         switch (key_exchange) {
             case DHE_RSA: {
-                send_server_key_exchange_dhe_rsa(conn, tls_context);
+                server_key_exchange = generate_server_key_exchange_dhe_rsa(tls_context);
                 break;
             }
             default:
                 break;
         }
+
+        if (server_key_exchange != null) {
+            TLSUtils.send_handshake_message(conn, tls_context, server_key_exchange);
+        }
     }
 
-    private static void send_server_key_exchange_dhe_rsa(TLSConnection conn, TLSServerParameters tls_context) throws IOException {
+    private static ServerKeyExchange generate_server_key_exchange_dhe_rsa(TLSServerParameters tls_context) throws IOException {
+        ProtocolVersion protocol_version = tls_context.protocol_version;
+        switch (protocol_version) {
+            case TLSv1_0:
+            case TLSv1_1:
+                return generate_server_key_exchange_dhe_rsa_tlsv1_0(tls_context);
+            case TLSv1_2:
+                return generate_server_key_exchange_dhe_rsa_tlsv1_2(tls_context);
+            default:
+                throw new RuntimeException("Unsupported Protocol Version: " + protocol_version);
+        }
+    }
+
+    private static ServerKeyExchange generate_server_key_exchange_dhe_rsa_tlsv1_0(TLSServerParameters tls_context) throws IOException {
         // p
         byte[] p_bytes = DHKeyExchange.dh2236_p_bytes;
         int p_length = p_bytes.length;
@@ -164,8 +179,71 @@ public class TLSServerUtils {
         bao.write(signature_bytes);
 
         byte[] data = bao.toByteArray();
-        ServerKeyExchange server_key_exchange = new ServerKeyExchange(data);
-        TLSUtils.send_handshake_message(conn, tls_context, server_key_exchange);
+        return new ServerKeyExchange(data);
+    }
+
+    private static ServerKeyExchange generate_server_key_exchange_dhe_rsa_tlsv1_2(TLSServerParameters tls_context) throws IOException {
+        // p
+        byte[] p_bytes = DHKeyExchange.dh2236_p_bytes;
+        int p_length = p_bytes.length;
+        byte[] p_length_bytes = ByteUtils.toBytes(p_length, 2);
+        BigInteger p = BigUtils.toBigInteger(p_bytes);
+
+        // g
+        byte[] g_bytes = DHKeyExchange.dh2236_g_bytes;
+        int g_length = g_bytes.length;
+        byte[] g_length_bytes = ByteUtils.toBytes(g_length, 2);
+        BigInteger g = BigUtils.toBigInteger(g_bytes);
+
+        // secret
+        byte[] secret_bytes = ByteUtils.toBytes(System.currentTimeMillis());
+        BigInteger secret = BigUtils.toBigInteger(secret_bytes);
+
+        // Ys
+        BigInteger Ys = g.modPow(secret, p);
+        byte[] Ys_bytes = BigUtils.toByteArray(Ys);
+        int Ys_length = Ys_bytes.length;
+        byte[] Ys_length_bytes = ByteUtils.toBytes(Ys_length, 2);
+
+        tls_context.dh_key = new DHKeyExchange(secret, g, p, Ys, null);
+
+        // hash and signature algorithm
+        byte[] hash_and_signature_bytes = new byte[2];
+        hash_and_signature_bytes[0] = (byte) HashAlgorithm.SHA256.value;
+        hash_and_signature_bytes[1] = (byte) SignatureAlgorithm.RSA.value;
+
+        // hash: sha256
+        byte[] p_total_bytes = ByteUtils.concatenate(p_length_bytes, p_bytes);
+        byte[] g_total_bytes = ByteUtils.concatenate(g_length_bytes, g_bytes);
+        byte[] pub_key_total_bytes = ByteUtils.concatenate(Ys_length_bytes, Ys_bytes);
+        byte[] message = ByteUtils.concatenate(p_total_bytes, g_total_bytes, pub_key_total_bytes);
+        byte[] input = ByteUtils.concatenate(tls_context.client_random, tls_context.server_random, message);
+
+        byte[] digest = SHA256Utils.sha256_hash(input);
+
+        // asn1
+        byte[] asn1_prefix = HexUtils.parse("30 31 30 0D 06 09 60 86 48 01 65 03 04 02 01 05 00 04 20", HexFormat.FORMAT_FF_SPACE_FF);
+        byte[] asn1_digest = ByteUtils.concatenate(asn1_prefix, digest);
+
+        // signature
+        RSAKey private_key = tls_context.private_key_info.rsa_private_key.toKey();
+        byte[] signature_bytes = RSAUtils.rsa_encrypt(asn1_digest, private_key);
+        int signature_length = signature_bytes.length;
+        byte[] signature_length_bytes = ByteUtils.toBytes(signature_length, 2);
+
+        ByteArrayOutputStream bao = new ByteArrayOutputStream();
+        bao.write(p_length_bytes);
+        bao.write(p_bytes);
+        bao.write(g_length_bytes);
+        bao.write(g_bytes);
+        bao.write(Ys_length_bytes);
+        bao.write(Ys_bytes);
+        bao.write(hash_and_signature_bytes);
+        bao.write(signature_length_bytes);
+        bao.write(signature_bytes);
+
+        byte[] data = bao.toByteArray();
+        return new ServerKeyExchange(data);
     }
 
     public static void send_server_hello_done(TLSConnection conn, TLSServerParameters tls_context) throws IOException {
@@ -178,7 +256,7 @@ public class TLSServerUtils {
      */
     public static void send_change_cipher_spec(TLSConnection conn, TLSServerParameters tls_context) throws IOException {
         byte[] content = ChangeCipherSpec.getContent();
-        TLSUtils.send_message(conn, tls_context.active_send_parameters, ContentType.CONTENT_CHANGE_CIPHER_SPEC, tls_context.protocol_version,content);
+        TLSUtils.send_message(conn, tls_context.active_send_parameters, ContentType.CONTENT_CHANGE_CIPHER_SPEC, tls_context.protocol_version, content);
 
         ParameterUtils.activate_send_parameter(tls_context);
     }
@@ -187,7 +265,7 @@ public class TLSServerUtils {
      * This message will be encrypted using the newly negotiated keys
      */
     public static void send_finished(TLSConnection conn, TLSServerParameters tls_context) throws IOException {
-        byte[] verify_data = SecretUtils.compute_verify_data(ConnectionEnd.SERVER, tls_context.master_secret, tls_context.md5_handshake_digest, tls_context.sha1_handshake_digest);
+        byte[] verify_data = SecretUtils.compute_verify_data(ConnectionEnd.SERVER, tls_context);
         Finished finished_handshake_message = new Finished(verify_data);
         TLSUtils.send_handshake_message(conn, tls_context, finished_handshake_message);
     }
@@ -305,7 +383,7 @@ public class TLSServerUtils {
 
     public static void recv_finished(Finished finished, TLSParameters tls_context) {
         byte[] data = finished.data;
-        byte[] verify_data = SecretUtils.compute_verify_data(ConnectionEnd.CLIENT, tls_context.master_secret, tls_context.md5_handshake_digest, tls_context.sha1_handshake_digest);
+        byte[] verify_data = SecretUtils.compute_verify_data(ConnectionEnd.CLIENT, tls_context);
         if (!Arrays.equals(data, verify_data)) {
             System.out.println("Expected Verify Data: " + HexUtils.format(verify_data, HexFormat.FORMAT_FF_SPACE_FF));
             System.out.println("Received Verify Data: " + HexUtils.format(data, HexFormat.FORMAT_FF_SPACE_FF));

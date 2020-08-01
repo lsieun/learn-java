@@ -2,7 +2,7 @@ package lsieun.tls.param;
 
 import lsieun.crypto.asym.dh.DHKey;
 import lsieun.cert.x509.PublicKeyInfo;
-import lsieun.crypto.hash.DigestCtx;
+import lsieun.crypto.hash.updateable.DigestCtx;
 import lsieun.tls.cipher.ConnectionEnd;
 import lsieun.tls.entity.ProtocolVersion;
 import lsieun.tls.key.DHKeyExchange;
@@ -41,6 +41,7 @@ public class TLSParameters {
 
     public final DigestCtx md5_handshake_digest = DigestCtx.new_md5_digest();
     public final DigestCtx sha1_handshake_digest = DigestCtx.new_sha1_digest();
+    public final DigestCtx sha256_handshake_digest = DigestCtx.new_sha256_digest();
 
 
 }

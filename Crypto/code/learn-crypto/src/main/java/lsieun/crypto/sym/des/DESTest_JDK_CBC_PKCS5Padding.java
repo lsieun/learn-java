@@ -1,6 +1,6 @@
 package lsieun.crypto.sym.des;
 
-import lsieun.utils.ByteUtils;
+import lsieun.utils.HexUtils;
 
 import java.util.Arrays;
 
@@ -15,8 +15,8 @@ public class DESTest_JDK_CBC_PKCS5Padding {
         byte[] decrypted_bytes = JDK_DES_CBC_PKCS5Padding.decrypt(encrypted_bytes, key, iv);
 
         System.out.println(Arrays.equals(output, encrypted_bytes));
-        System.out.println(ByteUtils.toHex(encrypted_bytes));
-        System.out.println(ByteUtils.toHex(decrypted_bytes));
-        System.out.println(ByteUtils.toHex(input));
+        System.out.println(HexUtils.toHex(encrypted_bytes));
+        System.out.println(HexUtils.toHex(decrypted_bytes));
+        System.out.println(HexUtils.toHex(input));
     }
 }

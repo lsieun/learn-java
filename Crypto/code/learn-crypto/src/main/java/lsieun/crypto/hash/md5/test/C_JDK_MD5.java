@@ -1,7 +1,7 @@
 package lsieun.crypto.hash.md5.test;
 
 import lsieun.crypto.hash.md5.MD5Example;
-import lsieun.utils.ByteUtils;
+import lsieun.utils.HexUtils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -13,6 +13,6 @@ public class C_JDK_MD5 {
         MessageDigest md = MessageDigest.getInstance("MD5");
         md.update(bytes);
         byte[] digest = md.digest();
-        System.out.println(ByteUtils.toHex(digest));
+        System.out.println(HexUtils.toHex(digest));
     }
 }

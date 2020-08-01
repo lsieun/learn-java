@@ -1,6 +1,7 @@
 package lsieun.crypto.sym.rc4;
 
 import lsieun.utils.ByteUtils;
+import lsieun.utils.HexUtils;
 
 import java.nio.charset.StandardCharsets;
 
@@ -11,9 +12,9 @@ public class RC4Test_State {
 
         RC4State state = new RC4State();
         byte[] output1 = RC4Utils.rc4_operate(plain_text, key, state);
-        System.out.println(ByteUtils.toHex(output1));
+        System.out.println(HexUtils.toHex(output1));
 
         byte[] output2 = RC4Utils.rc4_operate(plain_text, key, state);
-        System.out.println(ByteUtils.toHex(output2));
+        System.out.println(HexUtils.toHex(output2));
     }
 }

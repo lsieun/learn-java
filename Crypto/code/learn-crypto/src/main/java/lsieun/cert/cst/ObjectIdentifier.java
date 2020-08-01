@@ -12,26 +12,51 @@ public enum ObjectIdentifier {
     MD5_With_RSA("2A 86 48 86 F7 0D 01 01 04"),
     SHA1_With_RSA("2A 86 48 86 F7 0D 01 01 05"),
     SHA256_With_RSA("2A 86 48 86 F7 0D 01 01 0B"),
+    SHA384_With_RSA("2A 86 48 86 F7 0D 01 01 0C"),
+    SHA512_With_RSA("2A 86 48 86 F7 0D 01 01 0D"),
+    SHA224_With_RSA("2A 86 48 86 F7 0D 01 01 0E"),
 
     EmailAddress("2A 86 48 86 F7 0D 01 09 01"),
 
     MD5("2A 86 48 86 F7 0D 02 05"),
-    HMACWithSHA1("2A 86 48 86 F7 0D 02 07"),
-    HMACWithSHA224("2A 86 48 86 F7 0D 02 08"),
-    HMACWithSHA256("2A 86 48 86 F7 0D 02 09"),
-    HMACWithSHA384("2A 86 48 86 F7 0D 02 0A"),
-    HMACWithSHA512("2A 86 48 86 F7 0D 02 0B"),
+    HMAC_With_SHA1("2A 86 48 86 F7 0D 02 07"),
+    HMAC_With_SHA224("2A 86 48 86 F7 0D 02 08"),
+    HMAC_With_SHA256("2A 86 48 86 F7 0D 02 09"),
+    HMAC_With_SHA384("2A 86 48 86 F7 0D 02 0A"),
+    HMAC_With_SHA512("2A 86 48 86 F7 0D 02 0B"),
 
     DSA("2A 86 48 CE 38 04 01"),
-    DSA_With_SHA1("2A 86 48 CE 38 04 03"),
+    SHA1_WITH_DSA("2A 86 48 CE 38 04 03"),
 
     EC_Public_Key("2A 86 48 CE 3D 02 01"),
+
+    prime192v1("2A 86 48 CE 3D 03 01 01"),
+    prime192v2("2A 86 48 CE 3D 03 01 02"),
+    prime192v3("2A 86 48 CE 3D 03 01 03"),
+    prime239v1("2A 86 48 CE 3D 03 01 04"),
+    prime239v2("2A 86 48 CE 3D 03 01 05"),
+    prime239v3("2A 86 48 CE 3D 03 01 06"),
     prime256v1("2A 86 48 CE 3D 03 01 07"),
-    ECDSA_With_SHA256("2A 86 48 CE 3D 04 03 02"),
+
+    SHA224_WITH_ECDSA("2A 86 48 CE 3D 04 03 01"),
+    SHA256_WITH_ECDSA("2A 86 48 CE 3D 04 03 02"),
+    SHA384_WITH_ECDSA("2A 86 48 CE 3D 04 03 03"),
+    SHA512_WITH_ECDSA("2A 86 48 CE 3D 04 03 04"),
+
     DH("2A 86 48 CE 3E 02 01"),
 
     ExtendedValidationCertificates("2B 06 01 04 01 D6 79 02 04 02"),
     AuthorityInfoAccess("2B 06 01 05 05 07 01 01"),
+
+    ServerAuth("2B 06 01 05 05 07 03 01"),
+    ClientAuth("2B 06 01 05 05 07 03 02"),
+    CodeSigning("2B 06 01 05 05 07 03 03"),
+    EmailProtection("2B 06 01 05 05 07 03 04"),
+    IpsecEndSystem("2B 06 01 05 05 07 03 05"),
+    IpsecTunnel("2B 06 01 05 05 07 03 06"),
+    IpsecUser("2B 06 01 05 05 07 03 07"),
+    TimeStamping("2B 06 01 05 05 07 03 08"),
+    OCSPSigning("2B 06 01 05 05 07 03 09"),
 
 //    DSA("2B 0E 03 02 0C"),
     SHA("2B 0E 03 02 12"),
@@ -65,8 +90,8 @@ public enum ObjectIdentifier {
     SHA512("60 86 48 01 65 03 04 02 03"),
     SHA224("60 86 48 01 65 03 04 02 04"),
 
-    DSA_With_SHA224("60 86 48 01 65 03 04 03 01"),
-    DSA_With_SHA256("60 86 48 01 65 03 04 03 02"),
+    SHA224_WITH_DSA("60 86 48 01 65 03 04 03 01"),
+    SHA256_WITH_DSA("60 86 48 01 65 03 04 03 02"),
     ;
 
     

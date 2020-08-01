@@ -29,6 +29,9 @@ public class TLSConnection implements Closeable {
         int accum_bytes = 0;
         while (accum_bytes < length) {
             int byte_read = this.in.read(data, accum_bytes, length - accum_bytes);
+            if (byte_read == -1) {
+                break;
+            }
             accum_bytes += byte_read;
         }
         return data;

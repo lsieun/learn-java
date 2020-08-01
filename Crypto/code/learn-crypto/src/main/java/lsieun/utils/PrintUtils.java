@@ -7,7 +7,7 @@ public class PrintUtils {
         int size = list.size();
         for (int i = 0; i < size; i++) {
             byte[] bytes = list.get(i);
-            String line = String.format("%02d: %s", i, ByteUtils.toHex(bytes));
+            String line = String.format("%02d: %s", i, HexUtils.toHex(bytes));
             System.out.println(line);
         }
     }
@@ -18,7 +18,7 @@ public class PrintUtils {
         for (int i = 0; i < half; i++) {
             byte[] bytes1 = list.get(i);
             byte[] bytes2 = list.get(i + half);
-            String line = String.format("%03d: %s, %03d: %s", i, ByteUtils.toHex(bytes1), i+half, ByteUtils.toHex(bytes2));
+            String line = String.format("%03d: %s, %03d: %s", i, HexUtils.toHex(bytes1), i+half, HexUtils.toHex(bytes2));
             System.out.println(line);
         }
     }

@@ -1,7 +1,10 @@
 package lsieun.crypto.sym.aes;
 
+import lsieun.crypto.sym.modes.CBCUtils;
+import lsieun.crypto.sym.modes.CTRUtils;
+import lsieun.utils.ByteUtils;
+
 import java.util.ArrayList;
-import java.util.Formatter;
 import java.util.List;
 
 // TODO: 我应该依照AES官方文档给出示例自己也写一个随时查看的文档
@@ -317,8 +320,105 @@ public class AESUtils {
         aes_encrypt(plain_text_bytes, plain_text_len, cipher_text_bytes, iv_128_bit_bytes, key_bytes, 32);
     }
 
-    public static void aes_256_decrypt(byte[] cipher_text_bytes, int ciper_text_len, byte[] plain_text_bytes, byte[] iv_128_bit_bytes, byte[] key_bytes) {
-        aes_decrypt(cipher_text_bytes, ciper_text_len, plain_text_bytes, iv_128_bit_bytes, key_bytes, 32);
+    public static void aes_256_decrypt(byte[] cipher_text_bytes, int cipher_text_len, byte[] plain_text_bytes, byte[] iv_128_bit_bytes, byte[] key_bytes) {
+        aes_decrypt(cipher_text_bytes, cipher_text_len, plain_text_bytes, iv_128_bit_bytes, key_bytes, 32);
     }
 
+    public static byte[] aes_cbc_encrypt(byte[] input, byte[] key, byte[] iv) {
+        return CBCUtils.cbc_encrypt(input, key, iv, AESConst.AES_BLOCK_SIZE, AESUtils::aes_block_encrypt);
+    }
+
+    public static byte[] aes_cbc_decrypt(byte[] input, byte[] key, byte[] iv) {
+        return CBCUtils.cbc_encrypt(input, key, iv, AESConst.AES_BLOCK_SIZE, AESUtils::aes_block_decrypt);
+    }
+
+    public static byte[] aes_ctr_encrypt(byte[] input, byte[] key, byte[] iv) {
+        return CTRUtils.operate(input, key, iv, AESConst.AES_BLOCK_SIZE, AESUtils::aes_block_encrypt);
+    }
+
+    public static byte[] aes_ctr_decrypt(byte[] input, byte[] key, byte[] iv) {
+        return CTRUtils.operate(input, key, iv, AESConst.AES_BLOCK_SIZE, AESUtils::aes_block_encrypt);
+    }
+
+    public static byte[] aes_cbc_mac(byte[] input, byte[] key, int mac_length) {
+        return CBCUtils.cbc_mac(input, key, AESConst.AES_BLOCK_SIZE, mac_length, AESUtils::aes_block_encrypt);
+    }
+
+    public static byte[] aes_ccm_encrypt(byte[] input, byte[] key, byte[] iv, int mac_length) {
+        int input_length = input.length;
+        byte[] output = new byte[input_length + mac_length];
+
+        int block_size = AESConst.AES_BLOCK_SIZE;
+
+        // The first input block is a (complicated) standardized header
+        // This is just for the MAC; not output
+        byte[] input_block = new byte[block_size];
+        input_block[0] = 0x1F; // t = mac_length = 8 bytes, q = 8 bytes (so n = 7)
+        System.arraycopy(iv, 0, input_block, 1, 8);
+        byte[] header_length_bytes = ByteUtils.toBytes(input_length);
+        System.arraycopy(header_length_bytes, 0, input_block, block_size - header_length_bytes.length, header_length_bytes.length);
+
+        // update the CBC-MAC
+        byte[] mac_block = new byte[block_size];
+        input_block = ByteUtils.xor(input_block, mac_block, block_size);
+        byte[] output_block = aes_block_encrypt(input_block, key);
+        System.arraycopy(output_block, 0, mac_block, 0, block_size);
+
+        // Prepare the first nonce
+        byte[] nonce = new byte[block_size];
+        nonce[0] = 0x07; // q hardcode to 8 bytes, so n = 7
+        System.arraycopy(iv, 0, nonce, 1, 8);
+
+        int times = input_length / block_size;
+        int remaining = input_length % block_size;
+        for (int i = 0; i < times; i++) {
+            System.arraycopy(input, i * block_size, input_block, 0, block_size);
+
+            // Increment counter
+            ByteUtils.add_one(nonce, 4);
+
+            // encrypt the nonce
+            byte[] encrypted_bytes = aes_block_encrypt(nonce, key);
+            byte[] xor_bytes = ByteUtils.xor(encrypted_bytes, input_block, block_size); // implement CTR
+            System.arraycopy(xor_bytes, 0, output, i * block_size, block_size);
+
+            // update the CBC-MAC
+            byte[] xor_bytes2 = ByteUtils.xor(input_block, mac_block, block_size);
+            byte[] encrypted_bytes2 = aes_block_encrypt(xor_bytes, key);
+            System.arraycopy(encrypted_bytes2, 0, mac_block, 0, block_size);
+        }
+
+        if (remaining > 0) {
+            ByteUtils.setAll(input_block, 0);
+            System.arraycopy(input, times * block_size, input_block, 0, remaining);
+            // Increment counter
+            ByteUtils.add_one(nonce, 4);
+
+            // encrypt the nonce
+            byte[] encrypted_bytes = aes_block_encrypt(nonce, key);
+            byte[] xor_bytes = ByteUtils.xor(encrypted_bytes, input_block, remaining); // implement CTR
+            System.arraycopy(xor_bytes, 0, output, times * block_size, remaining);
+
+            // update the CBC-MAC
+            ByteUtils.setAll(input_block, 0);
+            System.arraycopy(input, times * block_size, input_block, 0, remaining);
+            byte[] xor_bytes2 = ByteUtils.xor(input_block, mac_block, block_size);
+            byte[] encrypted_bytes2 = aes_block_encrypt(xor_bytes, key);
+            System.arraycopy(encrypted_bytes2, 0, mac_block, 0, block_size);
+        }
+
+        // Regenerate the first nonce
+        ByteUtils.setAll(nonce, 0);
+        nonce[0] = 0x07; // q hardcode to 8 bytes
+        System.arraycopy(iv, 0, nonce, 1, 8);
+
+        // encrypt the header and output it
+        byte[] encrypted_bytes3 = aes_block_encrypt(nonce, key);
+
+        // MAC is the CBC-mac XOR’ed with S0
+        byte[] mac_bytes = ByteUtils.xor(encrypted_bytes3, mac_block, mac_length);
+        System.arraycopy(mac_bytes, 0, output, input_length, mac_length);
+
+        return output;
+    }
 }

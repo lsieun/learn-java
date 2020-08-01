@@ -1,7 +1,8 @@
 package lsieun.tls.utils;
 
-import lsieun.crypto.hash.Digest;
+import lsieun.crypto.hash.updateable.Digest;
 import lsieun.tls.cipher.CipherSuiteIdentifier;
+import lsieun.tls.entity.ProtocolVersion;
 import lsieun.tls.entity.handshake.Certificate;
 import lsieun.tls.entity.handshake.ClientHello;
 import lsieun.tls.entity.handshake.ServerHello;
@@ -78,8 +79,19 @@ public class ParameterUtils {
     }
 
     public static void update_digest(byte[] handshake_bytes, TLSParameters tls_context) {
-        Digest.update_digest(tls_context.md5_handshake_digest, handshake_bytes);
-        Digest.update_digest(tls_context.sha1_handshake_digest, handshake_bytes);
+        ProtocolVersion protocol_version = tls_context.protocol_version;
+        switch (protocol_version) {
+            case TLSv1_0:
+            case TLSv1_1:
+                Digest.update_digest(tls_context.md5_handshake_digest, handshake_bytes);
+                Digest.update_digest(tls_context.sha1_handshake_digest, handshake_bytes);
+                break;
+            case TLSv1_2:
+                Digest.update_digest(tls_context.sha256_handshake_digest, handshake_bytes);
+                break;
+            default:
+                throw new RuntimeException("Unsupported TLS Version: " + protocol_version);
+        }
     }
 
 }

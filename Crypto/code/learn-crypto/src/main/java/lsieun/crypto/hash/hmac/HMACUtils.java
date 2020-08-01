@@ -1,11 +1,11 @@
 package lsieun.crypto.hash.hmac;
 
-import lsieun.crypto.hash.HashAlgorithm;
 import lsieun.crypto.hash.md5.MD5Utils;
 import lsieun.crypto.hash.sha1.SHA1Utils;
 import lsieun.crypto.hash.sha256.SHA256Utils;
 
 import java.util.Arrays;
+import java.util.function.Function;
 
 public class HMACUtils {
     public static byte[] hmac_md5(byte[] key_bytes, byte[] message_bytes) {
@@ -20,7 +20,7 @@ public class HMACUtils {
         return hmac(key_bytes, message_bytes, SHA256Utils::sha256_hash);
     }
 
-    public static byte[] hmac(byte[] key_bytes, byte[] message_bytes, HashAlgorithm hash_algorithm) {
+    public static byte[] hmac(byte[] key_bytes, byte[] message_bytes, Function<byte[], byte[]> hash_algorithm) {
         int block_size = 64;
         byte[] standard_key_bytes = new byte[block_size];
 

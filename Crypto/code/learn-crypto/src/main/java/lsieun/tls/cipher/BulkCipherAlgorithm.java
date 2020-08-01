@@ -26,4 +26,6 @@ public enum BulkCipherAlgorithm {
         this.bulk_encrypt = bulk_encrypt;
         this.bulk_decrypt = bulk_decrypt;
     }
+
+
 }

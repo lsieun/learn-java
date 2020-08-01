@@ -12,10 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SocketTest {
-    public static final String DOMAIN_NAME = "www.baidu.com";
-    public static final String CLIENT_PROTOCOLS = "TLSv1.1";
+    public static final String DOMAIN_NAME = "www.horozdemir.com";
+    public static final String CLIENT_PROTOCOLS = "TLSv1.2";
     public static final String[] CIPHER_SUITES = new String[] {
-            "TLS_RSA_WITH_AES_256_CBC_SHA"
+            "TLS_DHE_RSA_WITH_AES_256_CBC_SHA"
     };
     private static final InetSocketAddress address;
 

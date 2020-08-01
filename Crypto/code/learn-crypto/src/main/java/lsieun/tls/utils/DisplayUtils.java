@@ -2,9 +2,7 @@ package lsieun.tls.utils;
 
 import lsieun.cert.x509.SignedCertificate;
 import lsieun.cert.x509.X509Utils;
-import lsieun.tls.cipher.CipherSuite;
-import lsieun.tls.cipher.CipherSuiteIdentifier;
-import lsieun.tls.cipher.KeyExchange;
+import lsieun.tls.cipher.*;
 import lsieun.tls.entity.ContentType;
 import lsieun.tls.entity.ProtocolVersion;
 import lsieun.tls.entity.alert.AlertDescription;
@@ -24,16 +22,12 @@ import java.util.Formatter;
 
 public class DisplayUtils {
 
-    public static CipherSuiteIdentifier cipher_suite_id = CipherSuiteIdentifier.TLS_RSA_WITH_RC4_128_MD5;
-    public static ProtocolVersion protocol_version = ProtocolVersion.TLSv1_0;
-
-    public static void set(CipherSuiteIdentifier cipher_suite_id, ProtocolVersion protocol_version) {
-        DisplayUtils.cipher_suite_id = cipher_suite_id;
-        DisplayUtils.protocol_version = protocol_version;
+    public static void display_record(byte[] bytes) {
+        display_record(bytes, "", ProtocolVersion.TLSv1_0, CipherSuiteIdentifier.TLS_NULL_WITH_NULL_NULL);
     }
 
-    public static void display_record(byte[] bytes) {
-        System.out.println(HexUtils.format(bytes, " ", 32));
+    public static void display_record(byte[] bytes, String suffix, ProtocolVersion protocol_version, CipherSuiteIdentifier cipher_suite_id) {
+        System.out.println(HexUtils.format(bytes, " ", 32) + suffix);
 
         ByteDashboard bd = new ByteDashboard(bytes);
         byte[] content_type_bytes = bd.nextN(1);
@@ -63,7 +57,7 @@ public class DisplayUtils {
                 process_content_alert(bd, fm);
                 break;
             case CONTENT_HANDSHAKE:
-                process_content_handshake(bd, fm);
+                process_content_handshake(bd, fm, protocol_version, cipher_suite_id);
                 break;
             case CONTENT_APPLICATION_DATA:
                 process_content_application_data(bd, fm, length);
@@ -72,11 +66,17 @@ public class DisplayUtils {
                 throw new RuntimeException("Unknown Content Type: " + content_type_hex);
         }
 
-        int remaining = bd.remaining();
-        byte[] remaining_bytes = bd.nextN(remaining);
-        String remaining_hex = HexUtils.format(remaining_bytes, HexFormat.FORMAT_FF_SPACE_FF);
-        fm.format("Remaining Bytes: %s%n%n", remaining_hex);
+        process_remaining(bd, fm);
         System.out.println(sb.toString());
+    }
+
+    public static void process_remaining(ByteDashboard bd, Formatter fm) {
+        int remaining = bd.remaining();
+        if (remaining > 0) {
+            byte[] remaining_bytes = bd.nextN(remaining);
+            String remaining_hex = HexUtils.format(remaining_bytes, " ", 16);
+            fm.format("Remaining Bytes: %s%n%n", remaining_hex);
+        }
     }
 
     public static void process_content_change_cipher_spec(ByteDashboard bd, Formatter fm) {
@@ -96,10 +96,55 @@ public class DisplayUtils {
         AlertDescription alert_description = AlertDescription.valueOf(ByteUtils.toInt(alert_description_bytes));
 
         fm.format("Alert Level: %s (%s)%n", alert_level, alert_level_hex);
-        fm.format("Alert Level: %s (%s)%n", alert_description, alert_description_hex);
+        fm.format("Alert Description: %s (%s)%n", alert_description, alert_description_hex);
     }
 
-    public static void process_content_handshake(ByteDashboard bd, Formatter fm) {
+    public static void process_content_handshake(ByteDashboard bd, Formatter fm, ProtocolVersion protocol_version, CipherSuiteIdentifier cipher_suite_id) {
+        int count = 0;
+        while (bd.hasNext()) {
+            if (count > 0) {
+                fm.format("%n");
+            }
+            byte[] length_bytes = bd.peekN(1, 3);
+            int length = ByteUtils.toInt(length_bytes);
+            byte[] bytes = bd.nextN(length + 4);
+            process_content_handshake(bytes, fm, protocol_version, cipher_suite_id);
+            count++;
+        }
+    }
+
+    public static void process_content_handshake(byte[] bytes, Formatter fm, ProtocolVersion protocol_version, CipherSuiteIdentifier cipher_suite_id) {
+        int handshake_type_val = bytes[0];
+        HandshakeType handshake_type = HandshakeType.valueOf(handshake_type_val);
+
+        switch (handshake_type) {
+            case CLIENT_HELLO:
+                process_client_hello(bytes, fm);
+                break;
+            case SERVER_HELLO:
+                process_server_hello(bytes, fm);
+                break;
+            case CERTIFICATE:
+                process_certificate(bytes, fm);
+                break;
+            case SERVER_KEY_EXCHANGE:
+                process_server_key_exchange(bytes, fm, protocol_version, cipher_suite_id);
+                break;
+            case SERVER_HELLO_DONE:
+                process_server_hello_done(bytes, fm);
+                break;
+            case CLIENT_KEY_EXCHANGE:
+                process_client_key_exchange(bytes, fm, protocol_version, cipher_suite_id);
+                break;
+            case FINISHED:
+                process_finished(bytes, fm);
+                break;
+            default:
+                throw new RuntimeException("Unsupported handshake type: " + handshake_type);
+        }
+    }
+
+    public static void process_handshake_header(ByteDashboard bd, Formatter fm) {
         byte[] handshake_type_bytes = bd.nextN(1);
         byte[] length_bytes = bd.nextN(3);
 
@@ -111,37 +156,13 @@ public class DisplayUtils {
 
         fm.format("Handshake Type: %s (%s)%n", handshake_type, handshake_type_hex);
         fm.format("Length: %d (%s)%n", length, length_hex);
-
-        switch (handshake_type) {
-            case CLIENT_HELLO:
-                process_client_hello(bd, fm);
-                break;
-            case SERVER_HELLO:
-                process_server_hello(bd, fm);
-                break;
-            case CERTIFICATE:
-                process_certificate(bd, fm);
-                break;
-            case SERVER_KEY_EXCHANGE:
-                process_server_key_exchange(bd, fm);
-                break;
-            case SERVER_HELLO_DONE:
-                process_server_hello_done(bd, fm);
-                break;
-            case CLIENT_KEY_EXCHANGE:
-                process_client_key_exchange(bd, fm);
-                break;
-            case FINISHED:
-                process_finished(bd, fm);
-                break;
-            default:
-                throw new RuntimeException("Unsupported handshake type: " + handshake_type);
-        }
-
     }
 
     // region handshake
-    public static void process_client_hello(ByteDashboard bd, Formatter fm) {
+    public static void process_client_hello(byte[] bytes, Formatter fm) {
+        ByteDashboard bd = new ByteDashboard(bytes);
+
+        process_handshake_header(bd, fm);
         byte[] version_bytes = bd.nextN(2);
         ProtocolVersion version = ProtocolVersion.valueOf(version_bytes);
         byte[] gmt_unix_time_bytes = bd.nextN(4);
@@ -192,9 +213,13 @@ public class DisplayUtils {
         }
 
         display_extensions(bd, fm);
+        process_remaining(bd, fm);
     }
 
-    public static void process_server_hello(ByteDashboard bd, Formatter fm) {
+    public static void process_server_hello(byte[] bytes, Formatter fm) {
+        ByteDashboard bd = new ByteDashboard(bytes);
+        process_handshake_header(bd, fm);
+
         byte[] version_bytes = bd.nextN(2);
         ProtocolVersion version = ProtocolVersion.valueOf(version_bytes);
         byte[] gmt_unix_time_bytes = bd.nextN(4);
@@ -225,9 +250,15 @@ public class DisplayUtils {
         fm.format("Session ID: %s%n", session_id_hex);
         fm.format("Cipher Suite: %s (%s)%n", cipher_suite_id, cipher_suite_hex);
         fm.format("Compression Method: %s (%s)%n", compression_method, compression_method_hex);
+
+        display_extensions(bd, fm);
+        process_remaining(bd, fm);
     }
 
-    public static void process_certificate(ByteDashboard bd, Formatter fm) {
+    public static void process_certificate(byte[] bytes, Formatter fm) {
+        ByteDashboard bd = new ByteDashboard(bytes);
+        process_handshake_header(bd, fm);
+
         byte[] certificates_length_bytes = bd.nextN(3);
         int certificates_length = ByteUtils.toInt(certificates_length_bytes);
 
@@ -236,6 +267,7 @@ public class DisplayUtils {
 
         byte[] data = bd.nextN(certificates_length);
         parse_multi_certificates(data, fm);
+        process_remaining(bd, fm);
     }
 
     public static void parse_multi_certificates(byte[] data, Formatter fm) {
@@ -253,25 +285,19 @@ public class DisplayUtils {
         }
     }
 
-    public static void process_server_key_exchange(ByteDashboard bd, Formatter fm) {
+    public static void process_server_key_exchange(byte[] bytes, Formatter fm, ProtocolVersion protocol_version, CipherSuiteIdentifier cipher_suite_id) {
+        ByteDashboard bd = new ByteDashboard(bytes);
+        process_handshake_header(bd, fm);
+
         CipherSuite cipher_suite = CipherSuite.valueOf(cipher_suite_id);
         KeyExchange key_exchange = cipher_suite.key_exchange;
 
         switch (key_exchange) {
+            case NULL: {
+                break;
+            }
             case DHE_RSA: {
-                switch (protocol_version) {
-                    case TLSv1_0:
-                        process_server_key_exchange_dhe_rsa_tlsv1(bd, fm);
-                        break;
-                    case TLSv1_1:
-                        break;
-                    case TLSv1_2:
-                        break;
-                    case TLSv1_3:
-                        break;
-                    default:
-                        throw new RuntimeException("Unsupported TLS Version: " + protocol_version);
-                }
+                process_server_key_exchange_dhe_rsa(bd, fm, protocol_version);
                 break;
             }
             case ECDHE_RSA: {
@@ -280,6 +306,7 @@ public class DisplayUtils {
             default:
                 throw new RuntimeException("Unsupported Key Exchange: " + key_exchange);
         }
+        process_remaining(bd, fm);
     }
 
     public static void parse_ecdhe_tlsv1(ByteDashboard bd, Formatter fm) {
@@ -346,7 +373,21 @@ public class DisplayUtils {
         fm.format("Signature: %s%n", signature_hex);
     }
 
-    public static void process_server_key_exchange_dhe_rsa_tlsv1(ByteDashboard bd, Formatter fm) {
+    public static void process_server_key_exchange_dhe_rsa(ByteDashboard bd, Formatter fm, ProtocolVersion protocol_version) {
+        switch (protocol_version) {
+            case TLSv1_0:
+            case TLSv1_1:
+                process_server_key_exchange_dhe_rsa_tlsv1_0(bd, fm);
+                break;
+            case TLSv1_2:
+                process_server_key_exchange_dhe_rsa_tlsv1_2(bd, fm);
+                break;
+            default:
+                throw new RuntimeException("Unsupported Protocol Version: " + protocol_version);
+        }
+    }
+
+    public static void process_server_key_exchange_dhe_rsa_tlsv1_0(ByteDashboard bd, Formatter fm) {
         byte[] p_length_bytes = bd.nextN(2);
         int p_length = ByteUtils.toInt(p_length_bytes);
         String p_length_hex = HexUtils.format(p_length_bytes, HexFormat.FORMAT_FF_SPACE_FF);
@@ -380,15 +421,70 @@ public class DisplayUtils {
         fm.format("    Signature: %s%n", signature_hex);
     }
 
-    public static void process_server_hello_done(ByteDashboard bd, Formatter fm) {
+    public static void process_server_key_exchange_dhe_rsa_tlsv1_2(ByteDashboard bd, Formatter fm) {
+        byte[] p_length_bytes = bd.nextN(2);
+        int p_length = ByteUtils.toInt(p_length_bytes);
+        String p_length_hex = HexUtils.format(p_length_bytes, HexFormat.FORMAT_FF_SPACE_FF);
+        byte[] p_bytes = bd.nextN(p_length);
+        String p_hex = HexUtils.format(p_bytes, " ", 32);
+        fm.format("    p Length: %d (%s)%n", p_length, p_length_hex);
+        fm.format("    p: %s%n", p_hex);
+
+        byte[] g_length_bytes = bd.nextN(2);
+        int g_length = ByteUtils.toInt(g_length_bytes);
+        String g_length_hex = HexUtils.format(g_length_bytes, HexFormat.FORMAT_FF_SPACE_FF);
+        byte[] g_bytes = bd.nextN(g_length);
+        String g_hex = HexUtils.format(g_bytes, " ", 32);
+        fm.format("    g Length: %d (%s)%n", g_length, g_length_hex);
+        fm.format("    g: %s%n", g_hex);
+
+        byte[] pub_key_length_bytes = bd.nextN(2);
+        int pub_key_length = ByteUtils.toInt(pub_key_length_bytes);
+        String pub_key_length_hex = HexUtils.format(pub_key_length_bytes, HexFormat.FORMAT_FF_SPACE_FF);
+        byte[] pub_key_bytes = bd.nextN(pub_key_length);
+        String pub_key_hex = HexUtils.format(pub_key_bytes, " ", 32);
+        fm.format("    Pubkey Length: %d (%s)%n", pub_key_length, pub_key_length_hex);
+        fm.format("    Pubkey: %s%n", pub_key_hex);
+
+
+        byte[] hash_algorithm_bytes = bd.nextN(1);
+        int hash_algorithm_val = ByteUtils.toInt(hash_algorithm_bytes);
+        String hash_algorithm_hex = HexUtils.format(hash_algorithm_bytes, HexFormat.FORMAT_FF_SPACE_FF);
+        HashAlgorithm hash_algorithm = HashAlgorithm.valueOf(hash_algorithm_val);
+        fm.format("    Hash Algorithm: %s (%s)%n", hash_algorithm, hash_algorithm_hex);
+
+        byte[] signature_algorithm_bytes = bd.nextN(1);
+        int signature_algorithm_val = ByteUtils.toInt(signature_algorithm_bytes);
+        String signature_algorithm_hex = HexUtils.format(signature_algorithm_bytes, HexFormat.FORMAT_FF_SPACE_FF);
+        SignatureAlgorithm signature_algorithm = SignatureAlgorithm.valueOf(signature_algorithm_val);
+        fm.format("    Signature Algorithm: %s (%s)%n", signature_algorithm, signature_algorithm_hex);
+
+        byte[] signature_length_bytes = bd.nextN(2);
+        int signature_length = ByteUtils.toInt(signature_length_bytes);
+        String signature_length_hex = HexUtils.format(signature_length_bytes, HexFormat.FORMAT_FF_SPACE_FF);
+        byte[] signature_bytes = bd.nextN(signature_length);
+        String signature_hex = HexUtils.format(signature_bytes, " ", 32);
+        fm.format("    Signature Length: %d (%s)%n", signature_length, signature_length_hex);
+        fm.format("    Signature: %s%n", signature_hex);
+    }
+
+    public static void process_server_hello_done(byte[] bytes, Formatter fm) {
+        ByteDashboard bd = new ByteDashboard(bytes);
+        process_handshake_header(bd, fm);
         // Do Nothing
     }
 
-    public static void process_client_key_exchange(ByteDashboard bd, Formatter fm) {
+    public static void process_client_key_exchange(byte[] bytes, Formatter fm, ProtocolVersion protocol_version, CipherSuiteIdentifier cipher_suite_id) {
+        ByteDashboard bd = new ByteDashboard(bytes);
+        process_handshake_header(bd, fm);
+
         CipherSuite cipher_suite = CipherSuite.valueOf(cipher_suite_id);
         KeyExchange key_exchange = cipher_suite.key_exchange;
 
         switch (key_exchange) {
+            case NULL: {
+                break;
+            }
             case RSA: {
                 process_client_key_exchange_rsa(bd, fm);
                 break;
@@ -415,6 +511,7 @@ public class DisplayUtils {
             default:
                 throw new RuntimeException("Unsupported Key Exchange: " + key_exchange);
         }
+        process_remaining(bd, fm);
     }
 
     public static void process_client_key_exchange_rsa(ByteDashboard bd, Formatter fm) {
@@ -454,12 +551,16 @@ public class DisplayUtils {
         fm.format("    Pubkey: %s%n", pub_key_hex);
     }
 
-    public static void process_finished(ByteDashboard bd, Formatter fm) {
+    public static void process_finished(byte[] bytes, Formatter fm) {
+        ByteDashboard bd = new ByteDashboard(bytes);
+        process_handshake_header(bd, fm);
+
         byte[] verify_data_bytes = bd.nextN(12);
 
         String verify_data_hex = HexUtils.format(verify_data_bytes, HexFormat.FORMAT_FF_SPACE_FF);
 
         fm.format("Verify Data: %s%n", verify_data_hex);
+        process_remaining(bd, fm);
     }
     // endregion
 
@@ -487,6 +588,10 @@ public class DisplayUtils {
                     int length = ByteUtils.toInt(length_bytes);
                     String length_hex = HexUtils.format(length_bytes, HexFormat.FORMAT_FF_SPACE_FF);
                     fm.format("    Length: %d (%s)%n", length, length_hex);
+
+                    if (length < 1) {
+                        break;
+                    }
 
                     byte[] server_name_list_length_bytes = bd.nextN(2);
                     int server_name_list_length = ByteUtils.toInt(server_name_list_length_bytes);

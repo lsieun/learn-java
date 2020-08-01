@@ -25,8 +25,10 @@ public enum HandshakeType {
     }
 
     public static HandshakeType valueOf(int val) {
-        System.out.println("handshake type value = " + val);
-        return Arrays.stream(values()).filter(item -> item.val == val).findFirst().get();
+        return Arrays.stream(values())
+                .filter(item -> item.val == val)
+                .findFirst()
+                .get();
     }
 
     public static void main(String[] args) {

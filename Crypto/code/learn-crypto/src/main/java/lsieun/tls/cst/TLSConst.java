@@ -2,7 +2,7 @@ package lsieun.tls.cst;
 
 public class TLSConst {
     public static final int TLS_VERSION_MAJOR = 3;
-    public static final int TLS_VERSION_MINOR = 1;
+    public static final int TLS_VERSION_MINOR = 3;
     public static final int HTTPS_PORT = 443;
 
     public static final int MASTER_SECRET_LENGTH = 48;
@@ -13,4 +13,6 @@ public class TLSConst {
 
     public static final int VERIFY_DATA_LEN = 12;
     public static final int MAX_SESSION_ID_LENGTH = 32;
+
+    public static final int MAX_SIGNATURE_ALGORITHMS = 28;
 }

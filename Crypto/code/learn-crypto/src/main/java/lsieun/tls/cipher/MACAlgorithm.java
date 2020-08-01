@@ -1,7 +1,7 @@
 package lsieun.tls.cipher;
 
-import lsieun.crypto.hash.DigestCtx;
-import lsieun.crypto.hash.HashContextAlgorithm;
+import lsieun.crypto.hash.updateable.DigestCtx;
+import lsieun.crypto.hash.updateable.HashContextFunction;
 
 public enum MACAlgorithm {
     NULL(0, null),
@@ -11,9 +11,9 @@ public enum MACAlgorithm {
     ;
 
     public final int hash_size;
-    public final HashContextAlgorithm hash_algorithm;
+    public final HashContextFunction hash_algorithm;
 
-    MACAlgorithm(int hash_size, HashContextAlgorithm hash_algorithm) {
+    MACAlgorithm(int hash_size, HashContextFunction hash_algorithm) {
         this.hash_size = hash_size;
         this.hash_algorithm = hash_algorithm;
     }

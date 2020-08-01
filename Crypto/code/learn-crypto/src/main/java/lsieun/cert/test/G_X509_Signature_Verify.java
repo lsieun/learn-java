@@ -4,6 +4,9 @@ import lsieun.cert.asn1.PEMUtils;
 import lsieun.cert.rsa.RSAPublicKey;
 import lsieun.cert.x509.X509Utils;
 import lsieun.utils.ByteUtils;
+import lsieun.utils.FileUtils;
+import lsieun.utils.HexFormat;
+import lsieun.utils.HexUtils;
 
 import java.math.BigInteger;
 
@@ -29,12 +32,12 @@ public class G_X509_Signature_Verify {
                         "d3:57:fa:2c:ee:14:9d:02:63:32:ae:15:1c:90:b6:" +
                         "1d:5e:e4:d4:68:49:1e:60:21:eb:b3:f9:f3:b8:7c:" +
                         "b7:89";
-        byte[] modulus_bytes = ByteUtils.fromHex(modulus_str, ":");
+        byte[] modulus_bytes = HexUtils.parse(modulus_str, HexFormat.FORMAT_FF_COLON_FF);
         BigInteger modulus = new BigInteger(1, modulus_bytes);
         BigInteger exponent = new BigInteger("65537");
         RSAPublicKey rsaKey = new RSAPublicKey(modulus, exponent);
 
-        String filepath = "/home/liusen/Workspace/tmp/abc/signed_certificate.pem";
+        String filepath = FileUtils.getFilePath("cert/rsa/signed_certificate.pem");
         byte[] bytes = PEMUtils.read(filepath);
 
         boolean flag = X509Utils.validate_certificate_rsa(bytes, rsaKey);

@@ -1,6 +1,7 @@
 package lsieun.crypto.hash.md5.collision;
 
-import lsieun.utils.ByteUtils;
+import lsieun.utils.HexFormat;
+import lsieun.utils.HexUtils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -34,11 +35,11 @@ public class CollisionTest {
     }
 
     public static String getMD5(String hex_str) throws NoSuchAlgorithmException {
-        byte[] bytes = ByteUtils.fromHex(hex_str);
+        byte[] bytes = HexUtils.parse(hex_str, HexFormat.FORMAT_FF_FF);
 
         MessageDigest md = MessageDigest.getInstance("MD5");
         md.update(bytes);
         byte[] digest = md.digest();
-        return ByteUtils.toHex(digest);
+        return HexUtils.toHex(digest);
     }
 }

@@ -1,14 +1,13 @@
 package lsieun.tls.utils;
 
-import lsieun.crypto.hash.Digest;
-import lsieun.crypto.hash.HashContextAlgorithm;
+import lsieun.crypto.hash.updateable.Digest;
+import lsieun.crypto.hash.updateable.HashContextFunction;
 import lsieun.crypto.sym.BlockOperation;
-import lsieun.crypto.sym.CBCUtils;
-import lsieun.crypto.sym.ECBUtils;
+import lsieun.crypto.sym.modes.CBCUtils;
+import lsieun.crypto.sym.modes.ECBUtils;
 import lsieun.crypto.sym.OperationType;
 import lsieun.crypto.sym.rc4.RC4State;
 import lsieun.tls.cipher.*;
-import lsieun.crypto.sym.rc4.RC4Utils;
 import lsieun.tls.cst.TLSConst;
 import lsieun.tls.entity.ContentType;
 import lsieun.tls.entity.ProtocolVersion;
@@ -19,8 +18,9 @@ import lsieun.tls.entity.alert.AlertLevel;
 import lsieun.tls.entity.handshake.Handshake;
 import lsieun.tls.param.ProtectionParameters;
 import lsieun.tls.param.TLSParameters;
-import lsieun.utils.ByteDashboard;
 import lsieun.utils.ByteUtils;
+import lsieun.utils.HexFormat;
+import lsieun.utils.HexUtils;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -69,7 +69,7 @@ public class TLSUtils {
         // STEP 1 - display TLS Record
         TLSRecord tls_record = new TLSRecord(content_type, protocol_version, content);
         byte[] data = tls_record.toBytes();
-        DisplayUtils.display_record(data);
+        DisplayUtils.display_record(data, " <-- Client", protocol_version, parameters.suite);
 
         // STEP 2 - encrypt content
         byte[] encrypted_content = tls_encrypt(tls_record, parameters);
@@ -90,98 +90,47 @@ public class TLSUtils {
         byte[] data = tls_record.toBytes();
 
         // STEP 3 - display TLS Record
-        DisplayUtils.display_record(data);
+        DisplayUtils.display_record(data, " <-- Server", tls_record.version, parameters.suite);
 
         return TLSRecord.parse(data);
     }
 
     public static TLSRecord tls_decrypt(TLSRecord tls_record, ProtectionParameters parameters) {
+        check_cipher_suite(parameters.suite);
         return tls_decrypt(tls_record, parameters.suite, parameters.seq_num, parameters.mac_secret, parameters.key, parameters.iv, parameters.state);
     }
 
     public static TLSRecord tls_decrypt(TLSRecord tls_record, CipherSuiteIdentifier cipher_suite_id, long seq_num, byte[] mac_secret, byte[] key, byte[] iv, RC4State state) {
-        check_cipher_suite(cipher_suite_id);
-        CipherSuite active_suite = CipherSuite.valueOf(cipher_suite_id);
-
-        ContentType content_type = tls_record.content_type;
         ProtocolVersion protocol_version = tls_record.version;
-        byte[] encrypted_content = tls_record.content;
-
-
-        byte[] decrypted_bytes;
-        BulkCipherAlgorithm bulk_cipher_algorithm = active_suite.bulk_cipher_algorithm;
-        if (bulk_cipher_algorithm == BulkCipherAlgorithm.NULL) {
-            decrypted_bytes = encrypted_content;
+        switch (protocol_version) {
+            case TLSv1_0:
+                return TLSUtilsV1_0.tls_decrypt(tls_record, cipher_suite_id, seq_num, mac_secret, key, iv, state);
+            case TLSv1_1:
+            case TLSv1_2:
+                return TLSUtilsV1_1.tls_decrypt(tls_record, cipher_suite_id, seq_num, mac_secret, key, iv, state);
+            default:
+                throw new RuntimeException("Unsupported TLS Version: " + protocol_version);
         }
-        else if (bulk_cipher_algorithm == BulkCipherAlgorithm.RC4) {
-            decrypted_bytes = RC4Utils.rc4_operate(encrypted_content, key, state);
-        }
-        else {
-            OperationMode mode = active_suite.mode;
-            decrypted_bytes = tls_bulk_operate(encrypted_content, OperationType.DECRYPT, mode, bulk_cipher_algorithm, key, iv);
-        }
-
-        MACAlgorithm mac_algorithm = active_suite.mac_algorithm;
-        if (mac_algorithm == MACAlgorithm.NULL) {
-            return new TLSRecord(content_type, protocol_version, decrypted_bytes);
-        }
-        else {
-            int decrypted_length = decrypted_bytes.length;
-            HashContextAlgorithm hash_algorithm = mac_algorithm.hash_algorithm;
-            int hash_size = mac_algorithm.hash_size;
-
-            int content_length = decrypted_length - hash_size;
-
-            byte[] content = Arrays.copyOf(decrypted_bytes, content_length);
-            byte[] received_hmac = Arrays.copyOfRange(decrypted_bytes, content_length, content_length + hash_size);
-
-
-            byte[] mac = tls_mac(seq_num, content_type, protocol_version, content, mac_secret, hash_algorithm);
-
-            if (!Arrays.equals(received_hmac, mac)) {
-                throw new RuntimeException("hmac not equals");
-            }
-
-            return new TLSRecord(content_type, protocol_version, content);
-        }
-
     }
 
     public static byte[] tls_encrypt(TLSRecord tls_record, ProtectionParameters parameters) {
+        TLSUtils.check_cipher_suite(parameters.suite);
         return tls_encrypt(tls_record, parameters.suite, parameters.seq_num, parameters.mac_secret, parameters.key, parameters.iv, parameters.state);
     }
 
     public static byte[] tls_encrypt(TLSRecord tls_record, CipherSuiteIdentifier cipher_suite_id, long seq_num, byte[] mac_secret, byte[] key, byte[] iv, RC4State state) {
-        check_cipher_suite(cipher_suite_id);
-
-        CipherSuite active_suite = CipherSuite.valueOf(cipher_suite_id);
-
-        ContentType content_type = tls_record.content_type;
         ProtocolVersion protocol_version = tls_record.version;
-        byte[] content = tls_record.content;
-
-        // (1) HMAC
-        byte[] mac = new byte[0];
-        if (active_suite.mac_algorithm != MACAlgorithm.NULL) {
-            mac = tls_mac(seq_num, content_type, protocol_version, content, mac_secret, active_suite.mac_algorithm.hash_algorithm);
-        }
-
-
-        byte[] data = ByteUtils.concatenate(content, mac);
-
-        BulkCipherAlgorithm bulk_cipher_algorithm = active_suite.bulk_cipher_algorithm;
-        CipherType cipher_type = bulk_cipher_algorithm.cipher_type;
-        if (cipher_type == CipherType.NULL) {
-            return data;
-        }
-        else if (bulk_cipher_algorithm == BulkCipherAlgorithm.RC4) {
-            return RC4Utils.rc4_operate(data, key, state);
-        }
-        else {
-            OperationMode mode = active_suite.mode;
-            return tls_bulk_operate(data, OperationType.ENCRYPT, mode, bulk_cipher_algorithm, key, iv);
+        switch (protocol_version) {
+            case TLSv1_0:
+                return TLSUtilsV1_0.tls_encrypt(tls_record, cipher_suite_id, seq_num, mac_secret, key, iv, state);
+            case TLSv1_1:
+            case TLSv1_2:
+                return TLSUtilsV1_1.tls_encrypt(tls_record, cipher_suite_id, seq_num, mac_secret, key, iv, state);
+            default:
+                throw new RuntimeException("Unsupported TLS Version: " + protocol_version);
         }
     }
+
 
     public static byte[] tls_bulk_operate(byte[] input, OperationType operation_type, OperationMode mode, BulkCipherAlgorithm bulk_cipher_algorithm, byte[] key, byte[] iv) {
         int block_size = bulk_cipher_algorithm.block_size;
@@ -189,8 +138,7 @@ public class TLSUtils {
         if (operation_type == OperationType.ENCRYPT) {
             block_operation = bulk_cipher_algorithm.bulk_encrypt;
             input = tls_add_padding(input, block_size);
-        }
-        else {
+        } else {
             block_operation = bulk_cipher_algorithm.bulk_decrypt;
         }
 
@@ -218,25 +166,24 @@ public class TLSUtils {
         BulkCipherAlgorithm bulk_cipher_algorithm = active_suite.bulk_cipher_algorithm;
         CipherType cipher_type = bulk_cipher_algorithm.cipher_type;
         if (cipher_type == CipherType.NULL) {
-            System.out.println("check_cipher_suite No Cipher: " + bulk_cipher_algorithm);
+//            System.out.println("check_cipher_suite No Cipher: " + bulk_cipher_algorithm);
             return;
         }
         if (cipher_type == CipherType.STREAM) {
             switch (bulk_cipher_algorithm) {
                 case RC4:
-                    System.out.println("check_cipher_suite Stream Cipher: " + bulk_cipher_algorithm);
+//                    System.out.println("check_cipher_suite Stream Cipher: " + bulk_cipher_algorithm);
                     break;
                 default:
-                    throw new RuntimeException("Unsupported Stream Cipher");
+                    throw new RuntimeException("Unsupported Stream Cipher: " + bulk_cipher_algorithm);
             }
-        }
-        else {
+        } else {
             switch (bulk_cipher_algorithm) {
                 case DES:
                 case TRIPLE_DES:
                 case AES128:
                 case AES256:
-                    System.out.println("check_cipher_suite Block Cipher: " + bulk_cipher_algorithm);
+//                    System.out.println("check_cipher_suite Block Cipher: " + bulk_cipher_algorithm);
                     break;
                 default:
                     throw new RuntimeException("Unsupported Block Cipher: " + bulk_cipher_algorithm);
@@ -244,7 +191,7 @@ public class TLSUtils {
         }
     }
 
-    public static byte[] tls_mac(long seq_num, ContentType content_type, ProtocolVersion protocol_version, byte[] content, byte[] mac_secret, HashContextAlgorithm hash_algorithm) {
+    public static byte[] tls_mac(long seq_num, ContentType content_type, ProtocolVersion protocol_version, byte[] content, byte[] mac_secret, HashContextFunction hash_algorithm) {
         int content_length = content.length;
         int major = protocol_version.major;
         int minor = protocol_version.minor;
@@ -253,7 +200,7 @@ public class TLSUtils {
         byte[] mac_buffer = new byte[13 + content_length];
 
         // 8-byte sequence number
-        byte[] seq_num_bytes = ByteUtils.fromLong(seq_num);
+        byte[] seq_num_bytes = ByteUtils.toBytes(seq_num);
         System.arraycopy(seq_num_bytes, 0, mac_buffer, 0, 8);
 
         // 5-byte header
@@ -305,6 +252,7 @@ public class TLSUtils {
         // STEP 1 - read TLS Record header
         byte[] header = conn.receive(5);
         if (header[0] < ContentType.CONTENT_CHANGE_CIPHER_SPEC.val || header[0] > ContentType.CONTENT_APPLICATION_DATA.val) {
+            System.out.println("header: " + HexUtils.format(header, HexFormat.FORMAT_FF_SPACE_FF));
             throw new RuntimeException("content type is not correct: " + header[0]);
         }
         if (header[1] != TLSConst.TLS_VERSION_MAJOR || header[2] != TLSConst.TLS_VERSION_MINOR) {

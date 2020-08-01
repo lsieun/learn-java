@@ -5,6 +5,7 @@ import lsieun.cert.asn1.ASN1Struct;
 import lsieun.cert.asn1.ASN1Utils;
 import lsieun.cert.cst.ObjectIdentifier;
 import lsieun.utils.ByteUtils;
+import lsieun.utils.HexUtils;
 
 import java.math.BigInteger;
 
@@ -41,8 +42,8 @@ public class ECDSAKeyUtils {
         ObjectIdentifier oid = ObjectIdentifier.valueOf(asn1_parameters.children.get(0).data);
         BigInteger public_key = new BigInteger(1, asn1_public_key.children.get(0).data);
 
-        System.out.println(ByteUtils.toHex(private_key.toByteArray()));
-        System.out.println(ByteUtils.toHex(public_key.toByteArray()));
+        System.out.println(HexUtils.toHex(private_key.toByteArray()));
+        System.out.println(HexUtils.toHex(public_key.toByteArray()));
         System.out.println(oid);
 
         return new ECDSAPrivateKey(version, private_key, public_key, oid);

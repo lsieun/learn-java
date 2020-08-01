@@ -1,7 +1,7 @@
 package lsieun.crypto.sym.des;
 
-import lsieun.crypto.sym.CBCUtils;
-import lsieun.utils.ByteUtils;
+import lsieun.crypto.sym.modes.CBCUtils;
+import lsieun.utils.HexUtils;
 
 import java.util.Arrays;
 
@@ -20,9 +20,9 @@ public class TripleDESTest_CBC {
         byte[] decrypted_bytes = CBCUtils.cbc_decrypt(encrypted_bytes, key, iv, block_size, TripleDESUtils::des_block_decrypt);
 
         System.out.println(Arrays.equals(output, encrypted_bytes));
-        System.out.println(String.format(FORMAT, "original bytes", ByteUtils.toHex(input)));
-        System.out.println(String.format(FORMAT, "encrypted bytes", ByteUtils.toHex(encrypted_bytes)));
-        System.out.println(String.format(FORMAT, "decrypted bytes", ByteUtils.toHex(decrypted_bytes)));
+        System.out.println(String.format(FORMAT, "original bytes", HexUtils.toHex(input)));
+        System.out.println(String.format(FORMAT, "encrypted bytes", HexUtils.toHex(encrypted_bytes)));
+        System.out.println(String.format(FORMAT, "decrypted bytes", HexUtils.toHex(decrypted_bytes)));
 
     }
 }

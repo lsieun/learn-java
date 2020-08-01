@@ -1,14 +1,13 @@
 package lsieun.jdk.jdk_cert;
 
+import lsieun.utils.HexUtils;
+import lsieun.utils.MyKeyStoreUtil;
+
+import javax.crypto.Cipher;
 import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Security;
-
-import javax.crypto.Cipher;
-
-import lsieun.utils.ByteUtils;
-import lsieun.utils.MyKeyStoreUtil;
 
 public class CipherWithKeyStore {
     public static void main(String[] args) throws Exception {
@@ -47,6 +46,6 @@ public class CipherWithKeyStore {
             System.out.print((char)b);
         }
         System.out.println();
-        System.out.println("Hex: " + ByteUtils.toHex(bytes).toUpperCase());
+        System.out.println("Hex: " + HexUtils.toHex(bytes).toUpperCase());
     }
 }

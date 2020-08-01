@@ -5,6 +5,8 @@ import lsieun.utils.ByteUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Handshake {
     public final HandshakeType hand_shake_type;
@@ -55,7 +57,20 @@ public abstract class Handshake {
             default:
                 throw new RuntimeException("Unsupported Handshake Type: " + hand_shake_type);
         }
+    }
 
+    public static List<Handshake> parse_list(byte[] content) {
+        ByteDashboard bd = new ByteDashboard(content);
+
+        List<Handshake> list = new ArrayList<>();
+        while (bd.hasNext()) {
+            byte[] length_bytes = bd.peekN(1, 3);
+            int length = ByteUtils.toInt(length_bytes);
+            byte[] bytes = bd.nextN(length + 4);
+            Handshake item = parse(bytes);
+            list.add(item);
+        }
+        return list;
     }
 
 }

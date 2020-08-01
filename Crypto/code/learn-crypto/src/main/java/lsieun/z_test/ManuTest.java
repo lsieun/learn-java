@@ -1,19 +1,17 @@
 package lsieun.z_test;
 
-import lsieun.crypto.hash.Digest;
-import lsieun.crypto.hash.DigestCtx;
+import lsieun.crypto.hash.updateable.Digest;
+import lsieun.crypto.hash.updateable.DigestCtx;
 import lsieun.tls.cipher.CipherSuite;
 import lsieun.tls.cipher.CipherSuiteIdentifier;
 import lsieun.tls.cst.TLSConst;
+import lsieun.tls.entity.ProtocolVersion;
 import lsieun.tls.entity.TLSRecord;
 import lsieun.tls.entity.handshake.ClientHello;
 import lsieun.tls.entity.handshake.Finished;
 import lsieun.tls.entity.handshake.Handshake;
 import lsieun.tls.entity.handshake.ServerHello;
-import lsieun.tls.utils.DisplayUtils;
-import lsieun.tls.utils.PRFUtils;
-import lsieun.tls.utils.SecretUtils;
-import lsieun.tls.utils.TLSUtils;
+import lsieun.tls.utils.*;
 import lsieun.utils.ByteDashboard;
 import lsieun.utils.ByteUtils;
 import lsieun.utils.SSLLog;
@@ -35,6 +33,7 @@ public class ManuTest {
         DisplayUtils.display_record(client_hello_record_bytes);
         byte[] client_hello_handshake_bytes = client_hello_record.content;
         ClientHello client_hello = (ClientHello) Handshake.parse(client_hello_handshake_bytes);
+        ProtocolVersion protocol_version = client_hello.client_version;
         byte[] client_random_bytes = client_hello.random.toBytes();
 
         Digest.update_digest(md5_handshake_digest, client_hello_handshake_bytes);
@@ -80,7 +79,7 @@ public class ManuTest {
 
         // PreMaster Secret
         byte[] pre_master_secret_bytes = SSLLog.read_data(filename, "958-960");
-        byte[] master_secret_bytes = SecretUtils.calculate_master_secret(pre_master_secret_bytes, client_random_bytes, server_random_bytes);
+        byte[] master_secret_bytes = SecretUtils.calculate_master_secret(protocol_version, pre_master_secret_bytes, client_random_bytes, server_random_bytes);
 
         CipherSuiteIdentifier cipher_suite_id = CipherSuiteIdentifier.TLS_RSA_WITH_AES_128_CBC_SHA;
         CipherSuite suite = CipherSuite.valueOf(cipher_suite_id);
@@ -90,7 +89,7 @@ public class ManuTest {
         int key_block_length = hash_size * 2 + key_size * 2 + iv_size * 2;
         byte[] label = "key expansion".getBytes(StandardCharsets.UTF_8);
         byte[] seed = ByteUtils.concatenate(server_random_bytes, client_random_bytes);
-        byte[] key_block = PRFUtils.PRF(master_secret_bytes, label, seed, key_block_length);
+        byte[] key_block = PRFUtils.PRF(protocol_version, master_secret_bytes, label, seed, key_block_length);
 
         ByteDashboard bd = new ByteDashboard(key_block);
         byte[] send_mac_secret = bd.nextN(hash_size);
@@ -110,7 +109,7 @@ public class ManuTest {
         byte[] md5_digest = Digest.finalize_digest(md5_handshake_digest);
         byte[] sha1_digest = Digest.finalize_digest(sha1_handshake_digest);
         byte[] handshake_hash = ByteUtils.concatenate(md5_digest, sha1_digest);
-        byte[] verify_data = PRFUtils.PRF(master_secret_bytes, finished_label, handshake_hash, TLSConst.VERIFY_DATA_LEN);
+        byte[] verify_data = PRFUtils.PRF(protocol_version,master_secret_bytes, finished_label, handshake_hash, TLSConst.VERIFY_DATA_LEN);
 
 //        Finished finished_handshake_message = new Finished(verify_data);
 //        byte[] finished_handshake_bytes = finished_handshake_message.toBytes();
@@ -121,7 +120,7 @@ public class ManuTest {
         // client send finish
         byte[] client_encrypted_finished_bytes = SSLLog.read_data(filename, "1007-1010");
         TLSRecord client_encrypted_finished_record = TLSRecord.parse(client_encrypted_finished_bytes);
-        TLSRecord client_finished_record = TLSUtils.tls_decrypt(client_encrypted_finished_record, cipher_suite_id, 0, send_mac_secret, send_key, send_iv, null);
+        TLSRecord client_finished_record = TLSUtilsV1_0.tls_decrypt(client_encrypted_finished_record, cipher_suite_id, 0, send_mac_secret, send_key, send_iv, null);
         byte[] client_finished_bytes = client_finished_record.toBytes();
         DisplayUtils.display_record(client_finished_bytes);
         byte[] client_finished_handshake_bytes = client_finished_record.content;
@@ -137,7 +136,7 @@ public class ManuTest {
         // server send finish
         byte[] server_encrypted_finished_bytes = SSLLog.read_data(filename, "1019-1019,1021-1023");
         TLSRecord server_encrypted_finished_record = TLSRecord.parse(server_encrypted_finished_bytes);
-        TLSRecord server_finished_record = TLSUtils.tls_decrypt(server_encrypted_finished_record, cipher_suite_id, 0, recv_mac_secret, recv_key, recv_iv, null);
+        TLSRecord server_finished_record = TLSUtilsV1_0.tls_decrypt(server_encrypted_finished_record, cipher_suite_id, 0, recv_mac_secret, recv_key, recv_iv, null);
         byte[] server_finished_bytes = server_finished_record.toBytes();
         DisplayUtils.display_record(server_finished_bytes);
         byte[] server_finished_handshake_bytes = server_finished_record.content;
@@ -177,7 +176,7 @@ public class ManuTest {
 
     public static TLSRecord decrypt(byte[] encrypted_bytes, CipherSuite suite, long seq_num, byte[] mac_secret, byte[] key, byte[] iv) {
         TLSRecord encrypted_record = TLSRecord.parse(encrypted_bytes);
-        TLSRecord decrypted_record = TLSUtils.tls_decrypt(encrypted_record, suite.id, seq_num, mac_secret, key, iv, null);
+        TLSRecord decrypted_record = TLSUtilsV1_0.tls_decrypt(encrypted_record, suite.id, seq_num, mac_secret, key, iv, null);
         byte[] decrypted_bytes = decrypted_record.toBytes();
         DisplayUtils.display_record(decrypted_bytes);
         return decrypted_record;

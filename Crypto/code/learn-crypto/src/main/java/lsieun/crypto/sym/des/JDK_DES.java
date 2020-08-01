@@ -1,6 +1,6 @@
 package lsieun.crypto.sym.des;
 
-import lsieun.utils.ByteUtils;
+import lsieun.utils.HexUtils;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -69,8 +69,8 @@ public class JDK_DES {
         byte[] decrypted_bytes = decrypt(encrypted_bytes, key_bytes);
 
         // 第3步，打印输出
-        System.out.println("加密前：" + ByteUtils.toHex(plain_text_bytes));
-        System.out.println("加密后：" + ByteUtils.toHex(encrypted_bytes));
-        System.out.println("解密后：" + ByteUtils.toHex(decrypted_bytes));
+        System.out.println("加密前：" + HexUtils.toHex(plain_text_bytes));
+        System.out.println("加密后：" + HexUtils.toHex(encrypted_bytes));
+        System.out.println("解密后：" + HexUtils.toHex(decrypted_bytes));
     }
 }

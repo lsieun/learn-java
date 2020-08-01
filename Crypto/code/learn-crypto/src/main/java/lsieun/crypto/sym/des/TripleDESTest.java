@@ -1,8 +1,7 @@
 package lsieun.crypto.sym.des;
 
-import lsieun.crypto.sym.CBCUtils;
-import lsieun.crypto.sym.ECBUtils;
-import lsieun.utils.ByteUtils;
+import lsieun.crypto.sym.modes.ECBUtils;
+import lsieun.utils.HexUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -26,8 +25,8 @@ public class TripleDESTest {
         String format = "%15s: %s";
 
         System.out.println(Arrays.equals(expected_cipher, encrypted_bytes));
-        System.out.println(String.format(format, "encrypted bytes", ByteUtils.toHex(encrypted_bytes)));
-        System.out.println(String.format(format, "decrypted bytes", ByteUtils.toHex(decrypted_bytes)));
-        System.out.println(String.format(format, "original bytes", ByteUtils.toHex(input)));
+        System.out.println(String.format(format, "encrypted bytes", HexUtils.toHex(encrypted_bytes)));
+        System.out.println(String.format(format, "decrypted bytes", HexUtils.toHex(decrypted_bytes)));
+        System.out.println(String.format(format, "original bytes", HexUtils.toHex(input)));
     }
 }

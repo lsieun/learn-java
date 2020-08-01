@@ -4,7 +4,7 @@ import lsieun.cert.asn1.ASN1Struct;
 import lsieun.cert.asn1.ASN1Utils;
 import lsieun.cert.x509.Name;
 import lsieun.cert.x509.PublicKeyInfo;
-import lsieun.cert.cst.SignatureAlgorithmIdentifier;
+import lsieun.cert.cst.HashSignatureIdentifier;
 import lsieun.cert.x509.SignatureValue;
 import lsieun.cert.x509.X509Utils;
 import lsieun.utils.ByteUtils;
@@ -21,7 +21,7 @@ public class CSRUtils {
         ASN1Struct asn1_signature_value = asn1_seq.children.get(2);
 
         CertificationRequestInfo certification_request_info = parse_certification_request_info(asn1_certification_request_info);
-        SignatureAlgorithmIdentifier signature_algorithm = X509Utils.parse_signature_algorithm_identifier(asn1_signature_algorithm);
+        HashSignatureIdentifier signature_algorithm = X509Utils.parse_signature_algorithm_identifier(asn1_signature_algorithm);
         SignatureValue signature_value = SignatureValue.parse(asn1_signature_value);
 
         return new CertificationRequest(certification_request_info, signature_algorithm, signature_value);

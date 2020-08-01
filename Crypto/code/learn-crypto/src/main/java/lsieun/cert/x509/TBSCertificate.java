@@ -1,6 +1,6 @@
 package lsieun.cert.x509;
 
-import lsieun.cert.cst.SignatureAlgorithmIdentifier;
+import lsieun.cert.cst.HashSignatureIdentifier;
 import lsieun.cert.x509.extensions.Extension;
 
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
 public class TBSCertificate {
     public final int version;
     public final String serialNumber; // This can be much longer than a 4-byte long allows
-    public final SignatureAlgorithmIdentifier signature;
+    public final HashSignatureIdentifier signature;
     public final Name issuer;
     public final ValidityPeriod validity;
     public final Name subject;
@@ -18,7 +18,7 @@ public class TBSCertificate {
 
     public TBSCertificate(int version,
                           String serialNumber,
-                          SignatureAlgorithmIdentifier signature,
+                          HashSignatureIdentifier signature,
                           Name issuer,
                           ValidityPeriod validity,
                           Name subject,

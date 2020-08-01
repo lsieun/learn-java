@@ -39,6 +39,9 @@ public enum ExtensionType {
     }
 
     public static ExtensionType valueOf(int val) {
-        return Arrays.stream(values()).filter(item -> item.val == val).findFirst().get();
+        return Arrays.stream(values())
+                .filter(item -> item.val == val)
+                .findFirst()
+                .get();
     }
 }

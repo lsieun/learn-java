@@ -5,7 +5,7 @@ import lsieun.utils.HexUtils;
 
 public class OIDTest {
     public static void main(String[] args) {
-        String hex_str = "2A 86 48 CE 38 04 01";
+        String hex_str = "2A 86 48 CE 3D 02 01";
         byte[] bytes = HexUtils.parse(hex_str, HexFormat.FORMAT_FF_SPACE_FF);
         String result = OIDUtils.format(bytes);
         System.out.println(result);

@@ -1,20 +1,22 @@
 package lsieun.tls.utils;
 
+import lsieun.cert.asn1.ASN1Struct;
+import lsieun.cert.asn1.ASN1Utils;
+import lsieun.cert.cst.ObjectIdentifier;
 import lsieun.crypto.asym.rsa.RSAKey;
 import lsieun.crypto.asym.rsa.RSAUtils;
 import lsieun.crypto.hash.md5.MD5Utils;
 import lsieun.crypto.hash.sha1.SHA1Utils;
-import lsieun.tls.cipher.CipherSuite;
-import lsieun.tls.cipher.CipherSuiteIdentifier;
-import lsieun.tls.cipher.KeyExchange;
+import lsieun.crypto.hash.sha256.SHA256Utils;
+import lsieun.tls.cipher.*;
 import lsieun.tls.entity.ChangeCipherSpec;
 import lsieun.tls.entity.ContentType;
+import lsieun.tls.entity.ProtocolVersion;
 import lsieun.tls.entity.TLSRecord;
 import lsieun.tls.entity.alert.Alert;
 import lsieun.tls.entity.alert.AlertLevel;
 import lsieun.tls.entity.handshake.*;
 import lsieun.tls.key.DHKeyExchange;
-import lsieun.tls.cipher.ConnectionEnd;
 import lsieun.tls.param.ProtectionParameters;
 import lsieun.tls.param.TLSClientParameters;
 import lsieun.tls.param.TLSParameters;
@@ -23,6 +25,7 @@ import lsieun.utils.*;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.List;
 
 public class TLSClientUtils {
     /**
@@ -101,7 +104,7 @@ public class TLSClientUtils {
         KeyExchange key_exchange = cipher_suite.key_exchange;
 
         switch (key_exchange) {
-            case NULL:{
+            case NULL: {
                 pre_master_secret = SecretUtils.generate_pre_master_secret(tls_context.protocol_version);
                 int pre_master_secret_length = pre_master_secret.length;
 
@@ -201,13 +204,13 @@ public class TLSClientUtils {
 
     public static void send_change_cipher_spec(TLSConnection conn, TLSParameters tls_context) throws IOException {
         byte[] content = ChangeCipherSpec.getContent();
-        TLSUtils.send_message(conn, tls_context.active_send_parameters, ContentType.CONTENT_CHANGE_CIPHER_SPEC, tls_context.protocol_version,content);
+        TLSUtils.send_message(conn, tls_context.active_send_parameters, ContentType.CONTENT_CHANGE_CIPHER_SPEC, tls_context.protocol_version, content);
 
         ParameterUtils.activate_send_parameter(tls_context);
     }
 
     public static void send_finished(TLSConnection conn, TLSParameters tls_context) throws IOException {
-        byte[] verify_data = SecretUtils.compute_verify_data(ConnectionEnd.CLIENT, tls_context.master_secret, tls_context.md5_handshake_digest, tls_context.sha1_handshake_digest);
+        byte[] verify_data = SecretUtils.compute_verify_data(ConnectionEnd.CLIENT, tls_context);
         Finished finished_handshake_message = new Finished(verify_data);
         TLSUtils.send_handshake_message(conn, tls_context, finished_handshake_message);
     }
@@ -229,8 +232,12 @@ public class TLSClientUtils {
                 recv_alert(alert);
                 break;
             case CONTENT_HANDSHAKE:
-                Handshake handshake = Handshake.parse(content);
-                recv_handshake(handshake, tls_context);
+                // single
+//                Handshake handshake = Handshake.parse(content);
+//                recv_handshake(handshake, tls_context);
+
+                // multi
+                recv_handshake(content, tls_context);
 
                 // NOTE: 要先对handshake进行处理，再进行Hash计算；否则，计算出的verify data会出现错误。
                 ParameterUtils.update_digest(content, tls_context);
@@ -251,6 +258,13 @@ public class TLSClientUtils {
         System.out.println(line);
         if (alert.level == AlertLevel.FATAL) {
             throw new RuntimeException("Fatal Alert");
+        }
+    }
+
+    public static void recv_handshake(byte[] content, TLSClientParameters tls_context) {
+        List<Handshake> handshake_list = Handshake.parse_list(content);
+        for (Handshake item : handshake_list) {
+            recv_handshake(item, tls_context);
         }
     }
 
@@ -301,7 +315,7 @@ public class TLSClientUtils {
         KeyExchange key_exchange = cipher_suite.key_exchange;
         switch (key_exchange) {
             case DHE_RSA: {
-                parse_server_key_exchange_dhe_rsa_tlsv1(server_key_exchange, tls_context);
+                parse_server_key_exchange_dhe_rsa(server_key_exchange, tls_context);
                 break;
             }
             default:
@@ -309,7 +323,22 @@ public class TLSClientUtils {
         }
     }
 
-    public static void parse_server_key_exchange_dhe_rsa_tlsv1(ServerKeyExchange server_key_exchange, TLSParameters tls_context) {
+    public static void parse_server_key_exchange_dhe_rsa(ServerKeyExchange server_key_exchange, TLSParameters tls_context) {
+        ProtocolVersion protocol_version = tls_context.protocol_version;
+        switch (protocol_version) {
+            case TLSv1_0:
+            case TLSv1_1:
+                parse_server_key_exchange_dhe_rsa_tlsv1_0(server_key_exchange, tls_context);
+                break;
+            case TLSv1_2:
+                parse_server_key_exchange_dhe_rsa_tlsv1_2(server_key_exchange, tls_context);
+                break;
+            default:
+                throw new RuntimeException("Unsupported Protocol Version: " + protocol_version);
+        }
+    }
+
+    public static void parse_server_key_exchange_dhe_rsa_tlsv1_0(ServerKeyExchange server_key_exchange, TLSParameters tls_context) {
         byte[] data = server_key_exchange.data;
         ByteDashboard bd = new ByteDashboard(data);
 
@@ -357,13 +386,93 @@ public class TLSClientUtils {
         }
     }
 
+    public static void parse_server_key_exchange_dhe_rsa_tlsv1_2(ServerKeyExchange server_key_exchange, TLSParameters tls_context) {
+        byte[] data = server_key_exchange.data;
+        ByteDashboard bd = new ByteDashboard(data);
+
+        // p
+        byte[] p_length_bytes = bd.nextN(2);
+        int p_length = ByteUtils.toInt(p_length_bytes);
+        byte[] p_bytes = bd.nextN(p_length);
+        BigInteger p = BigUtils.toBigInteger(p_bytes);
+
+        // g
+        byte[] g_length_bytes = bd.nextN(2);
+        int g_length = ByteUtils.toInt(g_length_bytes);
+        byte[] g_bytes = bd.nextN(g_length);
+        BigInteger g = BigUtils.toBigInteger(g_bytes);
+
+        // pub key
+        byte[] pub_key_length_bytes = bd.nextN(2);
+        int pub_key_length = ByteUtils.toInt(pub_key_length_bytes);
+        byte[] pub_key_bytes = bd.nextN(pub_key_length);
+        BigInteger Ys = BigUtils.toBigInteger(pub_key_bytes);
+
+        tls_context.dh_key = new DHKeyExchange(null, g, p, Ys, null);
+
+        byte[] hash_and_signature_bytes = bd.nextN(2);
+        byte hash_algorithm_val = hash_and_signature_bytes[0];
+        byte signature_algorithm_val = hash_and_signature_bytes[1];
+        HashAlgorithm hash_algorithm = HashAlgorithm.valueOf(hash_algorithm_val);
+        SignatureAlgorithm signature_algorithm = SignatureAlgorithm.valueOf(signature_algorithm_val);
+        if (signature_algorithm != SignatureAlgorithm.RSA) {
+            throw new RuntimeException("Server Key Exchange: " + hash_algorithm + ", " + signature_algorithm);
+        }
+
+        // hash: sha256
+        byte[] p_total_bytes = ByteUtils.concatenate(p_length_bytes, p_bytes);
+        byte[] g_total_bytes = ByteUtils.concatenate(g_length_bytes, g_bytes);
+        byte[] pub_key_total_bytes = ByteUtils.concatenate(pub_key_length_bytes, pub_key_bytes);
+        byte[] message = ByteUtils.concatenate(p_total_bytes, g_total_bytes, pub_key_total_bytes);
+        byte[] input = ByteUtils.concatenate(tls_context.client_random, tls_context.server_random, message);
+
+        byte[] digest;
+        switch (hash_algorithm) {
+            case MD5:
+                digest = MD5Utils.md5_hash(input);
+                break;
+            case SHA1:
+                digest = SHA1Utils.sha1_hash(input);
+                break;
+            case SHA256:
+                 digest = SHA256Utils.sha256_hash(input);
+                 break;
+            default:
+                throw new RuntimeException("Unsupported Hash Algorithm: " + hash_algorithm);
+        }
+
+        // verify signature
+        byte[] signature_length_bytes = bd.nextN(2);
+        int signature_length = ByteUtils.toInt(signature_length_bytes);
+        byte[] signature_bytes = bd.nextN(signature_length);
+
+        RSAKey pub_key = tls_context.server_public_key.rsa_public_key.toKey();
+        byte[] decrypted_bytes = RSAUtils.rsa_decrypt(signature_bytes, pub_key);
+        ASN1Struct asn1_seq = ASN1Utils.parse_der(decrypted_bytes).get(0);
+        ASN1Struct asn1_oid = asn1_seq.children.get(0);
+        ASN1Struct asn1_signature = asn1_seq.children.get(1);
+
+//        ObjectIdentifier oid = ObjectIdentifier.valueOf(asn1_oid.children.get(0).data);
+//        if (oid != ObjectIdentifier.SHA256) {
+//            throw new RuntimeException("Unsupported Object Identifier: " + oid);
+//        }
+
+        byte[] received_digest = asn1_signature.data;
+        boolean flag = Arrays.equals(digest, received_digest);
+        if (!flag) {
+            System.out.println("Calculated Digest: " + HexUtils.format(digest, HexFormat.FORMAT_FF_SPACE_FF));
+            System.out.println("Received   Digest: " + HexUtils.format(received_digest, HexFormat.FORMAT_FF_SPACE_FF));
+            throw new RuntimeException("Server Key Exchange Signature is Not right.");
+        }
+    }
+
     public static void recv_server_hello_done(TLSClientParameters tls_context) {
         ParameterUtils.recv_server_hello_done(tls_context);
     }
 
     public static void recv_finished(Finished finished, TLSParameters tls_context) {
         byte[] data = finished.data;
-        byte[] verify_data = SecretUtils.compute_verify_data(ConnectionEnd.SERVER, tls_context.master_secret, tls_context.md5_handshake_digest, tls_context.sha1_handshake_digest);
+        byte[] verify_data = SecretUtils.compute_verify_data(ConnectionEnd.SERVER, tls_context);
         if (!Arrays.equals(data, verify_data)) {
             System.out.println("Expected Verify Data: " + HexUtils.format(verify_data, HexFormat.FORMAT_FF_SPACE_FF));
             System.out.println("Received Verify Data: " + HexUtils.format(data, HexFormat.FORMAT_FF_SPACE_FF));

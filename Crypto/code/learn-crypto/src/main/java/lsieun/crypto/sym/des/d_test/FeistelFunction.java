@@ -2,7 +2,7 @@ package lsieun.crypto.sym.des.d_test;
 
 import lsieun.crypto.sym.des.DESConst;
 import lsieun.crypto.sym.des.DESUtils;
-import lsieun.utils.ByteUtils;
+import lsieun.utils.HexUtils;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -45,9 +45,9 @@ public class FeistelFunction {
         byte[] encrypted_bytes = feistel(input_64_bit_bytes, sub_key_48_bit_bytes);
         byte[] decrypted_bytes = feistel(encrypted_bytes, sub_key_48_bit_bytes);
 
-        System.out.println(" Original: " + ByteUtils.toHex(input_64_bit_bytes));
-        System.out.println("Encrypted: " + ByteUtils.toHex(encrypted_bytes));
-        System.out.println("Decrypted: " + ByteUtils.toHex(decrypted_bytes));
+        System.out.println(" Original: " + HexUtils.toHex(input_64_bit_bytes));
+        System.out.println("Encrypted: " + HexUtils.toHex(encrypted_bytes));
+        System.out.println("Decrypted: " + HexUtils.toHex(decrypted_bytes));
         System.out.println("   Equals: " + Arrays.equals(input_64_bit_bytes, decrypted_bytes));
     }
 

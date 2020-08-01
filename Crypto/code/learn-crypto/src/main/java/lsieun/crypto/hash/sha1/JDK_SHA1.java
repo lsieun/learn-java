@@ -1,6 +1,6 @@
 package lsieun.crypto.hash.sha1;
 
-import lsieun.utils.ByteUtils;
+import lsieun.utils.HexUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -13,6 +13,6 @@ public class JDK_SHA1 {
         MessageDigest md = MessageDigest.getInstance("SHA-1");
         md.update(bytes);
         byte[] digest = md.digest();
-        System.out.println(ByteUtils.toHex(digest));
+        System.out.println(HexUtils.toHex(digest));
     }
 }

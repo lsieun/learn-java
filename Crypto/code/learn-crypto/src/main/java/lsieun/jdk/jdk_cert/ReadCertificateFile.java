@@ -10,6 +10,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 
 import lsieun.utils.ByteUtils;
+import lsieun.utils.HexUtils;
 
 public class ReadCertificateFile {
     public static void main(String[] args) {
@@ -21,7 +22,7 @@ public class ReadCertificateFile {
 
             // an encoded version of the Certificate as a byte array
             byte[] certBytes = certificate.getEncoded();
-            System.out.println("Certificate: " + ByteUtils.toHex(certBytes).toUpperCase());
+            System.out.println("Certificate: " + HexUtils.toHex(certBytes).toUpperCase());
             System.out.println("==============================================");
 
 

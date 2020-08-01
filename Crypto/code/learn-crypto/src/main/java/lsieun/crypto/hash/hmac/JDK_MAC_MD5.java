@@ -1,6 +1,6 @@
 package lsieun.crypto.hash.hmac;
 
-import lsieun.utils.ByteUtils;
+import lsieun.utils.HexUtils;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -16,6 +16,6 @@ public class JDK_MAC_MD5 {
         mac.init(key);
 
         byte[] mac_bytes = mac.doFinal(MACSample.data);
-        System.out.println(ByteUtils.toHex(mac_bytes));
+        System.out.println(HexUtils.toHex(mac_bytes));
     }
 }

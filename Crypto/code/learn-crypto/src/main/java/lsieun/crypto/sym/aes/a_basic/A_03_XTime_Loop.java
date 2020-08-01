@@ -2,6 +2,7 @@ package lsieun.crypto.sym.aes.a_basic;
 
 import lsieun.crypto.sym.aes.AESUtils;
 import lsieun.utils.ByteUtils;
+import lsieun.utils.HexUtils;
 
 /**
  * <p>我们说，存在性，即存在“这样的机制”：一个数，经过“这个机制”的多次运算，就会产生出有规律的、重复的结果。</p>
@@ -21,12 +22,12 @@ public class A_03_XTime_Loop {
 //            x = (byte) rand.nextInt();
 //        }
 
-        String first_line = String.format(FORMAT, 0, ByteUtils.toBinary(x), ByteUtils.toHex(new byte[]{x}));
+        String first_line = String.format(FORMAT, 0, ByteUtils.toBinary(x), HexUtils.toHex(new byte[]{x}));
         System.out.println(first_line);
 
         for (int i = 0; i < count; i++) {
             x = AESUtils.xtime(x);
-            String line = String.format(FORMAT, (i+1), ByteUtils.toBinary(x), ByteUtils.toHex(new byte[]{x}));
+            String line = String.format(FORMAT, (i+1), ByteUtils.toBinary(x), HexUtils.toHex(new byte[]{x}));
             System.out.println(line);
         }
     }

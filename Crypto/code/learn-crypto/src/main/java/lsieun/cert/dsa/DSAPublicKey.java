@@ -3,7 +3,7 @@ package lsieun.cert.dsa;
 import lsieun.cert.asn1.ASN1Converter;
 import lsieun.cert.asn1.ASN1Struct;
 import lsieun.cert.asn1.ASN1Utils;
-import lsieun.crypto.hash.dsa.DsaParams;
+import lsieun.crypto.signature.dsa.DsaParams;
 
 import java.math.BigInteger;
 import java.util.Formatter;

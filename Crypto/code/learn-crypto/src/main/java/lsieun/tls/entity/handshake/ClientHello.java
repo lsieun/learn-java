@@ -113,7 +113,8 @@ public class ClientHello extends Handshake {
         int local_time = (int) (System.currentTimeMillis() / 1000);
         CipherSuiteIdentifier[] cipher_suites = {
 //                TLS_RSA_WITH_RC4_128_SHA,
-                TLS_RSA_WITH_AES_256_CBC_SHA,
+                TLS_DHE_RSA_WITH_AES_256_CBC_SHA,
+//                TLS_RSA_WITH_AES_256_CBC_SHA,
 //              TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
         };
         byte[] compression_methods = new byte[]{0};

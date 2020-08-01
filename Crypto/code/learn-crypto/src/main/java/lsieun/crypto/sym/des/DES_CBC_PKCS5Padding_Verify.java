@@ -1,6 +1,6 @@
 package lsieun.crypto.sym.des;
 
-import lsieun.crypto.sym.CBCUtils;
+import lsieun.crypto.sym.modes.CBCUtils;
 import lsieun.utils.PaddingUtils;
 
 import java.nio.charset.StandardCharsets;

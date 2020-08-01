@@ -2,6 +2,8 @@ package lsieun.crypto.sym.aes.e_use;
 
 import lsieun.crypto.sym.aes.AESUtils;
 import lsieun.utils.ByteUtils;
+import lsieun.utils.HexFormat;
+import lsieun.utils.HexUtils;
 
 import java.nio.charset.StandardCharsets;
 
@@ -11,7 +13,7 @@ public class B_Troop_AES_128 {
         String key_text = "passwordsecurity";
         String iv_text = "initializationvc";
 
-        byte[] cipher_text_bytes = ByteUtils.fromHex(cipher_text);
+        byte[] cipher_text_bytes = HexUtils.parse(cipher_text, HexFormat.FORMAT_FF_FF);
         byte[] key_bytes = key_text.getBytes(StandardCharsets.UTF_8);
         byte[] iv_bytes = iv_text.getBytes(StandardCharsets.UTF_8);
 

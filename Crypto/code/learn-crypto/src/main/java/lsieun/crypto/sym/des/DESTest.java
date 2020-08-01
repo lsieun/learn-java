@@ -1,7 +1,7 @@
 package lsieun.crypto.sym.des;
 
 import lsieun.crypto.sym.OperationType;
-import lsieun.utils.ByteUtils;
+import lsieun.utils.HexUtils;
 
 import java.util.Arrays;
 
@@ -15,8 +15,8 @@ public class DESTest {
         byte[] decrypted_bytes = DESUtils.des_block_operate(encrypted_bytes, key, OperationType.DECRYPT);
 
         System.out.println(Arrays.equals(output, encrypted_bytes));
-        System.out.println(ByteUtils.toHex(encrypted_bytes));
-        System.out.println(ByteUtils.toHex(decrypted_bytes));
-        System.out.println(ByteUtils.toHex(input));
+        System.out.println(HexUtils.toHex(encrypted_bytes));
+        System.out.println(HexUtils.toHex(decrypted_bytes));
+        System.out.println(HexUtils.toHex(input));
     }
 }

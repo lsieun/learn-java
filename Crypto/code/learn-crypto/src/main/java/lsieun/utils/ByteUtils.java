@@ -7,22 +7,29 @@ import java.util.Formatter;
 import java.util.List;
 
 public class ByteUtils {
-
-    public static byte[] fromInt(int x) {
-        ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES);
-        buffer.putInt(x);
-        return buffer.array();
+    public static void setAll(byte[] bytes, int val) {
+        int length = bytes.length;
+        for (int i = 0; i < length; i++) {
+            bytes[i] = (byte) val;
+        }
     }
 
-    public static byte[] fromLong(long num) {
-        int size = Long.BYTES;
-        byte[] bytes = new byte[size];
+    public static byte[] add_one(byte[] bytes) {
+        return add_one(bytes, bytes.length);
+    }
 
-        for (int i = 0; i < size; i++) {
-            bytes[i] = (byte) ((num >> ((size - 1 - i) * 8)) & 0xFF);
+    public static byte[] add_one(byte[] bytes, int counter) {
+        byte[] result = Arrays.copyOf(bytes, bytes.length);
+        int length = result.length;
+        for (int i = 0; i < counter; i++) {
+            int index = length - 1 - i;
+            int val = (result[index] & 0xFF);
+            result[index] = (byte) (val + 1);
+            if (val != 0xFF) {
+                break;
+            }
         }
-
-        return bytes;
+        return result;
     }
 
     public static int toInt(byte[] bytes) {
@@ -59,14 +66,6 @@ public class ByteUtils {
         return result_bytes;
     }
 
-    public static String toHex(byte[] bytes) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < bytes.length; ++i) {
-            sb.append(Integer.toString((bytes[i] & 0xFF) + 0x100, 16).substring(1));
-        }
-        return sb.toString();
-    }
-
     public static String toBinary(byte[] bytes) {
         if (bytes == null) return "";
 
@@ -93,9 +92,7 @@ public class ByteUtils {
     }
 
     public static byte[] toBytes(int value) {
-        ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES);
-        buffer.putInt(value);
-        return buffer.array();
+        return toBytes(value, Integer.BYTES);
     }
 
     public static byte[] toBytes(int value, int len) {
@@ -111,9 +108,14 @@ public class ByteUtils {
     }
 
     public static byte[] toBytes(long value) {
-        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
-        buffer.putLong(value);
-        return buffer.array();
+        int size = Long.BYTES;
+        byte[] bytes = new byte[size];
+
+        for (int i = 0; i < size; i++) {
+            bytes[i] = (byte) ((value >> ((size - 1 - i) * 8)) & 0xFF);
+        }
+
+        return bytes;
     }
 
     public static List<byte[]> toList(byte[] bytes, int block_size) {
@@ -127,42 +129,6 @@ public class ByteUtils {
             list.add(block_bytes);
         }
         return list;
-    }
-
-    public static byte[] fromHex(String hex_str, String separator) {
-        String[] array = hex_str.split(separator);
-        int length = array.length;
-
-        byte[] bytes = new byte[length];
-        for (int i = 0; i < length; i++) {
-            String item = array[i];
-            int value = Integer.parseInt(item, 16);
-            bytes[i] = (byte) value;
-        }
-        return bytes;
-    }
-
-    public static byte[] fromHex(String hex_str) {
-        int length = hex_str.length();
-        int count = length / 2;
-
-        byte[] bytes = new byte[count];
-        for (int i = 0; i < count; i++) {
-            String item = hex_str.substring(2 * i, 2 * i + 2);
-            int value = Integer.parseInt(item, 16);
-            bytes[i] = (byte) value;
-        }
-        return bytes;
-    }
-
-    public static String toProgramCode(String hex_str) {
-        byte[] bytes = fromHex(hex_str);
-        StringBuilder sb = new StringBuilder();
-        Formatter fm = new Formatter(sb);
-        for (int i = 0; i < bytes.length; ++i) {
-            fm.format("0x%s, ", Integer.toString((bytes[i] & 0xFF) + 0x100, 16).substring(1));
-        }
-        return sb.toString();
     }
 
     public static byte[] concatenate(byte[] bytes1, byte[] bytes2) {
@@ -189,11 +155,5 @@ public class ByteUtils {
         System.arraycopy(bytes3, 0, result_bytes, len1 + len2, len3);
 
         return result_bytes;
-    }
-
-    public static void main(String[] args) {
-        String hex_str = "2B57C023 5FB74897 68D058FF 4911C20F DBE71E36 99D91339 AFBB903E E17255DC";
-        String result = toProgramCode(hex_str.replaceAll(" ", ""));
-        System.out.println(result.toUpperCase());
     }
 }
