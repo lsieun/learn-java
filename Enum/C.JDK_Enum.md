@@ -3,6 +3,8 @@
 ## Java 5
 
 - `TimeUnit`: java.util.concurrent.TimeUnit
+- `RetentionPolicy`: java.lang.annotation.RetentionPolicy
+- `ElementType`: java.lang.annotation.ElementType
 
 ## Java 7
 
